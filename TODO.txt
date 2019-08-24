@@ -26,3 +26,5 @@ JS error reporting services
 do better error page
 
 devide error boudnary
+
+naming one called image, then photo of file
