@@ -1,7 +1,7 @@
 module.exports = {
 	apps: [{
-		name: 'photo-lib-api',
-		script: './build/App.js',
+		name: 'photo-lib-web',
+		script: 'serve -s build',
 		args: '',
 		instances: '2',
 		autorestart: true,
@@ -25,7 +25,7 @@ module.exports = {
 			ref: 'origin/testbuild',
 			repo: 'git@github.com:paligator/photo-lib-web.git',
 			path: '/home/photolib/photo-lib/photo-lib-web',
-			'post-deploy': 'npm install && npm run build:prod && serve -s build && pm2 reload ecosystem.config.js --env production'
+			'post-deploy': 'npm install && npm run build:prod && pm2 reload ecosystem.config.js --env production'
 		}
 	}
 };
