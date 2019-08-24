@@ -1,0 +1,28 @@
+globe in navbar - make it bigger
+
+selected thumb - border in around thumbsnpm start
+
+ImageBrowser -> render -> widht, height very very strange and doesn't work 100% resizing
+
+after click on favourite button there is some border
+
+fix: show originals
+
+changing favourites, ApolloCache vs Redux
+
+no favourites???
+
+validate email/password before submit
+
+clean useless packages
+
+dorobit aj video
+smooth changes between images
+
+no internet - main map doesn't work properly
+
+JS error reporting services 
+
+do better error page
+
+devide error boudnary
