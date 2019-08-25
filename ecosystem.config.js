@@ -7,7 +7,7 @@ module.exports = {
 		autorestart: true,
 		max_restarts: 5,
 		watch: false,
-		max_memory_restart: '500M',
+		max_memory_restart: '900M',
 		merge_logs: true,
 		env: {
 			NODE_ENV: 'development'
