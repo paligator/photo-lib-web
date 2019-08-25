@@ -3,7 +3,7 @@ module.exports = {
 		name: 'photo-lib-web',
 		script: 'serve -s build',
 		args: '',
-		instances: '2',
+		instances: '1',
 		autorestart: true,
 		max_restarts: 5,
 		watch: false,
