@@ -10,10 +10,10 @@ module.exports = {
 		max_memory_restart: '900M',
 		merge_logs: true,
 		env: {
-			NODE_ENV: 'development'
+			REACT_APP_ENV: 'development'
 		},
 		env_production: {
-			NODE_ENV: 'production'
+			REACT_APP_ENV: 'production'
 		}
 	}],
 

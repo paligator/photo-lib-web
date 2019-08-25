@@ -7,6 +7,8 @@ let apiUrl = local.apiUrl;
 let imageProxyUrl = local.imageProxyUrl;
 let apiGraphQLUrl = local.apiGraphQLUrl;
 
+console.log("I'm in........: " + process.env.REACT_APP_ENV);
+
 // if (process.env.REACT_APP_ENV === 'dev') {
 // 	apiUrl = dev.apiUrl;
 // }
