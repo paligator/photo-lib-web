@@ -20,6 +20,7 @@ console.log("I'm in........: " + process.env.REACT_APP_ENV);
 if (process.env.REACT_APP_ENV === 'production') {
 	apiUrl = prod.apiUrl;
 	imageProxyUrl = prod.imageProxyUrl;
+	apiGraphQLUrl = prod.apiGraphQLUrl;
 }
 
 
