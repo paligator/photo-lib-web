@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import Observer from 'react-intersection-observer'
+import { InView } from 'react-intersection-observer'
 import * as actions from "../constants/action-types";
 import config from '../config';
 import * as C from "../api/Common";
@@ -37,9 +37,9 @@ class Thumbs extends Component {
 						const url = `${thumbUrl}/${file}`;
 						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
 						return (
-							<Observer key={key} data-key={key} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
+							<InView id={`obsv${i}`} key={key} data-key={key} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
 
-								<img data-key={key} id={`imgThumb_${i}`} className={className}
+								<img data-key={key} title={file} id={`imgThumb_${i}`} className={className}
 									alt="error"
 									data-index={i}
 									onClick={this.chooseThumb}
@@ -55,11 +55,11 @@ class Thumbs extends Component {
 									<ReactLoading id={`thumbLoading${i}`} type='spin' color={"red"} style={{ marginLeft: "17%", width: "63%", height: "63%" }} />
 								</div>
 
-							</Observer>
+							</InView>
 						)
 					})
 				}
-			</div>
+			</div >
 
 		);
 	}
@@ -83,7 +83,8 @@ class Thumbs extends Component {
 		const image = observer.target.children[0];
 		const key = observer.target.dataset.key;
 
-		if (image.dataset.isloaded === "true") {
+		if (image.dataset.isloaded === "true" && inView === true) {
+			this.loadPhotosInAdvance(image.dataset.index);
 			return;
 		}
 
@@ -108,18 +109,42 @@ class Thumbs extends Component {
 
 			//we set src to download photo after some time, because user can scroll with scrollbar up-down, it that case all thumb would be downloading, 
 			//so we wait till he stop moving with scrollbar and than load photo
+			//but first 15 images we want load immediatelly
 			setTimeout(() => {
-				console.log('lets set image for ' + key)
 				if (this.downloadingPhotos.indexOf(key) > -1) {
 					image.src = image.dataset.src;
+					this.loadPhotosInAdvance(image.dataset.index);
 				}
-			}, 500);
+			}, image.dataset.index < 15 ? 0 : 500);
+		}
+	}
+
+	// in onPhotoVisibilityChange can be loaded only visible photos, then when we click on next button, first we see loading spinner, so we load some photos in advance
+	loadPhotosInAdvance(currentIndex) {
+		currentIndex = parseInt(currentIndex);
+
+		let startIndex = currentIndex - 2;
+		startIndex = (currentIndex < 0) ? 0 : startIndex;
+
+		for (let i = startIndex; i < currentIndex + 4; i++) {
+			if (startIndex === currentIndex) continue;
+
+			const observer = this.node.querySelector(`#obsv${i}`);
+
+			if (!observer) {
+				continue;
+			}
+
+			const image = observer.children[0];
+			const key = observer.dataset.key;
+			if (image.dataset.isloaded === "false" && this.downloadingPhotos.indexOf(key) === -1) {
+				image.src = image.dataset.src;
+			}
 		}
 	}
 
 	chooseThumb(e) {
 		let element = e.target;
-		console.log('thumbClick: ' + element.dataset.index);
 		this.props.onChooseThumb(element.dataset.index, this.node);
 		this.props.markThumbAsSelected(element, this.node, false);
 	}
