@@ -216,13 +216,17 @@ h1, h2, h3, H4, h5, h6 {
 .thumb {
   cursor: pointer;
   width: auto;
-  max-height: 80px !important;
-  /* margin-right: 5px !important; */
+  max-height: 70px !important;
   padding: 0px 2px 0px 2px !important;
 }
 .thumbSelected {
   border: 4px solid var(--main);
   padding: 0px 0px 0px 0px !important;
+}
+.thumbLoading { 
+  width: 105px;
+  max-height: 70px !important;
+  padding: 0px 2px 0px 2px !important;
 }
 
 .jvectormap-zoomin, .jvectormap-zoomout, .jvectormap-goback {
