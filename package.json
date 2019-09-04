@@ -25,6 +25,7 @@
     "react-fontawesome": "^1.6.1",
     "react-hotkeys": "^2.0.0",
     "react-image-gallery": "^0.8.14",
+    "react-intersection-observer": "^8.24.1",
     "react-jvectormap": "^0.0.12",
     "react-load-image": "^0.1.7",
     "react-loading": "^2.0.3",

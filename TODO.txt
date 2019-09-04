@@ -28,3 +28,9 @@ do better error page
 devide error boudnary
 
 naming one called image, then photo of file
+
+dont't download all thumb at once
+
+nice move between photos
+
+cache thumbnails somehow 
