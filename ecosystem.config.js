@@ -1,7 +1,7 @@
 module.exports = {
 	apps: [{
 		name: 'photo-lib-web',
-		script: 'serve -s build',
+		script: 'serve -s -p 6500 build',
 		args: '',
 		instances: '1',
 		autorestart: true,

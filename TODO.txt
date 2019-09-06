@@ -34,3 +34,5 @@ dont't download all thumb at once
 nice move between photos
 
 cache thumbnails somehow 
+
+error when image is not found, downloaded
