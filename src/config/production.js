@@ -1,5 +1,5 @@
 export default {
-	"apiUrl": "http://192.168.1.11:6005",
-	"imageProxyUrl": "http://192.168.1.11:6005",
-	"apiGraphQLUrl": "http://192.168.1.11:6005/graphql"
+	"apiUrl": "https://photo-lib-api.paligator.sk:6005",
+	"imageProxyUrl": "https://photo-lib-api.paligator.sk:6005",
+	"apiGraphQLUrl": "https://photo-lib-api.paligator.sk:6005"
 };
