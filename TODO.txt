@@ -2,7 +2,7 @@ globe in navbar - make it bigger
 
 selected thumb - border in around thumbsnpm start
 
-ImageBrowser -> render -> widht, height very very strange and doesn't work 100% resizing
+ImageBrowser -> render -> width, height very very strange and doesn't work 100% resizing
 
 after click on favourite button there is some border
 
@@ -29,8 +29,6 @@ devide error boudnary
 
 naming one called image, then photo of file
 
-dont't download all thumb at once
-
 nice move between photos
 
 cache thumbnails somehow 
@@ -40,3 +38,5 @@ error when image is not found, downloaded
 check http 2.0
 
 thumb/photos gzip
+
+SEO
