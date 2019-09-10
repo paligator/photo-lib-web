@@ -25,7 +25,7 @@ class Thumbs extends Component {
 
 	render() {
 
-		const thumbUrl = `${config.imageProxyUrl}/photo/thumb${this.props.urlPath}`;
+		const thumbUrl = `${config.imageProxyUrl}/photo/thumb/${this.props.urlPath}`;
 		const files = this.props.album.files;
 		const curIndex = this.props.selectedPhotoIndex;
 

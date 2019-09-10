@@ -9,7 +9,7 @@ export const GET_ALBUM = `
 			month
 			name 
 			year
-			url
+			path
 			files
 		}
 	}

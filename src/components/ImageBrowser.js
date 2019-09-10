@@ -90,11 +90,8 @@ class ImageBrowser extends Component {
     }
 
     const albumIsReady = album.isReady === true;
-    let url = null;
 
     if (albumIsReady === true) {
-
-      url = new URL(album.url);
 
       photoCount = album.files.length;
       selectedPhotoIndex = this.props.selectedPhotoIndex;
@@ -102,9 +99,9 @@ class ImageBrowser extends Component {
       const showOriginals = this.props.showOriginals;
 
       if (showOriginals === true) {
-        imageUrl = `${config.imageProxyUrl}/${url.pathname}/${photoName}`;
+        imageUrl = `${config.imageProxyUrl}/${album.path}/${photoName}`;
       } else {
-        imageUrl = `${config.imageProxyUrl}/photo/prev${url.pathname}/${photoName}`;
+        imageUrl = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoName}`;
       }
     }
 
@@ -133,7 +130,7 @@ class ImageBrowser extends Component {
               <button className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
               <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
 
-              <Thumbs urlPath={url.pathname} markThumbAsSelected={this.markThumbAsSelected} />
+              <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} />
 
               <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
 
