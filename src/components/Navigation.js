@@ -35,7 +35,6 @@ class Navigation extends Component {
 
 	render() {
 
-		console.log("Navigation -> Render()");
 		let continents = config.categories;
 		return (
 

@@ -15,6 +15,7 @@ import 'bootstrap/dist/js/bootstrap.js';
 import './css/bootstrap.theme.lux_v4.css';
 import './css/index.css';
 
+
 const sagaMiddleware = createSagaMiddleware();
 let middlewares = applyMiddleware(sagaMiddleware);
 
@@ -28,7 +29,6 @@ let store = createStore(
 
 sagaMiddleware.run(rootSaga);
 
-console.log('Index -> lets render()');
 ReactDOM.render(
 	<CookiesProvider>
 		<Provider store={store}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LeftMenu, Thumbs } from '../components'
+import { LeftMenu, Thumbs, PhotoLoader } from '../components'
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import config from '../config';
@@ -9,7 +9,7 @@ import { GlobalHotKeys } from "react-hotkeys";
 
 class ImageBrowser extends Component {
 
-  state = { photoLoadingState: "waiting" };
+  state = {};
 
   globalKeyHandlers = {
     NEXT_PHOTO: () => this.nextPhoto(true, "auto"),
@@ -28,8 +28,9 @@ class ImageBrowser extends Component {
   constructor() {
     super();
     this.nextPhoto = this.nextPhoto.bind(this);
-    this.onPictureIsLoaded = this.onPictureIsLoaded.bind(this);
+    //this.onPictureIsLoaded = this.onPictureIsLoaded.bind(this);
     this.markThumbAsSelected = this.markThumbAsSelected.bind(this);
+    this.disableNavButtons = this.disableNavButtons.bind(this);
   }
 
   componentDidMount() {
@@ -46,20 +47,6 @@ class ImageBrowser extends Component {
       throw new Error(this.props.album.error);
     }
     this.loadAlbum();
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  shouldComponentUpdate(nextProps) {
-
-    //FIXME: think about when picture is loading for long time
-    // const update = (
-    //   this.props.selectedPhotoIndex !== nextProps.selectedPhotoIndex ||
-    //   this.props.showOriginals !== nextProps.showOriginals ||
-    //   this.getAlbumNameFromUrl(this.props) !== this.getAlbumNameFromUrl(nextProps)
-    // );
-    // return update;
-
-    return true;
   }
 
   loadAlbum() {
@@ -96,13 +83,7 @@ class ImageBrowser extends Component {
       photoCount = album.files.length;
       selectedPhotoIndex = this.props.selectedPhotoIndex;
       const photoName = album.files[selectedPhotoIndex];
-      const showOriginals = this.props.showOriginals;
-
-      if (showOriginals === true) {
-        imageUrl = `${config.imageProxyUrl}/${album.path}/${photoName}`;
-      } else {
-        imageUrl = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoName}`;
-      }
+      imageUrl = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoName}`;
     }
 
     return (
@@ -119,12 +100,7 @@ class ImageBrowser extends Component {
           {(albumIsReady === true) ? (
             <div id="mainMe" style={{ height: "100%", width: "100%" }}  >
 
-              {(this.state.photoLoadingState === 'waiting') ? this.getLoadingDiv() : (null)}
-
-              <div className="mainImage flexContainer" style={{ padding: "10px", height: "100%", width: "100%" }}>
-                <img alt="error" style={this.state.photoLoadingState !== "waiting" ? { width: "auto", height: "auto", maxHeight: "100%", maxWidth: "100%" } : { display: 'none' }}
-                  src={imageUrl} onLoad={this.onPictureIsLoaded} />
-              </div>
+              <PhotoLoader id="loader1" imageUrl={imageUrl} disableNavButtons={this.disableNavButtons} />
 
               <button className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
               <button className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
@@ -146,12 +122,9 @@ class ImageBrowser extends Component {
     )
   }
 
-  onPictureIsLoaded() {
-    this.setState({ photoLoadingState: "finished" });
-    this.disableNavButtons(false);
-  }
-
   nextPhoto(forward, scrollBahaviour = null) {
+
+    console.log("ImageBrowswer -> nextPhoto");
 
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
@@ -159,8 +132,7 @@ class ImageBrowser extends Component {
     const enableNext = this.canNextPhoto(showOnlyFavourites, forward, curIndex, album);
 
     if (enableNext === true) {
-
-      (forward === true) ? this.props.onNextPhoto() : this.props.onPrevPhoto();
+      forward === true ? this.props.onNextPhoto() : this.props.onPrevPhoto();
 
       this.disableNavButtons(true);
       this.markThumbByIndexAsSelected(this.findNextPhotoIndex(album, curIndex, forward, showOnlyFavourites), true, scrollBahaviour);

@@ -8,6 +8,7 @@ import ImagesFilter from './ImagesFilter';
 import LeftMenu from './LeftMenu';
 import Thumbs from './Thumbs';
 import ErrorBoundary from './ErrorBoundary';
+import PhotoLoader from './PhotoLoader';
 
 
 export * from "./basics"
@@ -22,5 +23,6 @@ export {
 	ImagesFilter,
 	LeftMenu,
 	Thumbs,
-	ErrorBoundary
+	ErrorBoundary,
+	PhotoLoader
 }

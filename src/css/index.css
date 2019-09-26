@@ -127,9 +127,10 @@ btn-img-fav {
   align-items: center; 
 }
 
-.mainImage {
+.mainImageDiv {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
 .flexContainerItem {
@@ -189,6 +190,17 @@ btn-img-fav {
   margin-right: auto;
   left: 0;
   right: auto;
+}
+
+.mainImage {
+  width: auto; 
+  height: auto; 
+  max-height: calc(100% - 10px); 
+  max-width: 100%;
+  /* position: absolute; */
+  top: 10px;
+  animation-duration: 3.5s;
+ 
 }
 
 .bg-dark {

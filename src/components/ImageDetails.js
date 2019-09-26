@@ -19,8 +19,6 @@ class ImageDetails extends Component {
 		const photoName = this.props.photoName;
 		const albumName = this.props.albumName;
 
-		console.log(`ImageDetails -> render() ${albumId}`);
-
 		if (!albumId)
 			return <div></div>
 

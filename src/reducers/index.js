@@ -31,7 +31,7 @@ const initialState = {
 
 export default function rootReducer(state = initialState, inputAction) {
 
-	console.log(`rootReducer() ${JSON.stringify(inputAction)}`);
+	//	console.log(`rootReducer() ${JSON.stringify(inputAction)}`);
 
 	const parsedAction = parseAction(inputAction);
 	const action = parsedAction.action
