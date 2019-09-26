@@ -7,7 +7,7 @@ class PhotoLoader extends Component {
 	state = { photoLoadingState: "initNewPhoto", parentNotified: false };
 	_isMounted = false;
 
-	timeoutToShowLoading = 1500;
+	timeoutToShowLoading = 400;
 
 	constructor() {
 		super();
