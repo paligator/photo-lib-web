@@ -124,8 +124,6 @@ class ImageBrowser extends Component {
 
   nextPhoto(forward, scrollBahaviour = null) {
 
-    console.log("ImageBrowswer -> nextPhoto");
-
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
     const showOnlyFavourites = this.props.showOnlyFavourites;
