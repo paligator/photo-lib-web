@@ -232,15 +232,13 @@ class ImageBrowser extends Component {
     this.markThumbAsSelected(target, this.node, scroolTo, scrollBahaviour);
   }
 
-  markThumbAsSelected(target, node, scroolTo = false) {
+  markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
     const classNameForAll = target.className.replace("thumbSelected", "");
     node.querySelectorAll('.thumb').forEach(thumb => { thumb.className = classNameForAll });
     target.className += " thumbSelected";
     if (scroolTo === true) {
       //FIXME: I don't fucking understand when I use global Hotkeys (rith, left) and scroll behaviour = "smooth" scrollIntoView doesn't work, with hotkey I have to use "auto" or "instant"
-      //target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
-      //It looks, that I fixed if :) how ??? test it for awhile and then delete
-      target.scrollIntoView({ behavior: "smooth", inline: "center", block: "center" });
+      target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
     }
     this.disableNavButtons(true);
   }
