@@ -14,6 +14,7 @@ class PhotoLoader extends Component {
 		this.onPictureIsLoaded = this.onPictureIsLoaded.bind(this);
 		this.timeout = this.timeout.bind(this);
 		this.timeout();
+		this.onAnimationEnd = this.onAnimationEnd.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps) {
@@ -32,11 +33,13 @@ class PhotoLoader extends Component {
 
 	render() {
 
+		let classNames = "mainImageDiv flexContainer flexRow animated " + this.props.className;
+
 		return (
 
-			<div className="mainImageDiv flexContainer flexRow" id={this.props.id} ref={node => this.node = node}>
+			<div className={classNames} style={{ display: this.props.display }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
 
-				{(this.state.photoLoadingState === "waiting") ?
+				{(this.state.photoLoadingState === "waiting" && this.props.photoUrl !== '') ?
 					(
 						<div style={{ position: "absolute", left: "37.5%", top: "15%", height: "auto", width: "25%" }}>
 							<ReactLoading type='spin' color="red" style={{ width: "100%", height: "100%" }} />
@@ -45,8 +48,9 @@ class PhotoLoader extends Component {
 				}
 				<img id="img1" alt="error" data-next="next"
 					className="mainImage"
+					title={this.props.photoName}
 					style={{ display: this.state.photoLoadingState !== "waiting" ? "inline" : "none" }}
-					src={this.props.imageUrl} onLoad={this.onPictureIsLoaded} />
+					src={this.props.photoUrl} onLoad={this.onPictureIsLoaded} />
 
 			</div >
 		);
@@ -65,7 +69,11 @@ class PhotoLoader extends Component {
 
 	onPictureIsLoaded() {
 		this.setState({ photoLoadingState: "finished" });
-		this.props.disableNavButtons(false);
+	}
+
+	onAnimationEnd(e) {
+		console.log("PhotoLoader: onAnimationEnd ");
+		this.props.onAnimationEnd(e);
 	}
 }
 

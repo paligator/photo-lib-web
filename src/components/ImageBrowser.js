@@ -9,11 +9,11 @@ import { GlobalHotKeys } from "react-hotkeys";
 
 class ImageBrowser extends Component {
 
-  state = {};
+  state = { animating: false, movementDirection: "start" };
 
   globalKeyHandlers = {
-    NEXT_PHOTO: () => this.nextPhoto(true, "auto"),
-    PREV_PHOTO: () => this.nextPhoto(false, "auto")
+    NEXT_PHOTO: () => this.nextPhotoByGlobalKey(true),
+    PREV_PHOTO: () => this.nextPhotoByGlobalKey(false)
   };
 
   globalKeyMap = {
@@ -28,7 +28,6 @@ class ImageBrowser extends Component {
   constructor() {
     super();
     this.nextPhoto = this.nextPhoto.bind(this);
-    //this.onPictureIsLoaded = this.onPictureIsLoaded.bind(this);
     this.markThumbAsSelected = this.markThumbAsSelected.bind(this);
     this.disableNavButtons = this.disableNavButtons.bind(this);
   }
@@ -40,6 +39,14 @@ class ImageBrowser extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  shouldComponentUpdate() {
+
+    if (this.state.animating === true) {
+      return false;
+    }
+    return true;
   }
 
   componentDidUpdate() {
@@ -68,7 +75,8 @@ class ImageBrowser extends Component {
   render() {
 
     const album = this.props.album;
-    let imageUrl = null;
+    let photoUrlFadeIn = null, photoUrlFadeOut = null, photoUrlBuffer = null;
+    let photoNameFadeIn = null, photoNameFadeOut = null, photoNameBuffer = null;
     let photoCount;
     let selectedPhotoIndex
 
@@ -82,9 +90,30 @@ class ImageBrowser extends Component {
 
       photoCount = album.files.length;
       selectedPhotoIndex = this.props.selectedPhotoIndex;
-      const photoName = album.files[selectedPhotoIndex];
-      imageUrl = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoName}`;
+      photoNameFadeIn = album.files[selectedPhotoIndex];
+      const photoNameNext = selectedPhotoIndex + 1 < album.files.length ? album.files[selectedPhotoIndex + 1] : '';
+      const photoNamePrev = selectedPhotoIndex > 0 ? album.files[selectedPhotoIndex - 1] : '';
+
+      photoUrlFadeIn = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameFadeIn}`;
+      const photoUrlNext = selectedPhotoIndex + 1 < album.files.length ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameNext}` : '';
+      const photoUrlPrev = selectedPhotoIndex > 0 ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNamePrev}` : '';
+
+      if (this.state.movementDirection === "prev") {
+        photoUrlFadeOut = photoUrlNext;
+        photoNameFadeOut = photoNameNext;
+        photoUrlBuffer = photoUrlPrev;
+        photoNameBuffer = photoNamePrev
+      } else {
+        photoUrlFadeOut = photoUrlPrev;
+        photoNameFadeOut = photoNamePrev;
+        photoUrlBuffer = photoUrlNext;
+        photoNameBuffer = photoNameNext
+      }
+
     }
+
+    const fadeOutClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "" : (this.state.movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
+    const fadeInClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "" : (this.state.movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
 
     return (
 
@@ -98,12 +127,18 @@ class ImageBrowser extends Component {
         <div className="container col-sm-10 noPad" style={{ height: "100%" }} >
 
           {(albumIsReady === true) ? (
-            <div id="mainMe" style={{ height: "100%", width: "100%" }}  >
+            <div id="mainMe" style={{ height: "100%", width: "100%", maxWidth: "100%" }}  >
 
-              <PhotoLoader id="loader1" imageUrl={imageUrl} disableNavButtons={this.disableNavButtons} />
+              <div style={{ position: "relative", height: "100%", width: "100%", overflow: "hidden" }} >
 
-              <button className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
-              <button className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
+                <PhotoLoader className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                <PhotoLoader className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                <PhotoLoader display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+
+              </div>
+
+              <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
+              <button id="btnNextPhoto" className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
               <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
 
               <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} />
@@ -122,7 +157,25 @@ class ImageBrowser extends Component {
     )
   }
 
+  onAnimationEnd(e) {
+    if (e.target.classList.contains("fadeOutLeft") || e.target.classList.contains("fadeOutRight")) {
+      this.setState({ animating: false });
+    }
+
+    if (e.target.classList.contains("fadeInRight") || e.target.classList.contains("fadeInLeft")) {
+      this.disableNavButtons(false);
+    }
+  }
+
+  nextPhotoByGlobalKey(forward) {
+    this.nextPhoto(forward, "auto");
+  }
+
   nextPhoto(forward, scrollBahaviour = null) {
+
+    if (this.state.animating === true) {
+      return;
+    }
 
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
@@ -131,10 +184,9 @@ class ImageBrowser extends Component {
 
     if (enableNext === true) {
       forward === true ? this.props.onNextPhoto() : this.props.onPrevPhoto();
-
+      this.setState({ animating: true, movementDirection: forward === true ? "next" : "prev" });
       this.disableNavButtons(true);
       this.markThumbByIndexAsSelected(this.findNextPhotoIndex(album, curIndex, forward, showOnlyFavourites), true, scrollBahaviour);
-      this.timeout();
     }
 
   }
@@ -161,8 +213,18 @@ class ImageBrowser extends Component {
   }
 
   disableNavButtons(disabled) {
-    const btnNavs = this.node.querySelectorAll('.btn-nav');
-    btnNavs.forEach(btn => { btn.disabled = disabled; })
+
+    if (disabled === true) {
+      const btnNavs = this.node.querySelectorAll('.btn-nav');
+      btnNavs.forEach(btn => { btn.disabled = true; })
+    } else {
+      const curIndex = this.props.selectedPhotoIndex;
+      const album = this.props.album;
+      const showOnlyFavourites = this.props.showOnlyFavourites;
+
+      this.node.querySelector(`#btnNextPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, true, curIndex, album);
+      this.node.querySelector(`#btnPrevPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, false, curIndex, album);
+    }
   }
 
   markThumbByIndexAsSelected(index, scroolTo = false, scrollBahaviour = null) {
@@ -170,16 +232,17 @@ class ImageBrowser extends Component {
     this.markThumbAsSelected(target, this.node, scroolTo, scrollBahaviour);
   }
 
-  markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
+  markThumbAsSelected(target, node, scroolTo = false) {
     const classNameForAll = target.className.replace("thumbSelected", "");
     node.querySelectorAll('.thumb').forEach(thumb => { thumb.className = classNameForAll });
     target.className += " thumbSelected";
     if (scroolTo === true) {
       //FIXME: I don't fucking understand when I use global Hotkeys (rith, left) and scroll behaviour = "smooth" scrollIntoView doesn't work, with hotkey I have to use "auto" or "instant"
-      target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
+      //target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
+      //It looks, that I fixed if :) how ??? test it for awhile and then delete
+      target.scrollIntoView({ behavior: "smooth", inline: "center", block: "center" });
     }
     this.disableNavButtons(true);
-    this.timeout();
   }
 
   getLoadingDiv() {
@@ -216,16 +279,6 @@ class ImageBrowser extends Component {
         document.msExitFullscreen();
       }
     }
-  }
-
-  timeout() {
-    this.setState({ photoLoadingState: "started" });
-    this.timer = setTimeout(() => {
-      if (this.state.photoLoadingState === "started") {
-        if (this._isMounted === true)
-          this.setState({ photoLoadingState: "waiting" });
-      }
-    }, 400);
   }
 
 }

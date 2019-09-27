@@ -43,4 +43,4 @@ thumb/photos gzip
 
 SEO
 
-no more photo navigation button disable
+when i choose photo by thumb, there should be no animation, no fadeIn, no fadeOut
