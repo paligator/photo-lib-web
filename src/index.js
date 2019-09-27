@@ -12,7 +12,6 @@ import rootSaga from "./sagas";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import './css/bootstrap.theme.lux_v4.css';
 import './css/index.css';
 
 

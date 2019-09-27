@@ -5,13 +5,21 @@
   <meta charset="utf-8" />
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jvectormap/2.0.4/jquery-jvectormap.css" type="text/css" media="screen" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+  <!-- Integrity key can be generated https://www.srihash.org/ but don't forget to add key as sha256- even into nginx config, to get sha256- you will see error in console -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jvectormap/2.0.4/jquery-jvectormap.min.css"
+    integrity="sha384-LmTs77jzi3Z94+7+p0wVpKuqGLPsiOaD2RpiBUwSZuJTsjxIz3qT7EIxuNOmWx6b" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    integrity="sha384-7/Tl0k65OTvDSvtuq7aPR7aa0aCz7ZKqHsbMRLxhzueldW+9MZpCe9LB1c5UBuNS" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/lux/bootstrap.min.css"
+    integrity="sha384-hVpXlpdRmJ+uXGwD5W6HZMnR9ENcKVRn855pPbuI/mwPIEKAuKgTKgGksVGmlAvt" crossorigin="anonymous">
+
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="I want to share some photos from my travel around the world">
   <meta name="keywords" content="travel, world, photo, europe, africa, america, australia, artica, asia">
-  <meta name="author" content="Paligator, Pavol Zelenka, Svaty Jur, Pri Stadione, +421 904 328 274, paligator@gmail.com">
+  <meta name="author"
+    content="Paligator, Pavol Zelenka, Svaty Jur, Pri Stadione, +421 904 328 274, paligator@gmail.com">
   <meta name="google-site-verification" content="E6To5XFZSRcs5uM8xDQiraPyq0MI0eA7-EBHYluMwDM" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>My Dreams Come TRUE</title>
@@ -20,16 +28,6 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
 </body>
 
 </html>
