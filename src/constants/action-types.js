@@ -17,6 +17,8 @@ export const SYNC_FAVOURITES = "SYNC_FAVOURITES";
 export const LOGIN = "LOGIN_REQUEST";
 export const LOGOUT = "LOGOUT";
 
+export const LOAD_EXIF = "LOAD_EXIF";
+
 
 export function toSuccessAction(action) {
 	return action + '_SUCCESS';

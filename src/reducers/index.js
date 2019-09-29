@@ -23,6 +23,7 @@ const initialState = {
 		isFetching: false,
 		isReady: false,
 		error: null,
+		exif: null
 	},
 	isUserLogged: false,
 	unSuccessfulLogin: false,
@@ -62,6 +63,8 @@ export default function rootReducer(state = initialState, inputAction) {
 			return ACT_LOGIN(state, inputAction, actionType);
 		case actions.LOGOUT:
 			return ACT_LOGOUT(state);
+		case actions.LOAD_EXIF:
+			return ACT_GET_EXIF(state, inputAction);
 		default:
 
 			//TODO: This is probably antipattern. When Redux initializes it dispatches a "dummy" action to fill the state
@@ -148,6 +151,10 @@ function ACT_LOGOUT(state) {
 	localStorage.removeItem("token");
 	apolloClient.resetStore();
 	return initialState;
+}
+
+function ACT_GET_EXIF(state, inputAction) {
+	return { ...state, selectedPhoto: { ...state.selectedPhoto, exif: inputAction.payload.exif } };
 }
 
 

@@ -4,7 +4,7 @@ import ReactLoading from 'react-loading';
 
 class PhotoLoader extends Component {
 
-	state = { photoLoadingState: "initNewPhoto", parentNotified: false };
+	state = { photoLoadingState: "initNewPhoto" };
 	_isMounted = false;
 
 	timeoutToShowLoading = 400;
@@ -13,8 +13,8 @@ class PhotoLoader extends Component {
 		super();
 		this.onPictureIsLoaded = this.onPictureIsLoaded.bind(this);
 		this.timeout = this.timeout.bind(this);
+		//this.loadExif = this.loadExif.bind(this);
 		this.timeout();
-		this.onAnimationEnd = this.onAnimationEnd.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps) {
@@ -46,11 +46,11 @@ class PhotoLoader extends Component {
 						</div>
 					) : null
 				}
-				<img id="img1" alt="error" data-next="next"
+				<img id={this.props.imgId} alt="error" data-next="next"
 					className="mainImage"
 					title={this.props.photoName}
 					style={{ display: this.state.photoLoadingState !== "waiting" ? "inline" : "none" }}
-					src={this.props.photoUrl} onLoad={this.onPictureIsLoaded} />
+					src={this.props.photoUrl} onLoad={() => this.onPictureIsLoaded()} />
 
 			</div >
 		);
@@ -67,15 +67,36 @@ class PhotoLoader extends Component {
 		}, this.timeoutToShowLoading);
 	}
 
-	onPictureIsLoaded() {
+	async onPictureIsLoaded() {
 		this.setState({ photoLoadingState: "finished" });
 	}
 
-	onAnimationEnd(e) {
-		console.log("PhotoLoader: onAnimationEnd ");
-		this.props.onAnimationEnd(e);
-	}
+	// async loadExif(img) {
+
+	// 	console.log(`loading exif..............${this.props.id}`);
+
+	// 	if (this.props.showExif !== true) {
+	// 		return;
+	// 	}
+
+
+	// const exif = await new Promise((resolve): void => {
+
+	// 	EXIF.getData(img, function () {
+	// 		var exif = {
+	// 			make: EXIF.getTag(this, "Make"),
+	// 			model: EXIF.getTag(this, "Filename")
+	// 		}
+	// 		resolve(exif);
+	// 	});
+	// });
+
+	// this.props.onLoadExif(exif);
+	// 	}
 }
+
+
+
 
 // eslint-disable-next-line no-unused-vars
 function mapStateToProps(state) {

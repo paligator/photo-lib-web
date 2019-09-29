@@ -18,7 +18,6 @@ class ImagesFilter extends Component {
 			<div className="leftMenuItem boxUderline">
 				<h4>Photos:</h4>
 				<p><Switcher checked={this.props.showOnlyFavourites} onChange={this.onChangeShowOnlyFavourites} /><span>Only favourites</span></p>
-				<p><Switcher checked={this.props.showOriginals} onChange={this.onChangeShowOriginals} /><span>Show originals</span></p>
 			</div>
 		)
 	}

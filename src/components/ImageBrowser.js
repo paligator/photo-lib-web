@@ -6,6 +6,7 @@ import config from '../config';
 import ReactLoading from 'react-loading';
 import * as C from "../api/Common";
 import { GlobalHotKeys } from "react-hotkeys";
+import { getExif } from "../api/Utils";
 
 class ImageBrowser extends Component {
 
@@ -30,6 +31,8 @@ class ImageBrowser extends Component {
     this.nextPhoto = this.nextPhoto.bind(this);
     this.markThumbAsSelected = this.markThumbAsSelected.bind(this);
     this.disableNavButtons = this.disableNavButtons.bind(this);
+    this.onAnimationEnd = this.onAnimationEnd.bind(this);
+    this.loadExif = this.loadExif.bind(this);
   }
 
   componentDidMount() {
@@ -109,11 +112,10 @@ class ImageBrowser extends Component {
         photoUrlBuffer = photoUrlNext;
         photoNameBuffer = photoNameNext
       }
-
     }
 
     const fadeOutClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "" : (this.state.movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
-    const fadeInClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "" : (this.state.movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
+    const fadeInClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "pulse" : (this.state.movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
 
     return (
 
@@ -131,9 +133,9 @@ class ImageBrowser extends Component {
 
               <div style={{ position: "relative", height: "100%", width: "100%", overflow: "hidden" }} >
 
-                <PhotoLoader className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                <PhotoLoader className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                <PhotoLoader display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
 
               </div>
 
@@ -157,14 +159,21 @@ class ImageBrowser extends Component {
     )
   }
 
-  onAnimationEnd(e) {
-    if (e.target.classList.contains("fadeOutLeft") || e.target.classList.contains("fadeOutRight")) {
+  async onAnimationEnd(e) {
+    if (e.target.id === "loaderOut") {
       this.setState({ animating: false });
     }
 
-    if (e.target.classList.contains("fadeInRight") || e.target.classList.contains("fadeInLeft")) {
+    if (e.target.id === "loaderIn") {
       this.disableNavButtons(false);
+      this.loadExif();
     }
+  }
+
+  async loadExif() {
+    const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
+    const exif = await getExif(img);
+    this.props.onLoadExif(exif);
   }
 
   nextPhotoByGlobalKey(forward) {
@@ -305,7 +314,10 @@ function mapDispatchToProps(dispatch) {
     },
     onResetAlbum: () => {
       dispatch({ type: actions.RESET_ALBUM });
-    }
+    },
+    onLoadExif: (exif) => {
+      dispatch({ type: actions.LOAD_EXIF, payload: { exif } });
+    },
   }
 }
 

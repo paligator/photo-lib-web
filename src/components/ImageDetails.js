@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as C from '../api/Common';
 import gql from "graphql-tag";
-import { Query, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import * as gqlCommands from '../api/GqlCommands';
 import * as actions from "../constants/action-types";
 import { Can, FavouriteBtn } from "../components";
@@ -10,108 +10,82 @@ import { Can, FavouriteBtn } from "../components";
 class ImageDetails extends Component {
 
 	shouldComponentUpdate(nextProps) {
-		return (nextProps.albumId) ? true : false;
+		return (nextProps.album) ? true : false;
 	}
 
 	render() {
 
-		const albumId = this.props.albumId;
-		const photoName = this.props.photoName;
-		const albumName = this.props.albumName;
+		const album = this.props.album;
+		const photo = this.props.photo;
+		const exif = (photo && photo.exif) ? photo.exif : {};
+		const selectedPhotoIndex = album.selectedPhotoIndex;
+		const photoName = selectedPhotoIndex > -1 ? album.files[selectedPhotoIndex] : "";
+		const isFavourite = selectedPhotoIndex > -1 ? album.favourites.indexOf(photoName) > -1 : false;
 
-		if (!albumId)
-			return <div></div>
+		return (<div className="leftMenuItem">
+			<div className="boxUderline">
+				<h4>Photo details:</h4>
+				<p>
+					Name:<br />
+					<span>{photoName}</span>
+				</p>
+				<p>
+					<Can perform="photo:setFavourite" yes={() => (
+						<Mutation
+							mutation={gql`${gqlCommands.SET_PHOTO_AS_FAVOURITE}`}
+							update={(cache) => {
+								const cachedAlbum = cache.readQuery({ query: gqlCommands.GET_ALBUM_GQL, variables: { albumName: album.name } }).album;
 
-		return (
-			<Query query={gqlCommands.GET_EXIF_AND_ALBUM_GQL} variables={{ albumId, photoName }}	>
-				{({ loading, data }) => {
-					const exif = C.meOrVal((data) ? data.exif : data, {});
-					const album = C.meOrVal((data) ? data.album : data, {});
-					const isFavourite = (loading) ? false : album.favourites.indexOf(photoName) > -1;
+								if (cachedAlbum.favourites.indexOf(photoName) > -1) {
+									C.deleteFromArray(cachedAlbum.favourites, photoName);
+								} else {
+									cachedAlbum.favourites.push(photoName);
+								}
 
-					return (<div className="leftMenuItem">
-						<div className="boxUderline">
-							<h4>Photo details:</h4>
-							<p>
-								Name:<br />
-								<span>{this.props.photoName}</span>
-							</p>
-							<p>
+								this.props.onUpdateFavourites(cachedAlbum.favourites);
 
-								<Can perform="photo:setFavourite" yes={() => (
-									<Mutation
-										mutation={gql`${gqlCommands.SET_PHOTO_AS_FAVOURITE}`}
-										update={(cache) => {
-											const album = cache.readQuery({ query: gqlCommands.GET_ALBUM_GQL, variables: { albumName: albumName } }).album;
-
-											if (album.favourites.indexOf(photoName) > -1) {
-												C.deleteFromArray(album.favourites, photoName);
-											} else {
-												album.favourites.push(photoName);
-											}
-
-											this.props.onUpdateFavourites(album.favourites);
-
-											cache.writeQuery({
-												query: gqlCommands.GET_ALBUM_GQL,
-												data: { album }
-											});
-										}}
-									>
-										{(setAsFavouritePhoto) => {
-											return (
-												<React.Fragment>
-													Is my favourite:<br />
-													<span><FavouriteBtn isFavourite={isFavourite} onClick={() => { setAsFavouritePhoto({ variables: { albumId, photoName, status: !isFavourite } }) }}></FavouriteBtn></span>
-												</React.Fragment>
-											)
-										}}
-									</Mutation>
-								)} no={() => (<FavouriteBtn isFavourite={isFavourite} disabled></FavouriteBtn>)} />
-
-
-							</p>
-						</div>
-						<div className="leftMenuItem">
-							<h4>Exif:</h4>
-							<p>
-								Camera:<br />
-								<span>{exif.camera}</span>
-							</p>
-							<p>
-								Orientation:<br />
-								<span>{exif.orientation || "-"}</span>
-							</p>
-						</div>
-					</div >
-					)
-				}}
-
-			</Query>
+								cache.writeQuery({
+									query: gqlCommands.GET_ALBUM_GQL,
+									data: { cachedAlbum }
+								});
+							}}
+						>
+							{(setAsFavouritePhoto) => {
+								return (
+									<React.Fragment>
+										Is my favourite:<br />
+										<span><FavouriteBtn isFavourite={isFavourite} onClick={() => { setAsFavouritePhoto({ variables: { albumId: album.id, photoName, status: !isFavourite } }) }}></FavouriteBtn></span>
+									</React.Fragment>
+								)
+							}}
+						</Mutation>
+					)} no={() => (<FavouriteBtn isFavourite={isFavourite} disabled></FavouriteBtn>)} />
+				</p>
+			</div>
+			<div className="leftMenuItem">
+				<h4>Exif:</h4>
+				<p>
+					Camera:<br />
+					<span>{exif.Camera}</span>
+				</p>
+				<p>
+					Orientation:<br />
+					<span>{exif.Orientation || "-"}</span>
+				</p>
+			</div>
+		</div >
 		)
-		//}
 	}
 }
 
 function mapStateToProps(state) {
 
-	const album = (state.selectedAlbum) ? state.selectedAlbum : null;
-	const selectedPhotoIndex = state.selectedAlbum.selectedPhotoIndex;
-	let photoName = "";
-	let albumId = null;
-	let albumName = null;
-
-	if (album.isReady === true) {
-		photoName = album.files[selectedPhotoIndex];
-		albumName = album.name;
-
-		albumId = album.id;
-	}
+	const album = state.selectedAlbum || null;
+	const photo = state.selectedPhoto || null;
 
 	const retVal = {
-		photoName: photoName,
-		albumId: albumId,
-		albumName: albumName
+		album,
+		photo
 	};
 
 	return retVal;
