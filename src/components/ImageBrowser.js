@@ -132,11 +132,9 @@ class ImageBrowser extends Component {
             <div id="mainMe" style={{ height: "100%", width: "100%", maxWidth: "100%" }}  >
 
               <div style={{ position: "relative", height: "100%", width: "100%", overflow: "hidden" }} >
-
                 <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                 <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                 <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
-
               </div>
 
               <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
@@ -243,7 +241,8 @@ class ImageBrowser extends Component {
 
   markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
     const classNameForAll = target.className.replace("thumbSelected", "");
-    node.querySelectorAll('.thumb').forEach(thumb => { thumb.className = classNameForAll });
+    node.querySelectorAll('.thumbSelected').forEach(thumb => { thumb.className = classNameForAll });
+
     target.className += " thumbSelected";
     if (scroolTo === true) {
       //FIXME: I don't fucking understand when I use global Hotkeys (rith, left) and scroll behaviour = "smooth" scrollIntoView doesn't work, with hotkey I have to use "auto" or "instant"
@@ -287,7 +286,6 @@ class ImageBrowser extends Component {
       }
     }
   }
-
 }
 
 function mapStateToProps(state, ownState) {

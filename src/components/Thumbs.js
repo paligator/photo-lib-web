@@ -4,13 +4,14 @@ import { InView } from 'react-intersection-observer'
 import * as actions from "../constants/action-types";
 import config from '../config';
 import * as C from "../api/Common";
-import ReactLoading from 'react-loading';
 import emptyImage from '../images/emptyImage.png';
+import spinnerImage from '../images/spinner.gif';
 
 class Thumbs extends Component {
 
 	state = {};
 	DEFAULT_PHOTO_URL = emptyImage;
+	SPINNER_IMGET_URL = spinnerImage;
 
 	// photos actually being downloaded from server
 	downloadingPhotos = [];
@@ -22,8 +23,14 @@ class Thumbs extends Component {
 		this.onPhotoIsLoaded = this.onPhotoIsLoaded.bind(this);
 	}
 
+	shouldComponentUpdate() {
+		return false;
+	}
+
 
 	render() {
+
+		console.log("Thumbs-> render()");
 
 		const thumbUrl = `${config.imageProxyUrl}/photo/thumb/${this.props.urlPath}`;
 		const files = this.props.album.files;
@@ -52,7 +59,7 @@ class Thumbs extends Component {
 								</img>
 
 								<div id={`thumbLoading${i}`} data-index={i} className={(i === curIndex) ? "thumbLoading thumbSelected" : "thumbLoading"} >
-									<ReactLoading id={`thumbLoading${i}`} type='spin' color={"red"} style={{ marginLeft: "17%", width: "63%", height: "63%" }} />
+									<img key="xxx" src={this.SPINNER_IMGET_URL} width="100%" height="100%" />
 								</div>
 
 							</InView>
@@ -110,12 +117,13 @@ class Thumbs extends Component {
 			//we set src to download photo after some time, because user can scroll with scrollbar up-down, it that case all thumb would be downloading, 
 			//so we wait till he stop moving with scrollbar and than load photo
 			//but first 15 images we want load immediatelly
+			const timeout = image.dataset.index < 15 ? 0 : 500;
 			setTimeout(() => {
 				if (this.downloadingPhotos.indexOf(key) > -1) {
 					image.src = image.dataset.src;
 					this.loadPhotosInAdvance(image.dataset.index);
 				}
-			}, image.dataset.index < 15 ? 0 : 500);
+			}, timeout);
 		}
 	}
 
