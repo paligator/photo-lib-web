@@ -37,34 +37,50 @@ class ImageBrowser extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.loadAlbum();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
   }
 
-  shouldComponentUpdate() {
-
-    if (this.state.animating === true) {
-      return false;
-    }
+  // eslint-disable-next-line no-unused-vars
+  shouldComponentUpdate(nextProps, nextState) {
     return true;
   }
 
-  componentDidUpdate() {
-    if (this.props.album.error) {
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState) {
+
+    if (this.props.album.exists === true && this.props.album.error) {
       throw new Error(this.props.album.error);
     }
-    this.loadAlbum();
+
+    const albumNameFromUrl = this.getAlbumNameFromUrl(this.props);
+    if (this.shouldLoadAlbum(prevProps, albumNameFromUrl) === true) {
+      this.props.onSelectAlbum(albumNameFromUrl);
+    }
+
   }
 
-  loadAlbum() {
-    const urlAlbum = this.getAlbumNameFromUrl(this.props);
-    if (!this.props.album.error && urlAlbum !== this.props.album.name) {
-      console.log(`ImageBrowser loadAlbum() -> let's get album ${urlAlbum}`)
-      this.props.onSelectAlbum(urlAlbum);
+  shouldLoadAlbum(prevProps, albumNameFromUrl) {
+
+    const album = this.props.album;
+
+    if (album.isFetching === true) {
+      return false;
     }
+
+    //if is loaded and name of current album is the same as album name in url, than don't load
+    if (album.isReady === true && album.name === albumNameFromUrl) {
+      return false;
+    }
+
+    //check situation when user had erorr i.e. abount "not visited place (I've never been there)" and than choose in menu new country
+    if (album.isReady === true && album.error && albumNameFromUrl === this.getAlbumNameFromUrl(prevProps)) {
+      return false;
+    }
+
+    return true;
   }
 
   getAlbumNameFromUrl(props) {
@@ -83,7 +99,7 @@ class ImageBrowser extends Component {
     let photoCount;
     let selectedPhotoIndex
 
-    if (album.exists === false) {
+    if (album.isReady === true && album.exists === false) {
       return (<div>Sorry, I have never been there</div>);
     }
 

@@ -119,16 +119,16 @@ function ACT_GET_ALBUM(state, inputAction, actionType) {
 	if (actionType === 'SUCCESS') {
 		const initIndex = (state.showOnlyFavourites) ? C.findNextFavourite(inputAction.data, -1) : 0;
 
-		return { ...state, selectedAlbum: { ...inputAction.data, exists: true, isReady: true, fetching: false, error: null, selectedPhotoIndex: initIndex } };
+		return { ...state, selectedAlbum: { ...inputAction.data, exists: true, isReady: true, isFetching: false, error: null, selectedPhotoIndex: initIndex } };
 	} else if (actionType === 'ERROR') {
 		if (inputAction.error && inputAction.error.message.startsWith("GraphQL error: E001")) {
-			return { ...state, selectedAlbum: { name: -1, exists: false, isReady: false, fetching: false, error: inputAction.error } };
+			return { ...state, selectedAlbum: { name: -1, exists: false, isReady: true, isFetching: false, error: inputAction.error } };
 		} else {
-			return { ...state, selectedAlbum: { name: -1, error: inputAction.error } };
+			return { ...state, selectedAlbum: { name: -1, exists: true, isReady: true, isFetching: false, error: inputAction.error } };
 		}
 
 	} else if (actionType === 'REQUEST') {
-		return { ...state, selectedAlbum: { name: inputAction.payload.albumId, isReady: false, fetching: true }, selectedPhotoIndex: -1, selectedPhoto: { isReady: false } };
+		return { ...state, selectedAlbum: { name: inputAction.payload.albumId, isReady: false, isFetching: true }, selectedPhotoIndex: -1, selectedPhoto: { isReady: false } };
 	}
 }
 

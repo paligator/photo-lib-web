@@ -1,10 +1,6 @@
 import axios from "axios";
 import config from '../config';
 
-export function getAlbum(albumName) {
-	throw new Error(`Method getAlbum is not implemented ${albumName}`);
-}
-
 export function postLogin(email, password) {
 	return axios({
 		method: "post",
