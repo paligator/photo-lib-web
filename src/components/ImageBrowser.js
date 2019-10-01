@@ -47,15 +47,7 @@ class ImageBrowser extends Component {
   }
 
   // eslint-disable-next-line no-unused-vars
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("som tu shouldComponentUpdate .........");
-    return true;
-  }
-
-  // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState) {
-
-    console.log("som tu componentDidUpdate.........");
 
     if (this.props.album.exists === true && this.props.album.error) {
       throw new Error(this.props.album.error);
@@ -140,19 +132,21 @@ class ImageBrowser extends Component {
 
     return (
 
-      <div ref={node => this.node = node} id="main" className="row" style={{ minHeight: "200px", width: "100%", height: "82%", maxWidth: "100%" }}>
+      <div ref={node => this.node = node} className="row" id="main" style={{ maxWidth: "100%", height: "calc(100% - 170px)" }}>
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
-        <div className="col-sm-2" style={{ height: "100%" }}>
+        <div className="col-sm-2" style={{ height: "100%" }} >
           <LeftMenu cookies={this.props.cookies} />
         </div>
-        <div className="container col-sm-10 noPad" style={{ height: "100%" }} >
+
+        <div className="col-sm-10 noPad">
 
           {(albumIsReady === true) ? (
-            <div id="mainMe" style={{ height: "100%", width: "100%", maxWidth: "100%" }}  >
 
-              <div style={{ position: "relative", height: "100%", width: "100%", overflow: "hidden" }} >
+            <div style={{ display: "relative", width: "100%", height: "100%" }}>
+
+              <div style={{ position: "relative", height: "100%", width: "100%", overflow: "hidden", minHeight: "500px" }} >
                 <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                 <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                 <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
@@ -161,13 +155,10 @@ class ImageBrowser extends Component {
               <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
               <button id="btnNextPhoto" className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
               <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
-
-              <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} />
-
               <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
 
+              <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} />
             </div>
-
           ) :
             this.getLoadingDiv()
           }

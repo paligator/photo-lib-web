@@ -62,18 +62,29 @@ class ImageDetails extends Component {
 					)} no={() => (<FavouriteBtn isFavourite={isFavourite} disabled></FavouriteBtn>)} />
 				</p>
 			</div>
-			<div className="leftMenuItem">
+			<div className="leftMenuItem" style={{ height: "400px", overflow: "auto" }}>
 				<h4>Exif:</h4>
-				<p>
-					Camera:<br />
-					<span>{exif.Camera}</span>
-				</p>
-				<p>
-					Orientation:<br />
-					<span>{exif.Orientation || "-"}</span>
-				</p>
+				<div>
+					{(exif) ? (
+						Object.keys(exif).map(item => {
+
+							let value = exif[item];
+							console.log(`item ${item} -> ${value}`);
+							value = String(value);
+							return (
+								<React.Fragment key={item}>
+									<p>{item}<br />
+										<span>{value}</span>
+									</p>
+								</React.Fragment>
+							)
+						})) : null}
+
+				</div>
+
+
 			</div>
-		</div >
+		</div>
 		)
 	}
 }

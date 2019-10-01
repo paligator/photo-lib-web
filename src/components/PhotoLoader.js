@@ -34,7 +34,7 @@ class PhotoLoader extends Component {
 	render() {
 
 		let classNames = "mainImageDiv flexContainer flexRow animated " + this.props.className;
-		
+
 		return (
 			<div className={classNames} style={{ display: this.props.display }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
 
@@ -47,7 +47,7 @@ class PhotoLoader extends Component {
 				}
 
 				{(this.props.photoUrl) ? (
-					<img id={this.props.imgId} alt="error hahaha hihihi" data-next="next"
+					<img id={this.props.imgId} alt="error " data-next="next"
 						className="mainImage"
 						title={this.props.photoName}
 						style={{ display: this.state.photoLoadingState !== "waiting" ? "inline" : "none" }}
