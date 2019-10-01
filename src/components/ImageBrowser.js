@@ -37,6 +37,9 @@ class ImageBrowser extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+
+    const albumNameFromUrl = this.getAlbumNameFromUrl(this.props);
+    this.props.onSelectAlbum(albumNameFromUrl);
   }
 
   componentWillUnmount() {
@@ -45,11 +48,14 @@ class ImageBrowser extends Component {
 
   // eslint-disable-next-line no-unused-vars
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("som tu shouldComponentUpdate .........");
     return true;
   }
 
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState) {
+
+    console.log("som tu componentDidUpdate.........");
 
     if (this.props.album.exists === true && this.props.album.error) {
       throw new Error(this.props.album.error);
@@ -59,7 +65,6 @@ class ImageBrowser extends Component {
     if (this.shouldLoadAlbum(prevProps, albumNameFromUrl) === true) {
       this.props.onSelectAlbum(albumNameFromUrl);
     }
-
   }
 
   shouldLoadAlbum(prevProps, albumNameFromUrl) {
