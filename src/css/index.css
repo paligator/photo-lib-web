@@ -253,3 +253,19 @@ h1, h2, h3, H4, h5, h6 {
   background: var(--main);
   color: var(--black-09);
 }
+
+/* set up scrollbars - START */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px var(--line); 
+}
+::-webkit-scrollbar-thumb {
+  background: var(--main-01); 
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--main); 
+}
+/* set up scrollbars - END */
