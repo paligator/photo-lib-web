@@ -144,9 +144,9 @@ class ImageBrowser extends Component {
 
           {(albumIsReady === true) ? (
 
-            <div style={{ display: "relative", width: "100%", height: "100%" }}>
+            <div id="mainMe" style={{ display: "relative", width: "100%", height: "100%" }}>
 
-              <div style={{ position: "relative", height: "100%", width: "100%", overflow: "hidden", minHeight: "500px" }} >
+              <div style={{ position: "relative", height: "100%", width: "100%", minHeight: "200px" }} >
                 <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                 <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                 <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
@@ -275,7 +275,7 @@ class ImageBrowser extends Component {
       (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
       (document.msFullscreenElement && document.msFullscreenElement !== null);
 
-    const docElm = document.getElementById("mainMe");
+    const docElm = this.node.querySelector("#mainMe");
     if (!isInFullScreen) {
       if (docElm.requestFullscreen) {
         docElm.requestFullscreen();

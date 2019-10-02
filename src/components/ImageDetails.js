@@ -72,11 +72,9 @@ class ImageDetails extends Component {
 							console.log(`item ${item} -> ${value}`);
 							value = String(value);
 							return (
-								<React.Fragment key={item}>
-									<p>{item}<br />
+									<p key={item}>{item}<br />
 										<span>{value}</span>
 									</p>
-								</React.Fragment>
 							)
 						})) : null}
 
