@@ -9,8 +9,8 @@ class AlbumInfo extends Component {
 
 		return (
 			<div className="leftMenuItem boxUderline">
-				<h3><p className="noWrap"><span>{album.continent} &gt;&gt; {album.name}</span></p></h3>
-				<p className="noWrap"><span>{album.month}/{album.year}</span></p>
+				<h1>{album.name}</h1>
+				<p>{album.month}/{album.year}</p>
 			</div>
 		);
 	}

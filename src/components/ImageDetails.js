@@ -69,11 +69,8 @@ class ImageDetails extends Component {
 						Object.keys(exif).map(item => {
 
 							let value = exif[item];
-							
 							if(!value) return null;
-							
 							value = String(value || "");
-
 							return (
 								<p key={item}>{item}<br />
 									<span>{value}</span>

@@ -95,7 +95,7 @@ class ImageBrowser extends Component {
     let photoUrlFadeIn = null, photoUrlFadeOut = null, photoUrlBuffer = null;
     let photoNameFadeIn = null, photoNameFadeOut = null, photoNameBuffer = null;
     let photoCount;
-    let selectedPhotoIndex
+    let selectedPhotoIndex;
 
     if (album.isReady === true && album.exists === false) {
       return (<div>Sorry, I have never been there</div>);
@@ -131,11 +131,10 @@ class ImageBrowser extends Component {
     }
 
     const usePulseFading = (selectedPhotoIndex === 0 && movementDirection === "start") || movementDirection === "thumbClick";
-    let fadeOutClass = usePulseFading === true ? "fadeOut" : (movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
-    let fadeInClass = usePulseFading === true ? "fadeIn" : (movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
+    const fadeOutClass = usePulseFading === true ? "fadeOut" : (movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
+    const fadeInClass = usePulseFading === true ? "fadeIn" : (movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
 
-    // fadeOutClass = "";
-    // fadeInClass = "";
+    const showLeftMenu = this.props.styles.showLeftMenu === true;
 
     return (
 
@@ -143,11 +142,14 @@ class ImageBrowser extends Component {
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
-        <div className="col-sm-2" style={{ height: "100%", overflow: "auto", overflowX: "hidden" }} >
-          <LeftMenu cookies={this.props.cookies} />
-        </div>
+        {(showLeftMenu === true) ?
+          <div className="col-sm-2" style={{ height: "100%", overflow: "auto", overflowX: "hidden" }} >
+            <LeftMenu cookies={this.props.cookies} />
+          </div>
+          : null
+        }
 
-        <div className="col-sm-10 noPad">
+        <div className={showLeftMenu ? "col-sm-10 noPad" : "col-sm-12 noPad"}>
 
           {(albumIsReady === true) ? (
 
@@ -157,7 +159,7 @@ class ImageBrowser extends Component {
 
                 <div className="column" style={{ width: "100%", padding: "var(--baseSpace)" }}>
 
-                  <div id="loaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "300px", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
+                  <div id="loaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
                     <PhotoLoader id="loaderIn" imgId="imgPhotoIn" bgColor="pink" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                     <PhotoLoader id="loaderOut" imgId="imgPhotoOut" bgColor="grey" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                     <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" bgColor="pink" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
