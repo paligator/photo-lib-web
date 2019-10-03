@@ -62,19 +62,22 @@ class ImageDetails extends Component {
 					)} no={() => (<FavouriteBtn isFavourite={isFavourite} disabled></FavouriteBtn>)} />
 				</p>
 			</div>
-			<div className="leftMenuItem" style={{ height: "400px", overflow: "auto" }}>
+			<div className="leftMenuItem" style={{ overflow: "auto" }}>
 				<h4>Exif:</h4>
 				<div>
 					{(exif) ? (
 						Object.keys(exif).map(item => {
 
 							let value = exif[item];
-							console.log(`item ${item} -> ${value}`);
-							value = String(value);
+							
+							if(!value) return;
+							
+							value = String(value || "");
+
 							return (
-									<p key={item}>{item}<br />
-										<span>{value}</span>
-									</p>
+								<p key={item}>{item}<br />
+									<span>{value}</span>
+								</p>
 							)
 						})) : null}
 

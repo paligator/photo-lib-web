@@ -33,24 +33,24 @@ class PhotoLoader extends Component {
 
 	render() {
 
-		let classNames = "mainImageDiv flexContainer flexRow animated " + this.props.className;
+		let classNames = "animated photoLoading " + this.props.className;
 
 		return (
-			<div className={classNames} style={{ display: this.props.display }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
+			<div className={classNames} style={{ position:"absolute", display: this.props.display, width: "100%", height: "100%" }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
 
 				{(this.state.photoLoadingState === "waiting" && this.props.photoUrl !== '') ?
 					(
-						<div style={{ position: "absolute", left: "37.5%", top: "15%", height: "auto", width: "25%" }}>
-							<ReactLoading type='spin' color="red" style={{ width: "100%", height: "100%" }} />
+						<div className="photoLoading" style={{ position: "absolute", width: "25%" }}>
+							<ReactLoading type='spin' style={{ width: "100%", height: "100%" }} />
 						</div>
 					) : null
-				}
+				} 
 
 				{(this.props.photoUrl) ? (
 					<img id={this.props.imgId} alt="error " data-next="next"
 						className="mainImage"
 						title={this.props.photoName}
-						style={{ display: this.state.photoLoadingState !== "waiting" ? "inline" : "none" }}
+						style={{ display: this.state.photoLoadingState !== "waiting" ? "" : "none" }}
 						src={this.props.photoUrl} onLoad={() => this.onPictureIsLoaded()} />
 				) : null
 				}
@@ -73,28 +73,6 @@ class PhotoLoader extends Component {
 		this.setState({ photoLoadingState: "finished" });
 	}
 
-	// async loadExif(img) {
-
-	// 	console.log(`loading exif..............${this.props.id}`);
-
-	// 	if (this.props.showExif !== true) {
-	// 		return;
-	// 	}
-
-
-	// const exif = await new Promise((resolve): void => {
-
-	// 	EXIF.getData(img, function () {
-	// 		var exif = {
-	// 			make: EXIF.getTag(this, "Make"),
-	// 			model: EXIF.getTag(this, "Filename")
-	// 		}
-	// 		resolve(exif);
-	// 	});
-	// });
-
-	// this.props.onLoadExif(exif);
-	// 	}
 }
 
 

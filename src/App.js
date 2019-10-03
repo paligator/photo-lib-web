@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as action from "./constants/action-types";
-import './App.css';
 import './css/slider.css';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost";

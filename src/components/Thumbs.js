@@ -37,7 +37,7 @@ class Thumbs extends Component {
 		const curIndex = this.props.selectedPhotoIndex;
 
 		return (
-			<div ref={node => this.node = node} id="divThumbs" className="flexRow" style={{ maxWidth: "100%", width: "100%", height: "87px", minHeight: "87px", overflowY: "hidden" }}>
+			<div ref={node => this.node = node} id="divThumbs" className="flexRow" style={{bottom:0, position: "absolute",  maxWidth: "100%", width: "100%", height: "87px", minHeight: "87px", overflowY: "hidden" }}>
 				{
 					files.map((file, i) => {
 						const key = `thumb${i}`;
@@ -59,7 +59,7 @@ class Thumbs extends Component {
 								</img>
 
 								<div id={`thumbLoading${i}`} data-index={i} className={(i === curIndex) ? "thumbLoading thumbSelected" : "thumbLoading"} >
-									<img key="xxx" src={this.SPINNER_IMGET_URL} width="100%" height="100%" />
+									<img key="xxx" alt="watining..." src={this.SPINNER_IMGET_URL} width="100%" height="100%" />
 								</div>
 
 							</InView>
@@ -153,6 +153,7 @@ class Thumbs extends Component {
 
 	chooseThumb(e) {
 		let element = e.target;
+		this.props.setNextFading();
 		this.props.onChooseThumb(element.dataset.index, this.node);
 		this.props.markThumbAsSelected(element, this.node, false);
 	}

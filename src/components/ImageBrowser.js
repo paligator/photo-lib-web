@@ -10,7 +10,7 @@ import { getExif } from "../api/Utils";
 
 class ImageBrowser extends Component {
 
-  state = { animating: false, movementDirection: "start" };
+  state = { animating: false, movementDirection: "start", lastIndex: -1 };
 
   globalKeyHandlers = {
     NEXT_PHOTO: () => this.nextPhotoByGlobalKey(true),
@@ -33,6 +33,7 @@ class ImageBrowser extends Component {
     this.disableNavButtons = this.disableNavButtons.bind(this);
     this.onAnimationEnd = this.onAnimationEnd.bind(this);
     this.loadExif = this.loadExif.bind(this);
+    this.setNextFading = this.setNextFading.bind(this);
   }
 
   componentDidMount() {
@@ -101,20 +102,22 @@ class ImageBrowser extends Component {
     }
 
     const albumIsReady = album.isReady === true;
+    const movementDirection = this.state.movementDirection;
 
     if (albumIsReady === true) {
 
       photoCount = album.files.length;
       selectedPhotoIndex = this.props.selectedPhotoIndex;
       photoNameFadeIn = album.files[selectedPhotoIndex];
+
       const photoNameNext = selectedPhotoIndex + 1 < album.files.length ? album.files[selectedPhotoIndex + 1] : '';
-      const photoNamePrev = selectedPhotoIndex > 0 ? album.files[selectedPhotoIndex - 1] : '';
+      const photoNamePrev = selectedPhotoIndex > 0 ? album.files[(movementDirection === "thumbClick") ? this.state.lastIndex : selectedPhotoIndex - 1] : '';
 
       photoUrlFadeIn = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameFadeIn}`;
       const photoUrlNext = selectedPhotoIndex + 1 < album.files.length ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameNext}` : '';
       const photoUrlPrev = selectedPhotoIndex > 0 ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNamePrev}` : '';
 
-      if (this.state.movementDirection === "prev") {
+      if (movementDirection === "prev") {
         photoUrlFadeOut = photoUrlNext;
         photoNameFadeOut = photoNameNext;
         photoUrlBuffer = photoUrlPrev;
@@ -127,12 +130,16 @@ class ImageBrowser extends Component {
       }
     }
 
-    const fadeOutClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "" : (this.state.movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
-    const fadeInClass = selectedPhotoIndex === 0 && this.state.movementDirection === "start" ? "pulse" : (this.state.movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
+    const usePulseFading = (selectedPhotoIndex === 0 && movementDirection === "start") || movementDirection === "thumbClick";
+    let fadeOutClass = usePulseFading === true ? "fadeOut" : (movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
+    let fadeInClass = usePulseFading === true ? "fadeIn" : (movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
+
+    // fadeOutClass = "";
+    // fadeInClass = "";
 
     return (
 
-      <div ref={node => this.node = node} className="row" id="main" style={{ maxWidth: "100%", height: "calc(100% - 170px)" }}>
+      <div id="divBrowswerTop" ref={node => this.node = node} className="container row"  >
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
@@ -144,12 +151,16 @@ class ImageBrowser extends Component {
 
           {(albumIsReady === true) ? (
 
-            <div id="mainMe" style={{ display: "relative", width: "100%", height: "100%" }}>
+            <div id="mainMe" className="column" style={{ width: "100%", height: "100%", maxHeight: "100%", maxWidth: "100%" }}>
 
-              <div style={{ position: "relative", height: "100%", width: "100%", minHeight: "200px" }} >
-                <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="inline" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="inline" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+              <div id="photoLoaders" className="row">
+
+                <div style={{width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
+                  <PhotoLoader id="loaderIn" imgId="imgPhotoIn" bgColor="pink" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                  <PhotoLoader id="loaderOut" imgId="imgPhotoOut" bgColor="grey" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                  <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" bgColor="pink" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                </div>
+
               </div>
 
               <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
@@ -157,7 +168,7 @@ class ImageBrowser extends Component {
               <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
               <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
 
-              <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} />
+              <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} />
             </div>
           ) :
             this.getLoadingDiv()
@@ -233,6 +244,8 @@ class ImageBrowser extends Component {
 
   disableNavButtons(disabled) {
 
+    
+
     if (disabled === true) {
       const btnNavs = this.node.querySelectorAll('.btn-nav');
       btnNavs.forEach(btn => { btn.disabled = true; })
@@ -251,11 +264,15 @@ class ImageBrowser extends Component {
     this.markThumbAsSelected(target, this.node, scroolTo, scrollBahaviour);
   }
 
-  markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
-    const classNameForAll = target.className.replace("thumbSelected", "");
-    node.querySelectorAll('.thumbSelected').forEach(thumb => { thumb.className = classNameForAll });
+  setNextFading() {
+    this.setState({ movementDirection: "thumbClick", lastIndex: this.props.selectedPhotoIndex });
 
-    target.className += " thumbSelected";
+  }
+
+  markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
+    node.querySelectorAll('.thumbSelected').forEach(thumb => { thumb.classList.remove("thumbSelected") });
+
+    target.classList.add("thumbSelected");
     if (scroolTo === true) {
       //FIXME: I don't fucking understand when I use global Hotkeys (rith, left) and scroll behaviour = "smooth" scrollIntoView doesn't work, with hotkey I have to use "auto" or "instant"
       target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
