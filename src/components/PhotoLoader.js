@@ -40,7 +40,7 @@ class PhotoLoader extends Component {
 
 				{(this.state.photoLoadingState === "waiting" && this.props.photoUrl !== '') ?
 					(
-						<div className="photoLoading" style={{ position: "absolute", width: "25%" }}>
+						<div className="mainImage" style={{ position: "absolute", width: "25%" }}>
 							<ReactLoading type='spin' style={{ width: "100%", height: "100%" }} />
 						</div>
 					) : null
