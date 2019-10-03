@@ -30,19 +30,18 @@ class Thumbs extends Component {
 
 	render() {
 
-		console.log("Thumbs-> render()");
-
 		const thumbUrl = `${config.imageProxyUrl}/photo/thumb/${this.props.urlPath}`;
 		const files = this.props.album.files;
 		const curIndex = this.props.selectedPhotoIndex;
 
 		return (
-			<div ref={node => this.node = node} id="divThumbs" className="flexRow" style={{bottom:0, position: "absolute",  maxWidth: "100%", width: "100%", height: "87px", minHeight: "87px", overflowY: "hidden" }}>
+			<div ref={node => this.node = node} id="divThumbs" className="flexRow" style={{ ...this.props.style, overflowY: "hidden" }}>
 				{
 					files.map((file, i) => {
 						const key = `thumb${i}`;
 						const url = `${thumbUrl}/${file}`;
 						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
+						const classNameLoader = className + " thumbLoading";
 						return (
 							<InView id={`obsv${i}`} key={key} data-key={key} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
 
@@ -58,8 +57,8 @@ class Thumbs extends Component {
 									data-src={url}>
 								</img>
 
-								<div id={`thumbLoading${i}`} data-index={i} className={(i === curIndex) ? "thumbLoading thumbSelected" : "thumbLoading"} >
-									<img key="xxx" alt="watining..." src={this.SPINNER_IMGET_URL} width="100%" height="100%" />
+								<div id={`thumbLoading${i}`} data-index={i} className={classNameLoader} >
+									<img key="imgWating" alt="waiting..." src={this.SPINNER_IMGET_URL} width="100%" height="100%" />
 								</div>
 
 							</InView>

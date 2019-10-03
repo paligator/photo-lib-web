@@ -70,7 +70,7 @@ class ImageDetails extends Component {
 
 							let value = exif[item];
 							
-							if(!value) return;
+							if(!value) return null;
 							
 							value = String(value || "");
 

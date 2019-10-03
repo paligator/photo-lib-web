@@ -50,7 +50,7 @@ class App extends Component {
 
     return (
       <ErrorBoundary>
-        <div className="App" style={{ height: "100%" }}>
+        <div className="App" style={{ height: "100%", width: "100%" }}>
 
           <BrowserRouter>
             <ApolloProvider client={apolloClient}>

@@ -139,7 +139,7 @@ class ImageBrowser extends Component {
 
     return (
 
-      <div id="divBrowswerTop" ref={node => this.node = node} className="container row"  >
+      <div id="divBrowswerTop" ref={node => this.node = node} className="row" style={{ height: 'calc(100% - 80px)', maxWidth: "100%" }} >
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
@@ -151,24 +151,28 @@ class ImageBrowser extends Component {
 
           {(albumIsReady === true) ? (
 
-            <div id="mainMe" className="column" style={{ width: "100%", height: "100%", maxHeight: "100%", maxWidth: "100%" }}>
+            <div id="mainMe" className="column" style={{ width: "100%", height: "100%" }}>
 
-              <div id="photoLoaders" className="row">
+              <div className="row" style={{ height: '100%', width: "100%", position: "absolute", }}>
 
-                <div style={{width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
-                  <PhotoLoader id="loaderIn" imgId="imgPhotoIn" bgColor="pink" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                  <PhotoLoader id="loaderOut" imgId="imgPhotoOut" bgColor="grey" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                  <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" bgColor="pink" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                <div className="column" style={{ width: "100%", padding: "var(--baseSpace)" }}>
+
+                  <div id="loaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "300px", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
+                    <PhotoLoader id="loaderIn" imgId="imgPhotoIn" bgColor="pink" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                    <PhotoLoader id="loaderOut" imgId="imgPhotoOut" bgColor="grey" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                    <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" bgColor="pink" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                  </div>
+
+                  <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
+
                 </div>
 
+                <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
+                <button id="btnNextPhoto" className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
+                <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
+                <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
               </div>
 
-              <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
-              <button id="btnNextPhoto" className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
-              <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
-              <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
-
-              <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} />
             </div>
           ) :
             this.getLoadingDiv()
@@ -244,7 +248,7 @@ class ImageBrowser extends Component {
 
   disableNavButtons(disabled) {
 
-    
+
 
     if (disabled === true) {
       const btnNavs = this.node.querySelectorAll('.btn-nav');
