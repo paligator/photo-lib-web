@@ -159,7 +159,7 @@ class ImageBrowser extends Component {
 
                 <div className="column" style={{ width: "100%", padding: "var(--baseSpace)" }}>
 
-                  <div id="loaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
+                  <div id="divPhotoLoaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
                     <PhotoLoader id="loaderIn" imgId="imgPhotoIn" bgColor="pink" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                     <PhotoLoader id="loaderOut" imgId="imgPhotoOut" bgColor="grey" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                     <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" bgColor="pink" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
@@ -293,12 +293,13 @@ class ImageBrowser extends Component {
   }
 
   goToFullScreen() {
+    console.log("som to go to fullscreent")
     const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
       (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
       (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
       (document.msFullscreenElement && document.msFullscreenElement !== null);
 
-    const docElm = this.node.querySelector("#mainMe");
+    const docElm = this.node.querySelector("#divPhotoLoaders");
     if (!isInFullScreen) {
       if (docElm.requestFullscreen) {
         docElm.requestFullscreen();
