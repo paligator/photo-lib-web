@@ -143,7 +143,7 @@ class ImageBrowser extends Component {
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
-        <div className="col-sm-2" style={{ height: "100%" }} >
+        <div className="col-sm-2" style={{ height: "100%", overflow: "auto", overflowX: "hidden" }} >
           <LeftMenu cookies={this.props.cookies} />
         </div>
 

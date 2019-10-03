@@ -8,7 +8,7 @@ class LeftMenu extends Component {
 	render() {
 
 		return (
-			<div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+			<div style={{ display: "flex", flexDirection: "column" }}>
 				<AlbumInfo />
 				<ImagesFilter cookies={this.props.cookies} />
 				<ImageDetails />
