@@ -92,7 +92,7 @@ class Navigation extends Component {
 			return (
 				contAlbums.map(album => (
 					<DropdownItem key={album.id}>
-						<NavItem key={album.id}>
+						<NavItem key={album.id} onClick={this.toggle} >
 							<Link className="navItem" to={`/album/${album.continent}/${album.name}`}>{C.formatAlbumName(album)}</Link>
 						</NavItem>
 					</DropdownItem>

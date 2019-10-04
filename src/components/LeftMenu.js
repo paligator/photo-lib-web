@@ -19,7 +19,6 @@ class LeftMenu extends Component {
 
 function mapStateToProps(state, ownState) {
 	return {
-		album: state.selectedAlbum,
 		cookies: ownState.cookies
 	};
 }

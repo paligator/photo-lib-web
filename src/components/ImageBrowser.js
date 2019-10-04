@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LeftMenu, Thumbs, PhotoLoader } from '../components'
+import { LeftMenu, Thumbs, PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter } from '../components'
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import config from '../config';
@@ -93,47 +93,17 @@ class ImageBrowser extends Component {
   render() {
 
     const album = this.props.album;
-    let photoUrlFadeIn = null, photoUrlFadeOut = null, photoUrlBuffer = null;
-    let photoNameFadeIn = null, photoNameFadeOut = null, photoNameBuffer = null;
-    let photoCount;
-    let selectedPhotoIndex;
 
     if (album.isReady === true && album.exists === false) {
       return (<div>Sorry, I have never been there</div>);
     }
 
+    const photoCount = (album.files) ? album.files.length : 0;
+    const selectedPhotoIndex = this.props.selectedPhotoIndex
     const albumIsReady = album.isReady === true;
     const movementDirection = this.state.movementDirection;
-
-    if (albumIsReady === true) {
-
-      photoCount = album.files.length;
-      selectedPhotoIndex = this.props.selectedPhotoIndex;
-      photoNameFadeIn = album.files[selectedPhotoIndex];
-
-      const photoNameNext = selectedPhotoIndex + 1 < album.files.length ? album.files[selectedPhotoIndex + 1] : '';
-      const photoNamePrev = selectedPhotoIndex > 0 ? album.files[(movementDirection === "thumbClick") ? this.state.lastIndex : selectedPhotoIndex - 1] : '';
-
-      photoUrlFadeIn = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameFadeIn}`;
-      const photoUrlNext = selectedPhotoIndex + 1 < album.files.length ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameNext}` : '';
-      const photoUrlPrev = selectedPhotoIndex > 0 ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNamePrev}` : '';
-
-      if (movementDirection === "prev") {
-        photoUrlFadeOut = photoUrlNext;
-        photoNameFadeOut = photoNameNext;
-        photoUrlBuffer = photoUrlPrev;
-        photoNameBuffer = photoNamePrev
-      } else {
-        photoUrlFadeOut = photoUrlPrev;
-        photoNameFadeOut = photoNamePrev;
-        photoUrlBuffer = photoUrlNext;
-        photoNameBuffer = photoNameNext
-      }
-    }
-
-    const usePulseFading = (selectedPhotoIndex === 0 && movementDirection === "start") || movementDirection === "thumbClick";
-    const fadeOutClass = usePulseFading === true ? "fadeOut" : (movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
-    const fadeInClass = usePulseFading === true ? "fadeIn" : (movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
+    const { photoUrlFadeIn, photoUrlFadeOut, photoUrlBuffer, photoNameFadeIn, photoNameFadeOut, photoNameBuffer } = this.getPhotoUrlsAndNames(album, selectedPhotoIndex, movementDirection);
+    const { fadeInClass, fadeOutClass } = this.getPhotoFadingClasses(selectedPhotoIndex, movementDirection)
 
     const showLeftMenu = this.props.styles.showLeftMenu === true;
 
@@ -144,8 +114,10 @@ class ImageBrowser extends Component {
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
         {(showLeftMenu === true) ?
-          <div className="col-sm-2" style={{ height: "100%", overflow: "auto", overflowX: "hidden" }} >
-            <LeftMenu cookies={this.props.cookies} />
+          <div className="col-sm-2" style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto", overflowX: "hidden" }} >
+            <AlbumInfo />
+            <ImagesFilter cookies={this.props.cookies} />
+            <ImageDetails />
           </div>
           : null
         }
@@ -155,20 +127,25 @@ class ImageBrowser extends Component {
           {(albumIsReady === true) ? (
 
             <div id="mainMe" className="column" style={{ width: "100%", height: "100%" }}>
+
+              {(showLeftMenu === false) ? (
+                <div style={{ padding: "10px" }}>
+                  <AlbumInfo />
+                  <ImagesFilter cookies={this.props.cookies} />
+                </div>) : null
+              }
+
               <Swipeable onSwipedLeft={() => { this.nextPhoto(true) }} onSwipedRight={() => { this.nextPhoto(false) }} >
 
                 <div className="row" style={{ height: '100%', width: "100%", position: "absolute", }}>
-
                   <div className="column" style={{ width: "100%", padding: "var(--baseSpace)" }}>
 
                     <div id="divPhotoLoaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
-                      <PhotoLoader id="loaderIn" imgId="imgPhotoIn" bgColor="pink" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                      <PhotoLoader id="loaderOut" imgId="imgPhotoOut" bgColor="grey" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                      <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" bgColor="pink" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                      <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                      <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                      <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
                     </div>
-
                     <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
-
                   </div>
 
                   <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
@@ -186,6 +163,50 @@ class ImageBrowser extends Component {
       </div >
 
     )
+  }
+
+  getPhotoFadingClasses(selectedPhotoIndex, movementDirection) {
+    const usePulseFading = (selectedPhotoIndex === 0 && movementDirection === "start") || movementDirection === "thumbClick";
+    const fadeOutClass = usePulseFading === true ? "fadeOut" : (movementDirection === "next" ? "fadeOutLeft" : "fadeOutRight");
+    const fadeInClass = usePulseFading === true ? "fadeIn" : (movementDirection === "next" ? "fadeInRight" : "fadeInLeft");
+
+    return { fadeInClass, fadeOutClass };
+  }
+
+  getPhotoUrlsAndNames(album, selectedPhotoIndex, movementDirection) {
+
+    if (album.isReady !== true) {
+      return {}
+    }
+
+    let photoUrlFadeIn = null, photoUrlFadeOut = null, photoUrlBuffer = null;
+    let photoNameFadeIn = null, photoNameFadeOut = null, photoNameBuffer = null;
+
+    photoNameFadeIn = album.files[selectedPhotoIndex];
+
+    const photoNameNext = selectedPhotoIndex + 1 < album.files.length ? album.files[selectedPhotoIndex + 1] : '';
+    const photoNamePrev = selectedPhotoIndex > 0 ? album.files[(movementDirection === "thumbClick") ? this.state.lastIndex : selectedPhotoIndex - 1] : '';
+
+    photoUrlFadeIn = `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameFadeIn}`;
+    const photoUrlNext = selectedPhotoIndex + 1 < album.files.length ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNameNext}` : '';
+    const photoUrlPrev = selectedPhotoIndex > 0 ? `${config.imageProxyUrl}/photo/prev/${album.path}/${photoNamePrev}` : '';
+
+    if (movementDirection === "prev") {
+      photoUrlFadeOut = photoUrlNext;
+      photoNameFadeOut = photoNameNext;
+      photoUrlBuffer = photoUrlPrev;
+      photoNameBuffer = photoNamePrev
+    } else {
+      photoUrlFadeOut = photoUrlPrev;
+      photoNameFadeOut = photoNamePrev;
+      photoUrlBuffer = photoUrlNext;
+      photoNameBuffer = photoNameNext
+    }
+
+    return {
+      photoNameFadeIn, photoUrlFadeIn, photoUrlFadeOut, photoNameFadeOut, photoNameBuffer, photoUrlBuffer
+    }
+
   }
 
   async onAnimationEnd(e) {
