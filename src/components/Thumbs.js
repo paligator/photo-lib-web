@@ -43,7 +43,7 @@ class Thumbs extends Component {
 						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
 						const classNameLoader = className + " thumbLoading";
 						return (
-							<InView id={`obsv${i}`} key={key} data-key={key} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
+							<InView id={`obsv${i}`} key={key} data-key={key} triggerOnce={false} onChange={this.onPhotoVisibilityChange} style={{ height: "var(--thumbsHeight)" }} >
 
 								<img data-key={key} title={file} id={`imgThumb_${i}`} className={className}
 									alt="error"
@@ -58,7 +58,7 @@ class Thumbs extends Component {
 								</img>
 
 								<div id={`thumbLoading${i}`} data-index={i} className={classNameLoader} >
-									<img key="imgWating" alt="waiting..." src={this.SPINNER_IMGET_URL} width="100%" height="100%" />
+									<img key="imgWating" alt="waiting..." src={this.SPINNER_IMGET_URL} style={{ height: "100%", width: "auto" }} />
 								</div>
 
 							</InView>

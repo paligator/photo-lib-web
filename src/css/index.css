@@ -6,7 +6,7 @@
   --black-05: rgba(255, 255, 255, 0.5);
   --map-bg-color: #E5EFF5;
   --line: #ebebeb;
-  --thumbsHeight: 70px;
+  --thumbsHeight: 9vh;
   --baseSpace: 5px;
   --navBtnWidth: 80px;
   --scrollbarWidth: 8px;
@@ -22,8 +22,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
-  font-size: 16px !important;
-  color: var(--main) !important;
+  color: var(--main);
   font-weight: 600;
 }
 
@@ -34,12 +33,6 @@ span {
 #root {
   height: 100%;
 }
-
-.row {
-  margin-right: 0px !important;
-  margin-left: 0px !important;
-}
-
 .btn-img {
   background-color: transparent;
   border: 0px;
@@ -56,6 +49,12 @@ span {
 	vertical-align: text-top;
 	background-position : center center;
   background-repeat:no-repeat;
+}
+
+/* why bootstrap has by default values -15px ??? */
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
 }
 
 .btn-img-act:before {
@@ -109,15 +108,6 @@ btn-img-fav {
   background-image : url(../images/fullscreen.png);
 }
 
-.imageloader {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.noPad {
-  padding: 0px !important;
-}
-
 .top-right {
   position: absolute;
   top: 10px;
@@ -168,24 +158,23 @@ btn-img-fav {
 }
 
 .navbar {
- font-size: 17px;
+ font-size: 1.2em;
  padding: 0px;
 }
 
 .nav-item {
-  font-size: 17px;
   font-weight: 600;
   color: var(--black-09)
 }
 
 .nav-item :hover {
   background-color: var(--main);
-  color: var(--black-05) !important;
+  color: var(--black-05);
 }
 
 .dropdown-menu {
   border-radius: 0;
-  background-color: var(--main) !important;
+  background-color: var(--main);
   border-color: var(--main);
 }
 
@@ -207,19 +196,14 @@ btn-img-fav {
   background-color: var(--main) !important;
 }
 
-.navbar-dark .navbar-nav .nav-link .nav-item {
-  color: var(--black-09) !important;
-}
-
 .navbar-dark .navbar-nav .dropdown a {
-  color: var(--black-09) !important;
+  color: var(--black-09);
 }
 
 h1, h2, h3, H4, h5, h6 {
   color: var(--main);
   text-transform: none;
 }
-
 
 .boxUderline {
   border-bottom: 1px solid  var(--line);
@@ -228,6 +212,7 @@ h1, h2, h3, H4, h5, h6 {
 .thumb {
   cursor: pointer;
   width: auto;
+  height: var(--thumbsHeight);
   max-height: var(--thumbsHeight);
   padding: 0px 2px 0px 2px;
 }
@@ -236,7 +221,6 @@ h1, h2, h3, H4, h5, h6 {
   padding: 0px 0px 0px 0px;
 }
 .thumbLoading { 
-  width: 105px;
   max-height: var(--thumbsHeight);
   padding: 0px 2px 0px 2px;
 }

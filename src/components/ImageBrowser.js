@@ -139,7 +139,6 @@ class ImageBrowser extends Component {
 
     return (
 
-
       <div id="divBrowswerTop" ref={node => this.node = node} className="row" style={{ height: 'calc(100% - 80px)', maxWidth: "100%" }} >
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
@@ -151,7 +150,7 @@ class ImageBrowser extends Component {
           : null
         }
 
-        <div className={showLeftMenu ? "col-sm-10 noPad" : "col-sm-12 noPad"}>
+        <div className={showLeftMenu ? "col-sm-10" : "col-sm-12"} style={{ padding: "0" }}>
 
           {(albumIsReady === true) ? (
 
