@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { LeftMenu, Thumbs, PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter } from '../components'
+import { Thumbs, PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter } from '../components'
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import config from '../config';
@@ -23,10 +23,6 @@ class ImageBrowser extends Component {
     PREV_PHOTO: "left",
   };
 
-  // i have to keep this information, otherwise if there is error, and than in timeOut callback setState() is called, so setState throw error because component is unmounted, 
-  // and errorBoundary doesn't catch error 
-  _isMounted = false;
-
   constructor() {
     super();
     this.nextPhoto = this.nextPhoto.bind(this);
@@ -38,14 +34,8 @@ class ImageBrowser extends Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
-
     const albumNameFromUrl = this.getAlbumNameFromUrl(this.props);
     this.props.onSelectAlbum(albumNameFromUrl);
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -138,9 +128,9 @@ class ImageBrowser extends Component {
               <Swipeable onSwipedLeft={() => { this.nextPhoto(true) }} onSwipedRight={() => { this.nextPhoto(false) }} >
 
                 <div className="row" style={{ height: '100%', width: "100%", position: "absolute", }}>
-                  <div className="column" style={{ width: "100%", padding: "var(--baseSpace)" }}>
+                  <div className="column" style={{ width: "100%" }}>
 
-                    <div id="divPhotoLoaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden", marginBottom: "5px" }}>
+                    <div id="divPhotoLoaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden" }}>
                       <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                       <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                       <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />

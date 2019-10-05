@@ -5,7 +5,6 @@ import WorldMap from './WorldMap';
 import AlbumInfo from './AlbumInfo';
 import ImageDetails from './ImageDetails';
 import ImagesFilter from './ImagesFilter';
-import LeftMenu from './LeftMenu';
 import Thumbs from './Thumbs';
 import ErrorBoundary from './ErrorBoundary';
 import PhotoLoader from './PhotoLoader';
@@ -21,7 +20,6 @@ export {
 	AlbumInfo,
 	ImageDetails,
 	ImagesFilter,
-	LeftMenu,
 	Thumbs,
 	ErrorBoundary,
 	PhotoLoader

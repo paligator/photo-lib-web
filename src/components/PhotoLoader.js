@@ -33,10 +33,10 @@ class PhotoLoader extends Component {
 
 	render() {
 
-		let classNames = "animated photoLoading " + this.props.className;
+		const classNames = "animated " + this.props.className;
 
 		return (
-			<div className={classNames} style={{ position:"absolute", display: this.props.display, width: "100%", height: "100%" }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
+			<div className={classNames} style={{ position: "absolute", display: this.props.display, width: "100%", height: "calc(100% - (var(--baseSpace) * 2))", margin: "var(--baseSpace)" }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
 
 				{(this.state.photoLoadingState === "waiting" && this.props.photoUrl !== '') ?
 					(
@@ -44,7 +44,7 @@ class PhotoLoader extends Component {
 							<ReactLoading type='spin' style={{ width: "100%", height: "100%" }} />
 						</div>
 					) : null
-				} 
+				}
 
 				{(this.props.photoUrl) ? (
 					<img id={this.props.imgId} alt="error " data-next="next"
