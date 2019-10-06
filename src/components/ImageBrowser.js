@@ -279,17 +279,25 @@ class ImageBrowser extends Component {
   }
 
   markThumbByIndexAsSelected(index, scroolTo = false, scrollBahaviour = null) {
-    const target = this.node.querySelector(`#imgThumb_${index}`);
+    const target = this.node.querySelector(`#thumbObsv${index}`);
     this.markThumbAsSelected(target, this.node, scroolTo, scrollBahaviour);
   }
 
+
   setNextFading() {
     this.setState({ movementDirection: "thumbClick", lastIndex: this.props.selectedPhotoIndex });
-
   }
 
   markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
     node.querySelectorAll('.thumbSelected').forEach(thumb => { thumb.classList.remove("thumbSelected") });
+
+    // find componnet which is displayed (loader, image, error message), on that compoment i can aply selected border
+    for (let i = 0; i < target.children.length; i++) {
+      if (target.children[i].style.display !== "none") {
+        target = target.children[i];
+        break;
+      }
+    }
 
     target.classList.add("thumbSelected");
     if (scroolTo === true) {

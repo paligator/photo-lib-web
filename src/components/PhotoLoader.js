@@ -11,9 +11,9 @@ class PhotoLoader extends Component {
 
 	constructor() {
 		super();
-		this.onPictureIsLoaded = this.onPictureIsLoaded.bind(this);
+		this.onPhotoIsLoaded = this.onPhotoIsLoaded.bind(this);
 		this.timeout = this.timeout.bind(this);
-		//this.loadExif = this.loadExif.bind(this);
+		this.onPhotoLoadError = this.onPhotoLoadError.bind(this);
 		this.timeout();
 	}
 
@@ -46,13 +46,23 @@ class PhotoLoader extends Component {
 					) : null
 				}
 
-				{(this.props.photoUrl) ? (
-					<img id={this.props.imgId} alt="error " data-next="next"
-						className="mainImage"
-						title={this.props.photoName}
-						style={{ display: this.state.photoLoadingState !== "waiting" ? "" : "none" }}
-						src={this.props.photoUrl} onLoad={() => this.onPictureIsLoaded()} />
-				) : null
+				{(this.state.photoLoadingState === "error" && this.props.photoUrl !== '') ?
+					(
+						<div className="mainImage" style={{ textAlign: "center" }}>
+							<i style={{ fontSize: "5em" }} className="fas fa-bug"></i><br /><br />
+							{`Sorry, there was a problem to get photo "${this.props.photoName}"!`}
+						</div>
+					) : null
+				}
+
+				{
+					(this.props.photoUrl) ? (
+						<img id={this.props.imgId} alt={`There is something wrong with picture ${this.props.photoName}`} data-next="next"
+							className="mainImage myShadow"
+							title={this.props.photoName}
+							style={{ display: this.state.photoLoadingState === "finished" ? "" : "none" }}
+							src={this.props.photoUrl} onLoad={this.onPhotoIsLoaded} onError={this.onPhotoLoadError} />
+					) : null
 				}
 			</div >
 		);
@@ -69,13 +79,15 @@ class PhotoLoader extends Component {
 		}, this.timeoutToShowLoading);
 	}
 
-	async onPictureIsLoaded() {
+	onPhotoIsLoaded() {
 		this.setState({ photoLoadingState: "finished" });
 	}
 
+	onPhotoLoadError() {
+		this.setState({ photoLoadingState: "error" })
+	}
+
 }
-
-
 
 
 // eslint-disable-next-line no-unused-vars

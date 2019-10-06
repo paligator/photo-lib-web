@@ -21,6 +21,7 @@ class Thumbs extends Component {
 		this.chooseThumb = this.chooseThumb.bind(this);
 		this.onPhotoVisibilityChange = this.onPhotoVisibilityChange.bind(this);
 		this.onPhotoIsLoaded = this.onPhotoIsLoaded.bind(this);
+		this.onPhotoLoadError = this.onPhotoLoadError.bind(this);
 	}
 
 	shouldComponentUpdate() {
@@ -41,33 +42,54 @@ class Thumbs extends Component {
 						const key = `thumb${i}`;
 						const url = `${thumbUrl}/${file}`;
 						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
-						const classNameLoader = className + " thumbLoading";
 						return (
-							<InView id={`obsv${i}`} key={key} data-key={key} triggerOnce={false} onChange={this.onPhotoVisibilityChange} style={{ height: "var(--thumbsHeight)" }} >
+							<InView id={`thumbObsv${i}`} data-index={i} key={key} data-key={key} onClick={this.chooseThumb} triggerOnce={false} onChange={this.onPhotoVisibilityChange} style={{}} >
 
 								<img data-key={key} title={file} id={`imgThumb_${i}`} className={className}
 									alt="error"
 									data-index={i}
-									onClick={this.chooseThumb}
 									src={this.DEFAULT_PHOTO_URL}
 									data-firstload={false}
 									data-isloaded={false}
 									style={{ display: 'none' }}
 									onLoad={this.onPhotoIsLoaded}
+									onError={this.onPhotoLoadError}
 									data-src={url}>
 								</img>
 
-								<div id={`thumbLoading${i}`} data-index={i} className={classNameLoader} >
-									<img key="imgWating" alt="waiting..." src={this.SPINNER_IMGET_URL} style={{ height: "100%", width: "auto" }} />
+								<div id={`errorMsg${i}`} className={className} style={{ display: "none", width: "5em" }} title={`Error get photo "${file}"`}>
+									<div style={{ position: "relative", width: "100%", height: "100%" }}>
+										<div style={{ position: "absolute", textAlign: "center", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
+											<i className="fas fa-bug" style={{ fontSize: "1em", }} />
+											error
+											</div>
+									</div>
 								</div>
 
-							</InView>
+								<div className={"thumbLoading " + className} id={`thumbLoading${i}`} >
+									<img alt="waiting..." src={this.SPINNER_IMGET_URL} style={{ height: "100%", width: "auto" }} />
+								</div>
+
+							</InView >
 						)
 					})
 				}
 			</div >
-
 		);
+	}
+
+	onPhotoLoadError(e, f) {
+		if (e && e.target.src !== this.DEFAULT_PHOTO_URL) {
+			//e.target.style.display = "";
+			e.target.dataset.isloaded = true;
+
+			//remove photo from downloading images
+			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== e.target.dataset.key);
+
+			//hide loading spinner
+			this.node.querySelector(`#thumbLoading${e.target.dataset.index}`).style.display = "none";
+			this.node.querySelector(`#errorMsg${e.target.dataset.index}`).style.display = "";
+		}
 	}
 
 	onPhotoIsLoaded(e) {
@@ -79,6 +101,7 @@ class Thumbs extends Component {
 			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== e.target.dataset.key);
 
 			//hide loading spinner
+			this.node.querySelector(`#imgThumb_${e.target.dataset.index}`).style.display = "";
 			this.node.querySelector(`#thumbLoading${e.target.dataset.index}`).style.display = "none";
 		}
 	}
@@ -86,7 +109,8 @@ class Thumbs extends Component {
 	//FIXME: this method is too complicated, simplified it
 	onPhotoVisibilityChange(inView, observer) {
 
-		const image = observer.target.children[0];
+		const index = observer.target.dataset.index;
+		const image = observer.target.querySelector(`#imgThumb_${index}`);
 		const key = observer.target.dataset.key;
 
 		if (image.dataset.isloaded === "true" && inView === true) {
@@ -94,7 +118,7 @@ class Thumbs extends Component {
 			return;
 		}
 
-		//FIXME: whent thumbs are created, observer event onChange is triggered for all thumbs with attribte inView=true, 
+		//FIXME: whent thumbs are created, observer event onChange is triggered for all thumbs with attribte inView=true,
 		//then is called second time with attribute false, but just for hidden images
 		//makeshift solution is load first 15 thumbs immediately and the rest dynamically
 		if (inView === true && image.dataset.firstload === "false" && image.dataset.index > 15) {
@@ -113,7 +137,7 @@ class Thumbs extends Component {
 		if (inView === true) {
 			this.downloadingPhotos.push(key);
 
-			//we set src to download photo after some time, because user can scroll with scrollbar up-down, it that case all thumb would be downloading, 
+			//we set src to download photo after some time, because user can scroll with scrollbar up-down, it that case all thumb would be downloading,
 			//so we wait till he stop moving with scrollbar and than load photo
 			//but first 15 images we want load immediatelly
 			const timeout = image.dataset.index < 15 ? 0 : 500;
@@ -136,7 +160,7 @@ class Thumbs extends Component {
 		for (let i = startIndex; i < currentIndex + 4; i++) {
 			if (startIndex === currentIndex) continue;
 
-			const observer = this.node.querySelector(`#obsv${i}`);
+			const observer = this.node.querySelector(`#thumbObsv${i}`);
 
 			if (!observer) {
 				continue;
@@ -151,8 +175,9 @@ class Thumbs extends Component {
 	}
 
 	chooseThumb(e) {
-		let element = e.target;
+		const element = e.currentTarget;
 		this.props.setNextFading();
+
 		this.props.onChooseThumb(element.dataset.index, this.node);
 		this.props.markThumbAsSelected(element, this.node, false);
 	}

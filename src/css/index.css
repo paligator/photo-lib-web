@@ -133,6 +133,9 @@ btn-img-fav {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.myShadow {
   box-shadow:  0 0 5px black;
 }
 
