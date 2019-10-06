@@ -84,7 +84,7 @@ class Thumbs extends Component {
 			e.target.dataset.isloaded = true;
 
 			//remove photo from downloading images
-			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== e.target.dataset.key);
+			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== e.target.dataset.index);
 
 			//hide loading spinner
 			this.node.querySelector(`#thumbLoading${e.target.dataset.index}`).style.display = "none";
@@ -98,7 +98,7 @@ class Thumbs extends Component {
 			e.target.dataset.isloaded = true;
 
 			//remove photo from downloading images
-			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== e.target.dataset.key);
+			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== e.target.dataset.index);
 
 			//hide loading spinner
 			this.node.querySelector(`#imgThumb_${e.target.dataset.index}`).style.display = "";
