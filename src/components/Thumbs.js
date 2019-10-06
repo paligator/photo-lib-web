@@ -43,9 +43,9 @@ class Thumbs extends Component {
 						const url = `${thumbUrl}/${file}`;
 						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
 						return (
-							<InView id={`thumbObsv${i}`} data-index={i} key={key} data-key={key} onClick={this.chooseThumb} triggerOnce={false} onChange={this.onPhotoVisibilityChange} style={{}} >
+							<InView id={`thumbObsv${i}`} key={i} data-key={i} onClick={this.chooseThumb} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
 
-								<img data-key={key} title={file} id={`imgThumb_${i}`} className={className}
+								<img title={file} id={`imgThumb_${i}`} className={className}
 									alt="error"
 									data-index={i}
 									src={this.DEFAULT_PHOTO_URL}
@@ -78,7 +78,7 @@ class Thumbs extends Component {
 		);
 	}
 
-	onPhotoLoadError(e, f) {
+	onPhotoLoadError(e) {
 		if (e && e.target.src !== this.DEFAULT_PHOTO_URL) {
 			//e.target.style.display = "";
 			e.target.dataset.isloaded = true;
@@ -109,9 +109,8 @@ class Thumbs extends Component {
 	//FIXME: this method is too complicated, simplified it
 	onPhotoVisibilityChange(inView, observer) {
 
-		const index = observer.target.dataset.index;
+		const index = observer.target.dataset.key;
 		const image = observer.target.querySelector(`#imgThumb_${index}`);
-		const key = observer.target.dataset.key;
 
 		if (image.dataset.isloaded === "true" && inView === true) {
 			this.loadPhotosInAdvance(image.dataset.index);
@@ -127,22 +126,22 @@ class Thumbs extends Component {
 		image.dataset.firstload = true;
 
 		//if photo is not loaded yet, and is hidden again, we cancel request to load photo
-		if (inView === false && this.downloadingPhotos.indexOf(key) > -1) {
+		if (inView === false && this.downloadingPhotos.indexOf(index) > -1) {
 			image.src = this.DEFAULT_PHOTO_URL;
-			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== key);
+			this.downloadingPhotos = this.downloadingPhotos.filter(item => item !== index);
 			return true;
 		}
 
 		//load photo
 		if (inView === true) {
-			this.downloadingPhotos.push(key);
+			this.downloadingPhotos.push(index);
 
 			//we set src to download photo after some time, because user can scroll with scrollbar up-down, it that case all thumb would be downloading,
 			//so we wait till he stop moving with scrollbar and than load photo
 			//but first 15 images we want load immediatelly
 			const timeout = image.dataset.index < 15 ? 0 : 500;
 			setTimeout(() => {
-				if (this.downloadingPhotos.indexOf(key) > -1) {
+				if (this.downloadingPhotos.indexOf(index) > -1) {
 					image.src = image.dataset.src;
 					this.loadPhotosInAdvance(image.dataset.index);
 				}
@@ -177,8 +176,7 @@ class Thumbs extends Component {
 	chooseThumb(e) {
 		const element = e.currentTarget;
 		this.props.setNextFading();
-
-		this.props.onChooseThumb(element.dataset.index, this.node);
+		this.props.onChooseThumb(element.dataset.key, this.node);
 		this.props.markThumbAsSelected(element, this.node, false);
 	}
 }

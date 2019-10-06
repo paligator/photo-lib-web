@@ -68,7 +68,8 @@ class Navigation extends Component {
 
 					<Nav navbar className="navbar-nav" >
 						<UncontrolledDropdown nav inNavbar key="help" title="help">
-							<DropdownToggle nav>⚙</DropdownToggle>
+							{/* <DropdownToggle nav>⚙</DropdownToggle> */}
+							<DropdownToggle style={{ backgroundColor: "var(--main)", borderColor: "var(--main)" }}><i className="fas fa-cog" /></DropdownToggle>
 							<DropdownMenu className="dropdown-menu-right">
 								<DropdownItem key="logout">
 									<NavItem key="logout" onClick={this.logOut}>

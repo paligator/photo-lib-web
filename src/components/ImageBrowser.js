@@ -205,7 +205,7 @@ class ImageBrowser extends Component {
     }
 
     if (e.target.id === "loaderIn") {
-      this.disableNavButtons(false);
+      this.disableNavButtons();
       this.loadExif();
     }
   }
@@ -222,9 +222,9 @@ class ImageBrowser extends Component {
 
   nextPhoto(forward, scrollBahaviour = null) {
 
-    if (this.state.animating === true) {
-      return;
-    }
+    // if (this.state.animating === true) {
+    //   return;
+    // }
 
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
@@ -234,7 +234,7 @@ class ImageBrowser extends Component {
     if (enableNext === true) {
       forward === true ? this.props.onNextPhoto() : this.props.onPrevPhoto();
       this.setState({ animating: true, movementDirection: forward === true ? "next" : "prev" });
-      this.disableNavButtons(true);
+      this.disableNavButtons();
       this.markThumbByIndexAsSelected(this.findNextPhotoIndex(album, curIndex, forward, showOnlyFavourites), true, scrollBahaviour);
     }
 
@@ -261,21 +261,13 @@ class ImageBrowser extends Component {
     return nextThumbIndex;
   }
 
-  disableNavButtons(disabled) {
+  disableNavButtons() {
+    const curIndex = this.props.selectedPhotoIndex;
+    const album = this.props.album;
+    const showOnlyFavourites = this.props.showOnlyFavourites;
 
-
-
-    if (disabled === true) {
-      const btnNavs = this.node.querySelectorAll('.btn-nav');
-      btnNavs.forEach(btn => { btn.disabled = true; })
-    } else {
-      const curIndex = this.props.selectedPhotoIndex;
-      const album = this.props.album;
-      const showOnlyFavourites = this.props.showOnlyFavourites;
-
-      this.node.querySelector(`#btnNextPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, true, curIndex, album);
-      this.node.querySelector(`#btnPrevPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, false, curIndex, album);
-    }
+    this.node.querySelector(`#btnNextPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, true, curIndex, album);
+    this.node.querySelector(`#btnPrevPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, false, curIndex, album);
   }
 
   markThumbByIndexAsSelected(index, scroolTo = false, scrollBahaviour = null) {
@@ -304,7 +296,7 @@ class ImageBrowser extends Component {
       //FIXME: I don't fucking understand when I use global Hotkeys (rith, left) and scroll behaviour = "smooth" scrollIntoView doesn't work, with hotkey I have to use "auto" or "instant"
       target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
     }
-    this.disableNavButtons(true);
+    this.disableNavButtons();
   }
 
   getLoadingDiv() {
