@@ -123,28 +123,30 @@ h1, h2, h3, H4, h5, h6 {
   margin-left: var(--bigSpace);
   content: "\f060";  
 }
-/* #endregion */
 
-/* #region FullScreen button */
 .btn-nav-right:before {
   right: 0%;
   margin-right: var(--bigSpace);
   content: "\f061";
 }
+/* #endregion */
+
+/* #region FullScreen button */
 .btn-fullscreen {
   font-size: 3em; 
   color: var(--main-01);
-  z-index: 2;
+  border: 0px;
+  padding: 0px;
 }
 .btn-fullscreen:before {
   position: absolute;
   content: "\f31e";
-  bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace) * 2);
+  bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace));
   right: 0; 
   margin-right: var(--bigSpace);
 }
 .btn-fullscreen:hover:before {
-  color: var(--main-01);
+  color: var(--main);
 }
 /* #endregion */
 

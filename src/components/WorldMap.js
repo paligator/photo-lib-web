@@ -35,10 +35,11 @@ class WorldMap extends Component {
 							zoomOnScroll={true}
 							color="red"
 							containerStyle={{
+								marginTop: "5vh",
 								width: '100%',
 								height: '100%',
-								maxWidth: "1200px",
-								maxHeight: "800px"
+								maxWidth: "90vw",
+								maxHeight: "90vh"
 							}}
 							onRegionClick={this.selectRegion}
 							containerClassName="map"

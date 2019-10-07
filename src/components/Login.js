@@ -37,7 +37,7 @@ class Login extends Component {
 	render() {
 		return (
 			<div className="flexContainer" style={{ width: "100%" }}>
-				<Form style={{ width: "300px", maxWidth: "400px", paddingTop: "10%" }} onSubmit={this.doLogin}>
+				<Form style={{ width: "20em", paddingTop: "10vh" }} onSubmit={this.doLogin}>
 					<FormGroup>
 						<Label for="txtEmail">Email</Label>
 						<Input type="email" name="email" id="txtEmail" placeholder="@" onChange={(() => this.hideWrongLogin())} />
@@ -46,7 +46,7 @@ class Login extends Component {
 						<Label for="txtPassword">Password</Label>
 						<Input type="password" name="password" id="txtPassword" placeholder="" onChange={(() => this.hideWrongLogin())} />
 					</FormGroup>
-					<FormGroup><Button>Login</Button></FormGroup>
+					<FormGroup style={{textAlign: "center"}}><Button>Login</Button></FormGroup>
 					{(this.state.wrongLogin === true) ? <FormGroup><div className="alert alert-danger">Wrong email or password!</div></FormGroup> : (null)}
 				</Form>
 			</div >
