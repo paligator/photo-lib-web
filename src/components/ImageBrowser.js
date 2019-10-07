@@ -142,6 +142,7 @@ class ImageBrowser extends Component {
                   <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
                   <button className="btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
                   <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
+                  
                 </div>
               </Swipeable>
             </div>

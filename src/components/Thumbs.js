@@ -39,7 +39,6 @@ class Thumbs extends Component {
 			<div ref={node => this.node = node} id="divThumbs" className="flexRow" style={{ ...this.props.style, overflowY: "hidden" }}>
 				{
 					files.map((file, i) => {
-						const key = `thumb${i}`;
 						const url = `${thumbUrl}/${file}`;
 						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
 						return (
