@@ -36,7 +36,7 @@ class PhotoLoader extends Component {
 		const classNames = "animated " + this.props.className;
 
 		return (
-			<div className={classNames} style={{ position: "absolute", display: this.props.display, width: "100%", height: "calc(100% - (var(--baseSpace) * 2))", margin: "var(--baseSpace)" }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
+			<div className={classNames} style={{ animationDuration: "0.6", position: "absolute", display: this.props.display, width: "100%", height: "calc(100% - (var(--baseSpace) * 2))", margin: "var(--baseSpace)" }} id={this.props.id} ref={node => this.node = node} onAnimationEnd={this.props.onAnimationEnd} >
 
 				{(this.state.photoLoadingState === "waiting" && this.props.photoUrl !== '') ?
 					(

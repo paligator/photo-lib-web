@@ -138,9 +138,9 @@ class ImageBrowser extends Component {
                     <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
                   </div>
 
-                  <button id="btnPrevPhoto" className="btn-img btn-nav btn-nav-left" onClick={() => { this.nextPhoto(false) }} />
-                  <button id="btnNextPhoto" className="btn-img btn-nav btn-nav-right" onClick={() => { this.nextPhoto(true) }} />
-                  <button className="btn-img btn-fullscreen" onClick={() => { this.goToFullScreen() }} />
+                  <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" tooltip="Next photo" onClick={() => { this.nextPhoto(false) }} />
+                  <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
+                  <button className="btn-img btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
                   <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
                 </div>
               </Swipeable>
@@ -222,9 +222,7 @@ class ImageBrowser extends Component {
 
   nextPhoto(forward, scrollBahaviour = null) {
 
-    // if (this.state.animating === true) {
-    //   return;
-    // }
+    console.log("som tu...");
 
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;

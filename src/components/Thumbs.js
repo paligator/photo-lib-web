@@ -45,7 +45,7 @@ class Thumbs extends Component {
 						return (
 							<InView id={`thumbObsv${i}`} key={i} data-key={i} onClick={this.chooseThumb} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
 
-								<img title={file} id={`imgThumb_${i}`} className={className}
+								<img title={file} id={`imgThumb_${i}`} className={className + " thumbPhoto"}
 									alt="error"
 									data-index={i}
 									src={this.DEFAULT_PHOTO_URL}

@@ -2,17 +2,22 @@
   --main: rgb(0, 102, 153);
   --main-002: rgb(0, 102, 153, 0.02);
   --main-01: rgb(0, 102, 153, 0.1);
+  --main-05: rgb(0, 102, 153, 0.5);
   --black-09: rgba(255, 255, 255, 0.9);
   --black-05: rgba(255, 255, 255, 0.5);
   --map-bg-color: #E5EFF5;
   --line: #ebebeb;
   --thumbsHeight: 9vh;
   --baseSpace: 5px;
-  --navBtnWidth: 80px;
   --scrollbarWidth: 8px;
+  --bigSpace: 0.2em
 }
 
 html {
+  height: 100%;
+}
+
+#root {
   height: 100%;
 }
 
@@ -30,9 +35,28 @@ span {
   margin-left: 8px;
 }
 
-#root {
-  height: 100%;
+/* why bootstrap has by default values -15px ??? */
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
 }
+
+.dropdown-menu {
+  border-radius: 0;
+  background-color: var(--main);
+  border-color: var(--main);
+}
+
+.bg-dark {
+  background-color: var(--main) !important;
+}
+
+h1, h2, h3, H4, h5, h6 {
+  color: var(--main);
+  text-transform: none;
+}
+
+/* #region Favourite photo button */
 .btn-img {
   background-color: transparent;
   border: 0px;
@@ -51,12 +75,6 @@ span {
   background-repeat:no-repeat;
 }
 
-/* why bootstrap has by default values -15px ??? */
-.row {
-  margin-right: 0px;
-  margin-left: 0px;
-}
-
 .btn-img-act:before {
   background-image: url(../images/heart_full.png);
 }
@@ -73,44 +91,69 @@ span {
   background-image: url(../images/heart_hover.png);
 }
 
-btn-img-fav {
-  width: "20px"
+/* #endregion */
+
+/* #region Navigation buttons */
+.btn-nav {
+  border: 0px;
+  padding: 0px;
+  font-size: 3.5em; 
+  color: var(--main-05);
 }
 
 .btn-nav:before {
   position: absolute;
-  top: 0%;
-  background-size: 40px auto; 
+  top: 0%;   
   height: calc(100% - var(--thumbsHeight) - var(--baseSpace));
-  width: var(--navBtnWidth);
+  display: flex;
+  align-items: center;
+  justify-content: center; 
 }
 
-.btn-nav:hover:before {
-  background-color: var(--main-01);
+.btn-nav:hover:enabled {
+  color: var(--main);
+}
+
+.btn-nav:hover:before:disabled {
+  cursor: pointer;
 }
 
 .btn-nav-left:before {
   left: 0%;
-  background-image : url(../images/left_nav_btn.png);
+  margin-left: var(--bigSpace);
+  content: "\f060";  
 }
+/* #endregion */
 
+/* #region FullScreen button */
 .btn-nav-right:before {
   right: 0%;
-  background-image : url(../images/right_nav_btn.png);
+  margin-right: var(--bigSpace);
+  content: "\f061";
 }
-
+.btn-fullscreen {
+  font-size: 3em; 
+  color: var(--main-01);
+  z-index: 2;
+}
 .btn-fullscreen:before {
   position: absolute;
-  bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace));
-  background-size: 40px auto;
-  right: calc(var(--navBtnWidth) + var(--baseSpace));
-  background-image : url(../images/fullscreen.png);
+  content: "\f31e";
+  bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace) * 2);
+  right: 0; 
+  margin-right: var(--bigSpace);
 }
+.btn-fullscreen:hover:before {
+  color: var(--main-01);
+}
+/* #endregion */
 
 .top-right {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0;
+  margin-top: var(--bigSpace);
+  right: 0;
+  margin-right: var(--bigSpace);
 }
 
 .flexContainer {
@@ -120,8 +163,11 @@ btn-img-fav {
   align-items: center; 
 }
 
-.animated {
-  animation-duration: 0.6s;
+.flexRow {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: last baseline;
+  overflow-x: auto;
 }
 
 .mainImage {
@@ -139,27 +185,17 @@ btn-img-fav {
   box-shadow:  0 0 5px black;
 }
 
-.flexContainerItem {
-  width: 100%;
-  text-align: center;
-}
-
-.flexRow {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: last baseline;
-  overflow-x: auto;
-}
-
 .leftMenuItem {
   text-align: left;
   margin-top: 15px;
 }
 
-.noWrap {
-  white-space: nowrap
+.boxUderline {
+  border-bottom: 1px solid  var(--line);
 }
 
+
+/* #region Navigation Bar */
 .navbar {
  font-size: 1.2em;
  padding: 0px;
@@ -173,12 +209,6 @@ btn-img-fav {
 .nav-item :hover {
   background-color: var(--main);
   color: var(--black-05);
-}
-
-.dropdown-menu {
-  border-radius: 0;
-  background-color: var(--main);
-  border-color: var(--main);
 }
 
 .navbar-nav.navbar-center {
@@ -195,39 +225,39 @@ btn-img-fav {
   right: auto;
 }
 
-.bg-dark {
-  background-color: var(--main) !important;
-}
-
 .navbar-dark .navbar-nav .dropdown a {
   color: var(--black-09);
 }
 
-h1, h2, h3, H4, h5, h6 {
-  color: var(--main);
-  text-transform: none;
-}
+/* #endregion */
 
-.boxUderline {
-  border-bottom: 1px solid  var(--line);
-}
-
+/* #region Thumbs */
 .thumb {
   cursor: pointer;
   width: auto;
   height: var(--thumbsHeight);
   max-height: var(--thumbsHeight);
-  padding: 0px 2px 0px 2px;
+  padding: 0;
+  margin-right: 2px;
 }
+
 .thumbSelected {
   border: 4px solid var(--main);
   padding: 0px 0px 0px 0px;
 }
+
 .thumbLoading { 
   max-height: var(--thumbsHeight);
   padding: 0px 2px 0px 2px;
 }
 
+.thumbPhoto {
+  border: 1px solid var(--main-05);
+}
+
+/* #endregion */
+
+/* #region JVectorMap */
 .jvectormap-zoomin, .jvectormap-zoomout, .jvectormap-goback {
   background: var(--main);
   color: var(--black-09);
@@ -238,7 +268,9 @@ h1, h2, h3, H4, h5, h6 {
   color: var(--black-09);
 }
 
-/* set up scrollbars - START */
+/* #endregion */
+
+/* #region Scrollbars */
 ::-webkit-scrollbar {
   width: var(--scrollbarWidth);
   height: var(--scrollbarWidth);
@@ -252,4 +284,4 @@ h1, h2, h3, H4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--main); 
 }
-/* set up scrollbars - END */
+/* #endregion */
