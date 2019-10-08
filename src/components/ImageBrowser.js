@@ -142,10 +142,10 @@ class ImageBrowser extends Component {
                   <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" tooltip="Next photo" onClick={() => { this.nextPhoto(false) }} />
                   <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
                   <button className="btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
-                  
+
                   <div className="photoCounter">{selectedPhotoIndex + 1}/{photoCount}</div>
 
-                  <p id="divExif" className="exif" style={{ display: "none" }}></p>
+                  <p id="divExif" className="exif animated" style={{ display: "none" }}></p>
                   <div id="btnExif" className="btn-exif" onClick={this.showExif}>EXIF</div>
 
                 </div>
@@ -164,9 +164,12 @@ class ImageBrowser extends Component {
   showExif() {
     const divExif = this.node.querySelector("#divExif");
     const btnExif = this.node.querySelector("#btnExif");
+    divExif.classList.remove("fadeIn", "fadeOut");
+    divExif.innerHTML = "";
     if (divExif.style.display === "none") {
       divExif.style.display = "inline";
       btnExif.style.color = "var(--main)";
+      this.loadExif(false);
     } else {
       divExif.style.display = "none";
       btnExif.style.color = "var(--main-01)";
@@ -224,11 +227,14 @@ class ImageBrowser extends Component {
 
     if (e.target.id === "loaderIn") {
       this.disableNavButtons();
-      this.loadExif();
+
+      if (this.node.querySelector("#divExif").style.display !== "none") {
+        this.loadExif();
+      }
     }
   }
 
-  async loadExif() {
+  async loadExif(fadeIn = true) {    
     const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
     const exif = await getExif(img);
     this.props.onLoadExif(exif);
@@ -247,6 +253,11 @@ class ImageBrowser extends Component {
     if (!exifText || exifText === "") exifText = "Photo has no Exif &nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;"
 
     divExif.innerHTML = exifText;
+
+    if (fadeIn === true) {
+      divExif.classList.remove("fadeOut");
+      divExif.classList.add("fadeIn");
+    }
   }
 
   nextPhotoByGlobalKey(forward) {
@@ -265,6 +276,10 @@ class ImageBrowser extends Component {
       this.disableNavButtons();
       this.markThumbByIndexAsSelected(this.findNextPhotoIndex(album, curIndex, forward, showOnlyFavourites), true, scrollBahaviour);
     }
+
+    const divExif = this.node.querySelector("#divExif");
+    divExif.classList.remove("fadeIn")
+    divExif.classList.add("fadeOut")
 
   }
 
@@ -302,7 +317,6 @@ class ImageBrowser extends Component {
     const target = this.node.querySelector(`#thumbObsv${index}`);
     this.markThumbAsSelected(target, this.node, scroolTo, scrollBahaviour);
   }
-
 
   setNextFading() {
     this.setState({ movementDirection: "thumbClick", lastIndex: this.props.selectedPhotoIndex });
