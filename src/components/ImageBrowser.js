@@ -6,7 +6,7 @@ import config from '../config';
 import ReactLoading from 'react-loading';
 import * as C from "../api/Common";
 import { GlobalHotKeys } from "react-hotkeys";
-import { getExif } from "../api/Utils";
+import { getExif, formatExposureTime } from "../api/Utils";
 import { Swipeable } from 'react-swipeable'
 
 class ImageBrowser extends Component {
@@ -31,6 +31,7 @@ class ImageBrowser extends Component {
     this.onAnimationEnd = this.onAnimationEnd.bind(this);
     this.loadExif = this.loadExif.bind(this);
     this.setNextFading = this.setNextFading.bind(this);
+    this.showExif = this.showExif.bind(this);
   }
 
   componentDidMount() {
@@ -141,8 +142,12 @@ class ImageBrowser extends Component {
                   <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" tooltip="Next photo" onClick={() => { this.nextPhoto(false) }} />
                   <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
                   <button className="btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
-                  <div className="top-right">{selectedPhotoIndex + 1}/{photoCount}</div>
                   
+                  <div className="photoCounter">{selectedPhotoIndex + 1}/{photoCount}</div>
+
+                  <p id="divExif" className="exif" style={{ display: "none" }}></p>
+                  <div id="btnExif" className="btn-exif" onClick={this.showExif}>EXIF</div>
+
                 </div>
               </Swipeable>
             </div>
@@ -154,6 +159,18 @@ class ImageBrowser extends Component {
       </div >
 
     )
+  }
+
+  showExif() {
+    const divExif = this.node.querySelector("#divExif");
+    const btnExif = this.node.querySelector("#btnExif");
+    if (divExif.style.display === "none") {
+      divExif.style.display = "inline";
+      btnExif.style.color = "var(--main)";
+    } else {
+      divExif.style.display = "none";
+      btnExif.style.color = "var(--main-01)";
+    }
   }
 
   getPhotoFadingClasses(selectedPhotoIndex, movementDirection) {
@@ -215,6 +232,21 @@ class ImageBrowser extends Component {
     const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
     const exif = await getExif(img);
     this.props.onLoadExif(exif);
+
+    const divExif = this.node.querySelector("#divExif");
+    let exifText = "";
+
+    if (exif.Camera) { exifText += `Camera: ${exif.Camera}<br>` }
+    if (exif.Camera) { exifText += `Date: ${exif.DateTime}<br>` }
+    if (exif.ExposureTime) { exifText += `Exp. Time: ${formatExposureTime(exif.ExposureTime)}s<br>` }
+    if (exif.FNumber) { exifText += `FNumber: ${exif.FNumber}F<br>` }
+    if (exif.ApertureValue) { exifText += `Aperture: ${exif.ApertureValue}<br>` }
+    if (exif.ISOSpeedRatings) { exifText += `ISO: ${exif.ISOSpeedRatings}<br>` }
+
+    //Not the nicest way, but when there is exif last item are very short and there is nice cascade around fullscreen button
+    if (!exifText || exifText === "") exifText = "Photo has no Exif &nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;"
+
+    divExif.innerHTML = exifText;
   }
 
   nextPhotoByGlobalKey(forward) {
@@ -222,9 +254,6 @@ class ImageBrowser extends Component {
   }
 
   nextPhoto(forward, scrollBahaviour = null) {
-
-    console.log("som tu...");
-
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
     const showOnlyFavourites = this.props.showOnlyFavourites;

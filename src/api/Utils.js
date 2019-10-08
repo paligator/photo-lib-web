@@ -28,3 +28,20 @@ export async function getExif(img) {
 
 	return exif;
 }
+
+export function formatExposureTime(value) {
+	if (!value) {
+		return "";
+	}
+
+	try {
+		if (value < 1) {
+			return `1/${1 / value}`;
+		} else {
+			return value.toFixed(2);
+		}
+	} catch (e) {
+		console.error(`Error parse exposure time ${value}`, e)
+		return value;
+	}
+}

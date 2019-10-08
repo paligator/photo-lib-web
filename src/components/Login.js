@@ -46,7 +46,7 @@ class Login extends Component {
 						<Label for="txtPassword">Password</Label>
 						<Input type="password" name="password" id="txtPassword" placeholder="" onChange={(() => this.hideWrongLogin())} />
 					</FormGroup>
-					<FormGroup style={{textAlign: "center"}}><Button>Login</Button></FormGroup>
+					<FormGroup style={{textAlign: "center"}}><Button className="btn-primary">Login</Button></FormGroup>
 					{(this.state.wrongLogin === true) ? <FormGroup><div className="alert alert-danger">Wrong email or password!</div></FormGroup> : (null)}
 				</Form>
 			</div >

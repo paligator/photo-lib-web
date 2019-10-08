@@ -5,6 +5,7 @@
   --main-05: rgb(0, 102, 153, 0.5);
   --black-09: rgba(255, 255, 255, 0.9);
   --black-05: rgba(255, 255, 255, 0.5);
+  --black-03: rgba(255, 255, 255, 0.3);
   --map-bg-color: #E5EFF5;
   --line: #ebebeb;
   --thumbsHeight: 9vh;
@@ -35,6 +36,21 @@ span {
   margin-left: 8px;
 }
 
+.form-control {
+  border-radius: 0;
+}
+
+.btn {
+  border-radius: 0;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--main);
+}
+
+
+
 /* why bootstrap has by default values -15px ??? */
 .row {
   margin-right: 0px;
@@ -54,6 +70,52 @@ span {
 h1, h2, h3, H4, h5, h6 {
   color: var(--main);
   text-transform: none;
+}
+
+.photoCounter {
+  position: absolute;
+  top: 0;
+  margin-top: var(--bigSpace);
+  right: 0;
+  margin-right: var(--bigSpace);
+}
+
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
+.flexRow {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: last baseline;
+  overflow-x: auto;
+}
+
+.mainImage {
+  width: auto; 
+  height: auto; 
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.myShadow {
+  box-shadow:  0 0 5px black;
+}
+
+.leftMenuItem {
+  text-align: left;
+  margin-top: 15px;
+}
+
+.boxUderline {
+  border-bottom: 1px solid  var(--line);
 }
 
 /* #region Favourite photo button */
@@ -137,6 +199,7 @@ h1, h2, h3, H4, h5, h6 {
   color: var(--main-01);
   border: 0px;
   padding: 0px;
+  z-index: 5;
 }
 .btn-fullscreen:before {
   position: absolute;
@@ -144,58 +207,36 @@ h1, h2, h3, H4, h5, h6 {
   bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace));
   right: 0; 
   margin-right: var(--bigSpace);
+  z-index: 5;
 }
 .btn-fullscreen:hover:before {
   color: var(--main);
 }
 /* #endregion */
 
-.top-right {
+/* #region Exif */
+.btn-exif {
   position: absolute;
-  top: 0;
-  margin-top: var(--bigSpace);
-  right: 0;
+  bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace)); 
+  right: 3.5em;
   margin-right: var(--bigSpace);
+  cursor: pointer;
+  color: var(--main-01);
 }
 
-.flexContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; 
-}
-
-.flexRow {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: last baseline;
-  overflow-x: auto;
-}
-
-.mainImage {
-  width: auto; 
-  height: auto; 
-  max-height: 100%;
-  max-width: 100%;
+.exif {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: calc(var(--thumbsHeight) + var(--scrollbarWidth) + var(--baseSpace)); 
+  min-width: 5em;
+  right: 3.5em;
+  margin-right: var(--bigSpace);
+  display: inline;
+  font-size: 0.7em; 
+  color: var(--main);
+  background-color: var(--black-05);
 }
 
-.myShadow {
-  box-shadow:  0 0 5px black;
-}
-
-.leftMenuItem {
-  text-align: left;
-  margin-top: 15px;
-}
-
-.boxUderline {
-  border-bottom: 1px solid  var(--line);
-}
-
+/* #endregion */
 
 /* #region Navigation Bar */
 .navbar {
