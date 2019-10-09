@@ -57,7 +57,7 @@ class PhotoLoader extends Component {
 
 				{
 					(this.props.photoUrl) ? (
-						<img id={this.props.imgId} alt={`There is something wrong with picture ${this.props.photoName}`} data-next="next"
+						<img id={this.props.imgId} alt={`There is something wrong with ${this.props.photoName}`} data-next="next"
 							className="mainImage myShadow"
 							title={this.props.photoName}
 							style={{ display: this.state.photoLoadingState === "finished" ? "" : "none" }}

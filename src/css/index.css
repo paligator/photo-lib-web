@@ -1,11 +1,9 @@
 :root {
-  --main: rgb(0, 102, 153);
-  --main-002: rgb(0, 102, 153, 0.02);
+  --main: rgb(0, 102, 153);;
   --main-01: rgb(0, 102, 153, 0.1);
   --main-05: rgb(0, 102, 153, 0.5);
   --black-09: rgba(255, 255, 255, 0.9);
   --black-05: rgba(255, 255, 255, 0.5);
-  --black-03: rgba(255, 255, 255, 0.3);
   --map-bg-color: #E5EFF5;
   --line: #ebebeb;
   --thumbsHeight: 9vh;
@@ -16,10 +14,12 @@
 
 html {
   height: 100%;
+  background-color: "black"
 }
 
 #root {
   height: 100%;
+  background-color: "black"
 }
 
 body {
@@ -30,6 +30,7 @@ body {
   height: 100%;
   color: var(--main);
   font-weight: 600;
+  background-color: "black"
 }
 
 span {
@@ -45,11 +46,13 @@ span {
   font-weight: 600;
 }
 
+.alert {
+  border-radius: 0;
+}
+
 .btn-primary {
   background-color: var(--main);
 }
-
-
 
 /* why bootstrap has by default values -15px ??? */
 .row {
@@ -183,13 +186,13 @@ h1, h2, h3, H4, h5, h6 {
 .btn-nav-left:before {
   left: 0%;
   margin-left: var(--bigSpace);
-  content: "\f060";  
+  content: "\f053";  
 }
 
 .btn-nav-right:before {
   right: 0%;
   margin-right: var(--bigSpace);
-  content: "\f061";
+  content: "\f054";
 }
 /* #endregion */
 

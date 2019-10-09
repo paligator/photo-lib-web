@@ -234,7 +234,7 @@ class ImageBrowser extends Component {
     }
   }
 
-  async loadExif(fadeIn = true) {    
+  async loadExif(fadeIn = true) {
     const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
     const exif = await getExif(img);
     this.props.onLoadExif(exif);

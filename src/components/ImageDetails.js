@@ -16,8 +16,6 @@ class ImageDetails extends Component {
 	render() {
 
 		const album = this.props.album;
-		const photo = this.props.photo;
-		const exif = (photo && photo.exif) ? photo.exif : {};
 		const selectedPhotoIndex = album.selectedPhotoIndex;
 		const photoName = selectedPhotoIndex > -1 ? album.files[selectedPhotoIndex] : "";
 		const isFavourite = selectedPhotoIndex > -1 ? album.favourites.indexOf(photoName) > -1 : false;

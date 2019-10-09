@@ -6,11 +6,12 @@ class AlbumInfo extends Component {
 	render() {
 
 		const album = this.props.album;
-
+		const date = `${album.month? album.month + "/": ""}${album.year}`;
+		
 		return (
 			<div className="leftMenuItem boxUderline">
 				<h1 style={{ overflowWrap: "break-word" }}>{album.name}</h1>
-				<p>{album.month}/{album.year}</p>
+				<p>{date}</p>
 			</div>
 		);
 	}
