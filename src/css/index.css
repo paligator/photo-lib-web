@@ -14,12 +14,10 @@
 
 html {
   height: 100%;
-  background-color: "black"
 }
 
 #root {
   height: 100%;
-  background-color: "black"
 }
 
 body {
@@ -30,7 +28,6 @@ body {
   height: 100%;
   color: var(--main);
   font-weight: 600;
-  background-color: "black"
 }
 
 span {
