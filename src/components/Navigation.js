@@ -47,7 +47,7 @@ class Navigation extends Component {
 				{/* </NavbarBrand> */}
 				<NavbarToggler onClick={this.toggle} />
 				<Collapse isOpen={this.state.togglerOpened} navbar>
-					<Nav navbar className="navbar-nav navbar-center" >
+					<Nav navbar className="navbar-center" >
 						<Query query={gqlCommands.GET_ALL_ALBUMS_GQL}>
 							{({ loading, data }) => {
 
@@ -66,10 +66,10 @@ class Navigation extends Component {
 						</Query>
 					</Nav>
 
-					<Nav navbar className="navbar-nav" >
+					<Nav navbar>
 						<UncontrolledDropdown nav inNavbar key="help" title="help">
 							{/* <DropdownToggle nav>⚙</DropdownToggle> */}
-							<DropdownToggle style={{ backgroundColor: "var(--main)", borderColor: "var(--main)" }}><i className="fas fa-cog" /></DropdownToggle>
+							<DropdownToggle className="navbar-dropdown"><i className="fas fa-cog" /></DropdownToggle>
 							<DropdownMenu className="dropdown-menu-right">
 								<DropdownItem key="logout">
 									<NavItem key="logout" onClick={this.logOut}>

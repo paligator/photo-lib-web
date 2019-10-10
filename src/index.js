@@ -12,7 +12,7 @@ import rootSaga from "./sagas";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import './css/index.css';
+import './css/index.scss';
 
 
 const sagaMiddleware = createSagaMiddleware();

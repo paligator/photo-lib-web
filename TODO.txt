@@ -1,27 +1,14 @@
-BIG BUG: When checkbox with favourites is checked and there is no favourtie, there is error, or if in favrourites is nonexist photo
+bug: When checkbox with favourites is checked and there is no favourtie, there is error, or if in favrourites is nonexist photo
+
+bug: when i jum on thum which is loading there is border - ok, when the thumb is loaded border dissapear
 
 globe in navbar - make it bigger
 
-selected thumb - border in around thumbsnpm start
-
-ImageBrowser -> render -> width, height very very strange and doesn't work 100% resizing
-
 after click on favourite button there is some border
-
-fix: show originals
-
-changing favourites, ApolloCache vs Redux
-
-no favourites???
 
 validate email/password before submit
 
-clean useless packages
-
 dorobit aj video
-smooth changes between images
-
-no internet - main map doesn't work properly
 
 JS error reporting services 
 
@@ -29,18 +16,4 @@ do better error page
 
 devide error boudnary
 
-naming one called image, then photo of file
-
-nice move between photos
-
-cache thumbnails somehow 
-
-error when image is not found, downloaded
-
-check http 2.0
-
-thumb/photos gzip
-
 SEO
-
-when i choose photo by thumb, there should be no animation, no fadeIn, no fadeOut

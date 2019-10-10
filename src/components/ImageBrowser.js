@@ -131,7 +131,7 @@ class ImageBrowser extends Component {
                 <div className="row" style={{ height: '100%', width: "100%", position: "absolute", }}>
                   <div className="column" style={{ width: "100%" }}>
 
-                    <div id="divPhotoLoaders" style={{ width: "100%", height: "calc(100% - var(--thumbsHeight) - var(--baseSpace))", minHeight: "60vh", position: "relative", overflow: "hidden" }}>
+                    <div id="divPhotoLoaders" className="photoLoadersDiv">
                       <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                       <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                       <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
@@ -168,11 +168,11 @@ class ImageBrowser extends Component {
     divExif.innerHTML = "";
     if (divExif.style.display === "none") {
       divExif.style.display = "inline";
-      btnExif.style.color = "var(--main)";
+      btnExif.classList.add("selected");
       this.loadExif(false);
     } else {
       divExif.style.display = "none";
-      btnExif.style.color = "var(--main-01)";
+      btnExif.classList.remove("selected");
     }
   }
 
