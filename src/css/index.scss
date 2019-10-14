@@ -9,6 +9,7 @@ $black-09: rgba($black, 0.9);
 $black-05: rgba($black, 0.5);
 $main-01: rgba($main, 0.1);
 $main-05: rgba($main, 0.5);
+$main-003: rgba($main, 0.04);
 $map-bg-color: #E5EFF5;
 $line: #ebebeb;
 $thumbsHeight: 9vh;
@@ -36,6 +37,7 @@ body {
   height: 100%;
   color: $main;
   font-weight: 600;
+  background-color: $main-003;
 }
 
 span {
@@ -233,6 +235,10 @@ h1, h2, h3, H4, h5, h6 {
   margin-right: $bigSpace;
   cursor: pointer;
   color: $main-01;
+}
+
+.btn-exif:hover {
+  color: $main;
 }
 
 .btn-exif.selected {
