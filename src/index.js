@@ -10,6 +10,10 @@ import * as serviceWorker from './serviceWorker';
 import rootReducer from "./reducers";
 import rootSaga from "./sagas";
 
+import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
+import '@fortawesome/fontawesome-free/scss/regular.scss';
+import '@fortawesome/fontawesome-free/scss/solid.scss';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import './css/index.scss';
