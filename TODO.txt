@@ -2,6 +2,8 @@ bug: When checkbox with favourites is checked and there is no favourtie, there i
 
 bug: when i jum on thum which is loading there is border - ok, when the thumb is loaded border dissapear
 
+bug: load into cache with selected favourties button doesn't work
+
 globe in navbar - make it bigger
 
 after click on favourite button there is some border
@@ -17,3 +19,4 @@ do better error page
 devide error boudnary
 
 SEO
+

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as action from "./constants/action-types";
-import './css/slider.css';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
@@ -52,7 +51,7 @@ class App extends Component {
   render() {
 
     const { windowWidth } = this.state;
-    
+
     const styles = {
       showLeftMenu: windowWidth > 900
     };

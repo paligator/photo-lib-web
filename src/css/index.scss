@@ -9,9 +9,9 @@ $black-09: rgba($black, 0.9);
 $black-05: rgba($black, 0.5);
 $main-01: rgba($main, 0.1);
 $main-05: rgba($main, 0.5);
+$main-03: rgba($main, 0.3);
 $main-003: rgba($main, 0.04);
 $map-bg-color: #E5EFF5;
-$line: #ebebeb;
 $thumbsHeight: 9vh;
 $baseSpace: 5px;
 $scrollbarWidth: 8px;
@@ -141,7 +141,7 @@ h1, h2, h3, H4, h5, h6 {
 }
 
 .boxUderline {
-  border-bottom: 1px solid  $line;
+  border-bottom: 1px solid  $main-05;
 }
 
 /* #region Favourite button */
@@ -346,7 +346,7 @@ h1, h2, h3, H4, h5, h6 {
   height: $scrollbarWidth;
 }
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px $line; 
+  box-shadow: inset 0 0 5px $main-05; 
 }
 ::-webkit-scrollbar-thumb {
   background: $main-01; 
@@ -354,4 +354,62 @@ h1, h2, h3, H4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: $main; 
 }
+/* #endregion */
+
+/* #region Slider */
+
+.switch input {display:none;}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 47px;
+  height: 25px;
+  float:left;
+}
+
+/* #region The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $main-03;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: 3px;
+  bottom: 3px;
+  background-color: $black;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+
+input.primary:checked + .slider {
+  background-color: $main;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+.slider.round {
+  border-radius: 0px;
+  margin-left: 1px;
+}
+
+.slider.round:before {
+  border-radius: 0%;
+}
+
 /* #endregion */
