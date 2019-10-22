@@ -8,6 +8,7 @@ import { apolloClient } from '../App';
 export default function* rootSaga() {
   yield all([
     takeLatest(actions.GET_ALBUM, getAlbumWorker),
+    takeLatest(actions.FILTER_ALBUM_PHOTOS, filterAlbumPhotos),
     takeLatest(actions.LOGIN, getLoginWorker)
   ]);
 }
@@ -27,18 +28,37 @@ function* getAlbumWorker(inputAction) {
   try {
     const response = yield apolloClient.query({
       query: gql`${gqlCommands.GET_ALBUM}`,
-      variables: { albumName: inputAction.payload.albumId }
+      variables: { albumName: inputAction.payload.albumId, tags: inputAction.payload.tags }
     })
 
     const album = response.data.album;
 
+    album.files = response.data.photosByTags;
+
     album.files.sort();
-    album.favourites.sort();
 
     yield put({ type: actions.toSuccessAction(actions.GET_ALBUM), data: album });
 
   } catch (error) {
     console.error("getAlbumWorker:", error);
     yield put({ type: actions.toErrorAction(actions.GET_ALBUM), error });
+  }
+}
+
+function* filterAlbumPhotos(inputAction) {
+  try {
+    const response = yield apolloClient.query({
+      query: gql`${gqlCommands.GET_ALBUM_PHOTOS}`,
+      variables: { albumName: inputAction.payload.albumName, tags: inputAction.payload.tags }
+    })
+
+    const photos = response.data.photosByTags;
+
+
+    yield put({ type: actions.toSuccessAction(actions.FILTER_ALBUM_PHOTOS), data: photos });
+
+  } catch (error) {
+    console.error("getAlbumWorker:", error);
+    yield put({ type: actions.toErrorAction(actions.FILTER_ALBUM_PHOTOS), error });
   }
 }

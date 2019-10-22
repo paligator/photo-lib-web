@@ -5,7 +5,6 @@ import { getUserRoles, isUserLogged } from "../api/Authorization"
 
 const initialState = {
 	showOriginals: false,
-	showOnlyFavourites: false,
 	albums: {
 		isFetcing: false,
 		error: null,
@@ -17,7 +16,9 @@ const initialState = {
 		name: null,
 		isFetcing: false,
 		error: null,
-		selectedPhotoIndex: -1
+		selectedPhotoIndex: -1,
+		isReloadingPhotos: false,
+		files: []
 	},
 	selectedPhoto: {
 		isFetching: false,
@@ -51,20 +52,18 @@ export default function rootReducer(state = initialState, inputAction) {
 			return ACT_CHOOSE_PHOTO_INDEX(state, inputAction);
 		case actions.CHANGE_SHOW_ORIGINALS:
 			return ACT_CHANGE_SHOW_ORIGINALS(state, inputAction);
-		case actions.CHANGE_SHOW_ONLY_FAVOURITES:
-			return ACT_CHANGE_SHOW_ONLY_FAVOURITES(state, inputAction);
 		case actions.RESET_ALBUM:
 			return ACT_RESET_ALBUM(state);
 		case actions.GET_ALBUM:
 			return ACT_GET_ALBUM(state, inputAction, actionType)
-		case actions.SYNC_FAVOURITES:
-			return ACT_SYNC_FAVOURITES(state, inputAction)
 		case actions.LOGIN:
 			return ACT_LOGIN(state, inputAction, actionType);
 		case actions.LOGOUT:
 			return ACT_LOGOUT(state);
 		case actions.LOAD_EXIF:
 			return ACT_GET_EXIF(state, inputAction);
+		case actions.FILTER_ALBUM_PHOTOS:
+			return FILTER_ALBUM_PHOTOS(state, inputAction, actionType)
 		default:
 
 			//TODO: This is probably antipattern. When Redux initializes it dispatches a "dummy" action to fill the state
@@ -77,14 +76,6 @@ export default function rootReducer(state = initialState, inputAction) {
 	return state;
 }
 
-function ACT_SYNC_FAVOURITES(state, inputAction) {
-	return { ...state, selectedAlbum: { ...state.selectedAlbum, favourites: inputAction.payload.favourites } };
-}
-
-function ACT_CHANGE_SHOW_ONLY_FAVOURITES(state, inputAction) {
-	return { ...state, showOnlyFavourites: inputAction.payload.onlyFavourites };
-}
-
 function ACT_CHANGE_SHOW_ORIGINALS(state, inputAction) {
 	return { ...state, showOriginals: inputAction.payload.status };
 }
@@ -95,20 +86,21 @@ function ACT_CHOOSE_PHOTO_INDEX(state, inputAction) {
 
 function ACT_PREV_PHOTO(state) {
 	const actualIndex = parseInt(state.selectedAlbum.selectedPhotoIndex);
-	const selectedPhotoIndex = (state.showOnlyFavourites) ? C.findPrevFavourite(state.selectedAlbum, actualIndex) : (actualIndex - 1);
+	const selectedPhotoIndex = actualIndex - 1;
 	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex }, selectedPhoto: { isReady: false } };
 }
 
 function ACT_NEXT_PHOTO(state) {
 	const actualIndex = parseInt(state.selectedAlbum.selectedPhotoIndex);
-	const selectedPhotoIndex = (state.showOnlyFavourites) ? C.findNextFavourite(state.selectedAlbum, actualIndex) : (actualIndex + 1);
+	const selectedPhotoIndex = actualIndex + 1;
 	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex }, selectedPhoto: { isReady: false } };
 }
 
 function ACT_INIT_STATE_BY_COOKIES(inputAction, state) {
+	console.log("ACT_INIT_STATE_BY_COOKIES");
 	const cookies = inputAction.payload.cookies;
 	const userRoles = isUserLogged() ? getUserRoles() : {};
-	return { ...state, showOnlyFavourites: cookies.showOnlyFavourites === "true", showOriginals: cookies.showOriginals === "true", userRoles };
+	return { ...state, selectedFilterTags: cookies.selectedFilterTags ? JSON.parse(cookies.selectedFilterTags) : [], userRoles };
 }
 
 function ACT_RESET_ALBUM(state) {
@@ -116,8 +108,9 @@ function ACT_RESET_ALBUM(state) {
 }
 
 function ACT_GET_ALBUM(state, inputAction, actionType) {
+	
 	if (actionType === 'SUCCESS') {
-		const initIndex = (state.showOnlyFavourites) ? C.findNextFavourite(inputAction.data, -1) : 0;
+		const initIndex = 0;
 
 		return { ...state, selectedAlbum: { ...inputAction.data, exists: true, isReady: true, isFetching: false, error: null, selectedPhotoIndex: initIndex } };
 	} else if (actionType === 'ERROR') {
@@ -157,6 +150,17 @@ function ACT_GET_EXIF(state, inputAction) {
 	return { ...state, selectedPhoto: { ...state.selectedPhoto, exif: inputAction.payload.exif } };
 }
 
+function FILTER_ALBUM_PHOTOS(state, inputAction, actionType) {
+	if (actionType === 'SUCCESS') {
+		const initIndex =  0;
+
+		return { ...state, selectedAlbum: { ...state.selectedAlbum, isReloadingPhotos: false, files: inputAction.data, selectedPhotoIndex: initIndex } };
+	} else if (actionType === 'ERROR') {
+		return { ...state, selectedAlbum: { ...state.selectedAlbum, files:[], error: inputAction.error } };
+	} else if (actionType === 'REQUEST') {
+		return { ...state, selectedAlbum: { ...state.selectedAlbum, isReloadingPhotos: true }, selectedPhotoIndex: -1, selectedPhoto: { isReady: false } };
+	}
+}
 
 function parseAction(inputAction) {
 	const tmp = inputAction.type;

@@ -9,6 +9,7 @@ export const CHOOSE_PHOTO_INDEX = "CHOOSE_PHOTO_INDEX";
 
 export const CHANGE_SHOW_ORIGINALS = "CHANGE_SHOW_ORIGINALS";
 export const CHANGE_SHOW_ONLY_FAVOURITES = "CHANGE_SHOW_ONLY_FAVOURITES";
+export const CHANGE_FILTER_TAGS = "CHANGE_FILTER_TAGS";
 
 export const INIT_STATE_BY_COOKIES = "INIT_STATE_BY_COOKIES";
 
@@ -19,6 +20,7 @@ export const LOGOUT = "LOGOUT";
 
 export const LOAD_EXIF = "LOAD_EXIF";
 
+export const FILTER_ALBUM_PHOTOS = "FILTER_ALBUM_PHOTOS_REQUEST";
 
 export function toSuccessAction(action) {
 	return action + '_SUCCESS';

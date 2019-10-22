@@ -1,59 +1,55 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
-import { Switcher } from '../components';
+import { PhotoTags } from '../components';
 import * as C from '../api/Common';
+import { Button } from 'reactstrap';
 
 class ImagesFilter extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
-		this.onChangeShowOnlyFavourites = this.onChangeShowOnlyFavourites.bind(this);
-		this.onChangeShowOriginals = this.onChangeShowOriginals.bind(this);
+		this.filterPhotos = this.filterPhotos.bind(this);
+
+		this.child = React.createRef();
 	}
 
 	render() {
+
+		const photoFilterTags = C.getPhotoFilterTagsFromCookies(this.props.cookies);
+
 		return (
-			<div className="leftMenuItem boxUderline">
-				<h4>Photos:</h4>
-				<p><Switcher checked={this.props.showOnlyFavourites} onChange={this.onChangeShowOnlyFavourites} /><span>Only favourites</span></p>
-			</div>
+			<div className="leftMenuItem boxUderline" >
+				<h4>Photo Filter:</h4>
+				<PhotoTags mode="multi" showNotTaggedTag={true} ref={this.child} tags={photoFilterTags} saveSelected={true} cookies={this.props.cookies} ></PhotoTags>
+				<Button color="link" style={{ paddingLeft: 0 }} onClick={this.filterPhotos}>Filter it</Button>
+			</div >
 		)
 	}
 
-	onChangeShowOnlyFavourites(e) {
-		const onlyFavourites = e.target.checked;
-		C.setCookie(this.props, 'showOnlyFavourites', onlyFavourites)
+	filterPhotos() {
+		const tags = this.child.current.getSelectedTags();
+		const album = this.props.selectedAlbum.name;
+		console.log(`vybrane tagy ${JSON.stringify(tags)}`);
 
-		this.props.onChangeShowOnlyFavourites(onlyFavourites);
-	}
-
-	onChangeShowOriginals(e) {
-		const showOriginals = e.target.checked;
-		C.setCookie(this.props, 'showOriginals', showOriginals)
-
-		this.props.onChangeShowOriginals(showOriginals);
+		this.props.onChangeFilterTags(album, tags);
 	}
 
 }
 
 function mapStateToProps(state, ownProps) {
 	return {
-		showOriginals: state.showOriginals,
-		showOnlyFavourites: state.showOnlyFavourites,
-		cookies: ownProps.cookies
+		cookies: ownProps.cookies,
+		selectedAlbum: state.selectedAlbum
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onChangeShowOriginals: (showOriginals) => {
-			dispatch({ type: actions.CHANGE_SHOW_ORIGINALS, payload: { status: showOriginals } });
-		},
-		onChangeShowOnlyFavourites: (onlyFavourites) => {
-			dispatch({ type: actions.CHANGE_SHOW_ONLY_FAVOURITES, payload: { onlyFavourites } });
-		},
+		onChangeFilterTags: (albumName, tags) => {
+			dispatch({ type: actions.FILTER_ALBUM_PHOTOS, payload: { albumName, tags } });
+		}
 	}
 }
 

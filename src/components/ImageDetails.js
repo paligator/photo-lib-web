@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import * as C from '../api/Common';
 import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
+
 import * as gqlCommands from '../api/GqlCommands';
 import * as actions from "../constants/action-types";
-import { Can, FavouriteBtn } from "../components";
+import { Can, PhotoTags } from "../components";
+import { Query } from "react-apollo";
 
 class ImageDetails extends Component {
 
@@ -16,51 +17,52 @@ class ImageDetails extends Component {
 	render() {
 
 		const album = this.props.album;
+		const albumId = (album) ? album.id : null;
 		const selectedPhotoIndex = album.selectedPhotoIndex;
 		const photoName = selectedPhotoIndex > -1 ? album.files[selectedPhotoIndex] : "";
-		const isFavourite = selectedPhotoIndex > -1 ? album.favourites.indexOf(photoName) > -1 : false;
 
 		return (<div className="leftMenuItem">
-			<div className="">
-				<h4>Photo details:</h4>
-				<p>
-					Name:<br />
-					<span>{photoName}</span>
-				</p>
-				<p>
-					<Can perform="photo:setFavourite" yes={() => (
-						<Mutation
-							mutation={gql`${gqlCommands.SET_PHOTO_AS_FAVOURITE}`}
-							update={(cache) => {
-								const cachedAlbum = cache.readQuery({ query: gqlCommands.GET_ALBUM_GQL, variables: { albumName: album.name } }).album;
 
-								if (cachedAlbum.favourites.indexOf(photoName) > -1) {
-									C.deleteFromArray(cachedAlbum.favourites, photoName);
-								} else {
-									cachedAlbum.favourites.push(photoName);
-								}
+			<Query query={gqlCommands.GET_PHOTO_DETAILS_GQL} variables={{ albumId, photoName }} fetchPolicy="cache-and-network">
+				{({ loading, data }) => {
 
-								this.props.onUpdateFavourites(cachedAlbum.favourites);
+					if (loading === true || !data) {
+						return <div />
+					}
 
-								cache.writeQuery({
-									query: gqlCommands.GET_ALBUM_GQL,
-									data: { cachedAlbum }
-								});
-							}}
-						>
-							{(setAsFavouritePhoto) => {
-								return (
-									<React.Fragment>
-										Is my favourite:<br />
-										<span><FavouriteBtn isFavourite={isFavourite} onClick={() => { setAsFavouritePhoto({ variables: { albumId: album.id, photoName, status: !isFavourite } }) }}></FavouriteBtn></span>
-									</React.Fragment>
-								)
-							}}
-						</Mutation>
-					)} no={() => (<FavouriteBtn isFavourite={isFavourite} disabled></FavouriteBtn>)} />
-				</p>
-			</div>
-		</div>
+					const photo = data.photo || {};
+					const tags = photo.tags || [];
+
+					return (<div className="">
+						<h4>Photo details:</h4>
+						<p>
+							Name:<br />
+							<span>{photoName}</span>
+						</p>
+						<Can perform="photo:setPhotoTags" yes={() => (
+							<Mutation
+								mutation={gql`${gqlCommands.SET_PHOTO_TAGS}`}
+								refetchQueries={[{ query: "Photo", variables: { albumId, photoName } }]}
+								fetchPolicy="no-cache"
+							>
+								{(updateTags) => {
+									return (
+										<div>
+											Tags:<br />
+											<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
+										</div>
+									)
+								}}
+							</Mutation>
+						)} no={() => (<PhotoTags albumId={album.id} photoName={photoName} tags={tags} disabled={true}></PhotoTags>)} />
+					</div>
+					)
+				}}
+			</Query>
+
+
+
+		</div >
 		)
 	}
 }
@@ -78,7 +80,7 @@ function mapStateToProps(state) {
 	return retVal;
 }
 
-// eslint-disable-next-line no-unused-vars
+
 function mapDispatchToProps(dispatch) {
 	return {
 		onUpdateFavourites: (favourites) => {

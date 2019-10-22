@@ -20,6 +20,17 @@ function setCookie(props, cookieName, cookieValue, cookiePath = "/") {
 	cookies.set(cookieName, cookieValue, { path: cookiePath });
 }
 
+function getPhotoFilterTagsFromCookies(cookies) {
+
+	let tags = cookies.cookies.selectedFilterTags;
+	if (tags) {
+		tags = JSON.parse(tags);
+	} else {
+		tags = ["nice", "top"];
+	}
+	return tags;
+}
+
 function findNextFavourite(album, currentIndex) {
 	const { files, favourites } = album;
 	for (let i = currentIndex + 1; i < files.length; i++) {
@@ -62,6 +73,7 @@ function findFirstFavouriteIndex(album) {
 
 module.exports = {
 	meOrNull, meOrVal,
-	formatAlbumName, deleteFromArray, setCookie,
+	formatAlbumName, deleteFromArray, 
+	setCookie, getPhotoFilterTagsFromCookies,
 	findNextFavourite, findPrevFavourite, findLastFavouriteIndex, findFirstFavouriteIndex,
 };
