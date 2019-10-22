@@ -1,5 +1,4 @@
 import * as actions from "../constants/action-types";
-import * as C from "../api/Common";
 import { apolloClient } from '../App';
 import { getUserRoles, isUserLogged } from "../api/Authorization"
 
@@ -88,7 +87,6 @@ function ACT_NEXT_PHOTO(state) {
 }
 
 function ACT_INIT_STATE_BY_COOKIES(inputAction, state) {
-	console.log("ACT_INIT_STATE_BY_COOKIES");
 	const cookies = inputAction.payload.cookies;
 	const userRoles = isUserLogged() ? getUserRoles() : {};
 	return { ...state, selectedFilterTags: cookies.selectedFilterTags ? JSON.parse(cookies.selectedFilterTags) : [], userRoles };

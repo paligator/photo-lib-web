@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
 
 import * as gqlCommands from '../api/GqlCommands';
-import * as actions from "../constants/action-types";
 import { Can, PhotoTags } from "../components";
 import { Query } from "react-apollo";
 
@@ -81,6 +80,7 @@ function mapStateToProps(state) {
 }
 
 
+// eslint-disable-next-line no-unused-vars
 function mapDispatchToProps(dispatch) {
 	return {
 		
