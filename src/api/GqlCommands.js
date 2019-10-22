@@ -46,12 +46,6 @@ export const GET_PHOTO_DETAILS = `
 `;
 export const GET_PHOTO_DETAILS_GQL = toGql(GET_PHOTO_DETAILS);
 
-export const SET_PHOTO_AS_FAVOURITE = `
-	mutation SetPhotoFavourite($albumId: ID!, $photoName: String!, $status: Boolean!) {
-		setPhotoFavourite(albumId: $albumId, photoName: $photoName, status: $status)
-	}
-`;
-
 export const SET_PHOTO_TAGS = `
 	mutation SetPhotoTags($albumId: ID!, $photoName: String!, $addTags: [String]!, $removeTags: [String]!) {
 		setPhotoTags(albumId: $albumId, photoName: $photoName, addTags: $addTags, removeTags: $removeTags)

@@ -31,49 +31,8 @@ function getPhotoFilterTagsFromCookies(cookies) {
 	return tags;
 }
 
-function findNextFavourite(album, currentIndex) {
-	const { files, favourites } = album;
-	for (let i = currentIndex + 1; i < files.length; i++) {
-		if (favourites.indexOf(files[i]) > -1) {
-			return i;
-		}
-	}
-}
-
-function findPrevFavourite(album, currentIndex) {
-	const { files, favourites } = album;
-	for (let i = currentIndex - 1; i >= 0; i--) {
-		if (favourites.indexOf(files[i]) > -1) {
-			return i;
-		}
-	}
-}
-
-function findLastFavouriteIndex(album) {
-	const { files, favourites } = album;
-	for (let i = favourites.length - 1; i >= 0; i--) {
-		if (files.indexOf(favourites[i]) > -1) {
-			return files.indexOf(favourites[i]);
-		}
-	}
-
-	return -1;
-}
-
-function findFirstFavouriteIndex(album) {
-	const { files, favourites } = album;
-	for (let i = 0; i < favourites.length; i++) {
-		if (files.indexOf(favourites[i]) > -1) {
-			return files.indexOf(favourites[i]);
-		}
-	}
-
-	return -1;
-}
-
 module.exports = {
 	meOrNull, meOrVal,
 	formatAlbumName, deleteFromArray, 
-	setCookie, getPhotoFilterTagsFromCookies,
-	findNextFavourite, findPrevFavourite, findLastFavouriteIndex, findFirstFavouriteIndex,
+	setCookie, getPhotoFilterTagsFromCookies
 };

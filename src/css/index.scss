@@ -153,30 +153,6 @@ h1, h2, h3, H4, h5, h6 {
   border-bottom: 1px solid  $main-05;
 }
 
-/* #region Favourite button */
-.fav-button {
-   @extend .far;
-   font-size: 2.5em; 
-   cursor: pointer
-}
-
-.fav-button:hover {
-  color: red; 
-}
-
-.fav-button-selected {
-  @extend .fas; 
-  font-size: 2.5em; 
-  color: red;
-  cursor: pointer
-}
-
-.fav-button-selected:hover {
-  @extend .far; 
-}
-
-/* #endregion */
-
 /* #region Navigation buttons */
 .btn-nav {
   border: 0px;

@@ -247,7 +247,6 @@ class ImageBrowser extends Component {
   async loadExif(fadeIn = true) {
     const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
     const exif = await getExif(img);
-    this.props.onLoadExif(exif);
 
     const divExif = this.node.querySelector("#divExif");
     let exifText = "";
@@ -384,7 +383,6 @@ function mapStateToProps(state, ownState) {
   return {
     album: state.selectedAlbum,
     selectedPhotoIndex: C.meOrVal(state.selectedAlbum.selectedPhotoIndex, -1),
-    showOriginals: state.showOriginals,
     selectedFilterTags: state.selectedFilterTags,
     match: ownState.match
   };
@@ -401,10 +399,7 @@ function mapDispatchToProps(dispatch) {
     },
     onSelectAlbum: (albumId, tags) => {
       dispatch({ type: actions.GET_ALBUM, payload: { albumId, tags: tags } });
-    },
-    onLoadExif: (exif) => {
-      dispatch({ type: actions.LOAD_EXIF, payload: { exif } });
-    },
+    }
   }
 }
 

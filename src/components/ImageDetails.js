@@ -83,9 +83,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onUpdateFavourites: (favourites) => {
-			dispatch({ type: actions.SYNC_FAVOURITES, payload: { favourites } });
-		},
+		
 	};
 }
 

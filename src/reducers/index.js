@@ -4,7 +4,6 @@ import { apolloClient } from '../App';
 import { getUserRoles, isUserLogged } from "../api/Authorization"
 
 const initialState = {
-	showOriginals: false,
 	albums: {
 		isFetcing: false,
 		error: null,
@@ -50,8 +49,6 @@ export default function rootReducer(state = initialState, inputAction) {
 			return ACT_PREV_PHOTO(state);
 		case actions.CHOOSE_PHOTO_INDEX:
 			return ACT_CHOOSE_PHOTO_INDEX(state, inputAction);
-		case actions.CHANGE_SHOW_ORIGINALS:
-			return ACT_CHANGE_SHOW_ORIGINALS(state, inputAction);
 		case actions.RESET_ALBUM:
 			return ACT_RESET_ALBUM(state);
 		case actions.GET_ALBUM:
@@ -60,8 +57,6 @@ export default function rootReducer(state = initialState, inputAction) {
 			return ACT_LOGIN(state, inputAction, actionType);
 		case actions.LOGOUT:
 			return ACT_LOGOUT(state);
-		case actions.LOAD_EXIF:
-			return ACT_GET_EXIF(state, inputAction);
 		case actions.FILTER_ALBUM_PHOTOS:
 			return FILTER_ALBUM_PHOTOS(state, inputAction, actionType)
 		default:
@@ -74,10 +69,6 @@ export default function rootReducer(state = initialState, inputAction) {
 	}
 
 	return state;
-}
-
-function ACT_CHANGE_SHOW_ORIGINALS(state, inputAction) {
-	return { ...state, showOriginals: inputAction.payload.status };
 }
 
 function ACT_CHOOSE_PHOTO_INDEX(state, inputAction) {
@@ -144,10 +135,6 @@ function ACT_LOGOUT(state) {
 	localStorage.removeItem("token");
 	apolloClient.resetStore();
 	return initialState;
-}
-
-function ACT_GET_EXIF(state, inputAction) {
-	return { ...state, selectedPhoto: { ...state.selectedPhoto, exif: inputAction.payload.exif } };
 }
 
 function FILTER_ALBUM_PHOTOS(state, inputAction, actionType) {
