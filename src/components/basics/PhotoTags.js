@@ -14,7 +14,7 @@ class PhotoTags extends Component {
 	render() {
 
 		return (
-			<div ref={node => this.node = node} style={{ verticalAlign: "middle", display: "table-cell" }}>
+			<div className="leftMenuItem" ref={node => this.node = node} style={{ verticalAlign: "middle", display: "block" }}>
 				<Button data-tag="nice" className={this.getBtnClasses("nice")} onClick={this.onClick} disabled={this.props.disabled}>Nice</Button>
 				<Button data-tag="top" className={this.getBtnClasses("top")} onClick={this.onClick} disabled={this.props.disabled}>TOP</Button>
 				<Button data-tag="boring" className={this.getBtnClasses("boring")} onClick={this.onClick} disabled={this.props.disabled}>boring</Button>
