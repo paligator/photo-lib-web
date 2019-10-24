@@ -20,48 +20,19 @@ function setCookie(props, cookieName, cookieValue, cookiePath = "/") {
 	cookies.set(cookieName, cookieValue, { path: cookiePath });
 }
 
-function findNextFavourite(album, currentIndex) {
-	const { files, favourites } = album;
-	for (let i = currentIndex + 1; i < files.length; i++) {
-		if (favourites.indexOf(files[i]) > -1) {
-			return i;
-		}
+function getPhotoFilterTagsFromCookies(cookies) {
+
+	let tags = cookies.cookies.selectedFilterTags;
+	if (tags) {
+		tags = JSON.parse(tags);
+	} else {
+		tags = ["nice", "top"];
 	}
-}
-
-function findPrevFavourite(album, currentIndex) {
-	const { files, favourites } = album;
-	for (let i = currentIndex - 1; i >= 0; i--) {
-		if (favourites.indexOf(files[i]) > -1) {
-			return i;
-		}
-	}
-}
-
-function findLastFavouriteIndex(album) {
-	const { files, favourites } = album;
-	for (let i = favourites.length - 1; i >= 0; i--) {
-		if (files.indexOf(favourites[i]) > -1) {
-			return files.indexOf(favourites[i]);
-		}
-	}
-
-	return -1;
-}
-
-function findFirstFavouriteIndex(album) {
-	const { files, favourites } = album;
-	for (let i = 0; i < favourites.length; i++) {
-		if (files.indexOf(favourites[i]) > -1) {
-			return files.indexOf(favourites[i]);
-		}
-	}
-
-	return -1;
+	return tags;
 }
 
 module.exports = {
 	meOrNull, meOrVal,
-	formatAlbumName, deleteFromArray, setCookie,
-	findNextFavourite, findPrevFavourite, findLastFavouriteIndex, findFirstFavouriteIndex,
+	formatAlbumName, deleteFromArray, 
+	setCookie, getPhotoFilterTagsFromCookies
 };

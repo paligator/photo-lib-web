@@ -1,7 +1,8 @@
 @import '@fortawesome/fontawesome-free/scss/regular.scss';
 @import '@fortawesome/fontawesome-free/scss/solid.scss';
+@import 'bootstrap/scss/bootstrap.scss';
 
-$main: rgb(0, 102, 153); 
+$main: #006699; 
 
 /*FIXME: black is white, gray... chaos */
 $black: white;
@@ -10,12 +11,19 @@ $black-05: rgba($black, 0.5);
 $main-01: rgba($main, 0.1);
 $main-05: rgba($main, 0.5);
 $main-03: rgba($main, 0.3);
-$main-003: rgba($main, 0.04);
+$main-004: rgba($main, 0.04);
 $map-bg-color: #E5EFF5;
 $thumbsHeight: 9vh;
 $baseSpace: 5px;
 $scrollbarWidth: 8px;
 $bigSpace: 0.2em;
+$tagBoring: rgb(80, 80, 80);
+$tagNice: #92EB86;
+$tagTop: #EB4F46;
+$tagInactiveOpactiy: 0.3;
+$tagHoverOpacity: 0.7;
+$tagBtnBorder: 4px;
+$tagNotTagged: $main;
 
 :root {
   --map-bg-color:#E5EFF5;
@@ -37,24 +45,24 @@ body {
   height: 100%;
   color: $main;
   font-weight: 600;
-  background-color: $main-003;
+  background-color: $main-004;
+}
+
+.form-control, .btn, .alert, .dropdown-menu {
+  border-radius: 0;
+}
+
+p, button {
+  margin-bottom: $baseSpace;
 }
 
 span {
-  margin-left: 8px;
-}
-
-.form-control {
-  border-radius: 0;
+  margin-left: $baseSpace;
 }
 
 .btn {
-  border-radius: 0;
   font-weight: 600;
-}
-
-.alert {
-  border-radius: 0;
+  text-transform: none;
 }
 
 .btn-primary {
@@ -68,7 +76,6 @@ span {
 }
 
 .dropdown-menu {
-  border-radius: 0;
   background-color: $main;
   border-color: $main;
 }
@@ -143,30 +150,6 @@ h1, h2, h3, H4, h5, h6 {
 .boxUderline {
   border-bottom: 1px solid  $main-05;
 }
-
-/* #region Favourite button */
-.fav-button {
-   @extend .far;
-   font-size: 2.5em; 
-   cursor: pointer
-}
-
-.fav-button:hover {
-  color: red; 
-}
-
-.fav-button-selected {
-  @extend .fas; 
-  font-size: 2.5em; 
-  color: red;
-  cursor: pointer
-}
-
-.fav-button-selected:hover {
-  @extend .far; 
-}
-
-/* #endregion */
 
 /* #region Navigation buttons */
 .btn-nav {
@@ -410,6 +393,83 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 0%;
+}
+
+/* #endregion */
+
+/* #region Photo Tag */
+
+.btn-tag {
+  @extend .btn;
+  font-size: 0.7em;
+  margin-right: 5px;
+  border: 0;
+  outline: none;
+  box-shadow: none !important;
+  border-style: solid;
+  margin-top: $baseSpace
+}
+.btn-tag.active {
+ border-width: $tagBtnBorder;
+}
+
+.btn-tag.boring {
+  background-color: rgba($tagBoring, $tagInactiveOpactiy) !important;
+}
+.btn-tag.boring:hover, .btn-tag.boring.active:hover {
+  background-color: rgba($tagBoring, $tagHoverOpacity) !important;
+}
+.btn-tag.boring.active {
+  border-color: $tagBoring !important;
+  background-color: $tagBoring !important;
+}
+
+.btn-tag.nice {
+  background-color: rgba($tagNice, $tagInactiveOpactiy) !important;
+}
+.btn-tag.nice:hover, .btn-tag.nice.active:hover {
+  background-color: rgba($tagNice, $tagHoverOpacity) !important;
+}
+.btn-tag.nice.active {
+  border-color: $tagNice !important;
+  background-color: $tagNice !important;
+}
+
+.btn-tag.top {
+  background-color: rgba($tagTop, $tagInactiveOpactiy)  !important;
+}
+.btn-tag.top:hover, .btn-tag.top.active:hover {
+  background-color: rgba($tagTop, $tagHoverOpacity) !important;
+}
+.btn-tag.top.active {
+  border-color: $tagTop !important;
+  background-color: $tagTop !important;;
+}
+
+.btn-tag.notTagged {
+  background-color: rgba($tagNotTagged, $tagInactiveOpactiy)  !important;
+}
+.btn-tag.notTagged:hover, .btn-tag.notTagged.active:hover {
+  background-color: rgba($tagNotTagged, $tagHoverOpacity) !important;
+}
+.btn-tag.notTagged.active {
+  border-color: $tagNotTagged !important;
+  background-color: $tagNotTagged !important;
+}
+
+/* #endregion Photo Tag */
+
+/* #region PhotoFilter */
+
+.tags-filter-menu {
+  background-color: $main-004;
+  padding: 0;
+}
+
+.tags-filter-btn, .tags-filter-btn:hover, .tags-filter-btn:focus, .tags-filter-btn.dropdown-toggle {
+  background-color: $main-03 !important;
+  box-shadow: none !important;
+  color: $main !important;
 }
 
 /* #endregion */

@@ -1,5 +1,5 @@
 const rules = {
-	"photo:setFavourite": ["editor"]
+	"photo:setPhotoTags": ["editor"]
 	// guest: {
 
 	// },

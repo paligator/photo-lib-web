@@ -23,6 +23,10 @@ class Navigation extends Component {
 
 	}
 
+	shouldComponentUpdate() {
+		return false;
+	}
+
 	toggle() {
 		this.setState({
 			togglerOpened: !this.state.togglerOpened
@@ -35,7 +39,7 @@ class Navigation extends Component {
 
 	render() {
 
-		let continents = config.categories;
+		const continents = config.categories;
 		return (
 
 			<Navbar color="dark" dark expand="md" >
@@ -109,12 +113,6 @@ class Navigation extends Component {
 
 }
 
-function mapStateToProps(state) {
-	return {
-		albums: state.albums.value,
-	};
-}
-
 const mapDispatchToProps = dispatch => {
 	return {
 		onLogout: () => {
@@ -124,4 +122,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+export default connect(mapDispatchToProps)(Navigation);

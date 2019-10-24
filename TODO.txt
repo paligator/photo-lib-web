@@ -4,6 +4,8 @@ bug: when i jum on thum which is loading there is border - ok, when the thumb is
 
 bug: load into cache with selected favourties button doesn't work
 
+BUG: works only in chrome
+
 globe in navbar - make it bigger
 
 after click on favourite button there is some border
@@ -19,4 +21,6 @@ do better error page
 devide error boudnary
 
 SEO
+
+check if withou edit permissions
 

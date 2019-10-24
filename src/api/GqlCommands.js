@@ -1,10 +1,9 @@
 import gql from "graphql-tag";
 
 export const GET_ALBUM = `
-	query GetAlbum($albumName: String!) {
+	query GetAlbum($albumName: String!, $tags: [String]) {
 		album(name: $albumName) {
 			continent
-			favourites
 			id
 			month
 			name 
@@ -12,9 +11,17 @@ export const GET_ALBUM = `
 			path
 			files
 		}
+		photosByTags(albumName: $albumName, tags: $tags)
 	}
 `;
 export const GET_ALBUM_GQL = toGql(GET_ALBUM);
+
+export const GET_ALBUM_PHOTOS = `
+	query GetPhotosByTags($albumName: String!, $tags: [String]) {
+		photosByTags(albumName: $albumName, tags: $tags)
+	}
+`;
+export const GET_ALBUM_PHOTOS_GQL = toGql(GET_ALBUM_PHOTOS);
 
 export const GET_ALL_ALBUMS = `
 	query GetAllAlbums {
@@ -30,36 +37,18 @@ export const GET_ALL_ALBUMS = `
 `;
 export const GET_ALL_ALBUMS_GQL = toGql(GET_ALL_ALBUMS);
 
-export const GET_EXIF = `
-	query GetExif($albumId: ID!, $photoName: String!) {
-		exif(albumId: $albumId, photoName: $photoName) {
-			createDate
-			orientation
-			camera
+export const GET_PHOTO_DETAILS = `
+	query GetPhotoDetails($albumId: ID!, $photoName: String!) {
+		photo(albumId: $albumId, photoName: $photoName) {
+			tags
 		}
 	}
-`
-export const GET_EXIF_GQL = toGql(GET_EXIF);
+`;
+export const GET_PHOTO_DETAILS_GQL = toGql(GET_PHOTO_DETAILS);
 
-export const GET_EXIF_AND_ALBUM = `
-	query GetExifAndAlbum($albumId: ID!, $photoName: String!) {
-		exif(albumId: $albumId, photoName: $photoName) {
-			createDate
-			orientation
-			camera
-		}
-		album(id: $albumId) {
-			favourites
-			id
-			name
-		}
-	}
-`
-export const GET_EXIF_AND_ALBUM_GQL = toGql(GET_EXIF_AND_ALBUM);
-
-export const SET_PHOTO_AS_FAVOURITE = `
-	mutation SetPhotoFavourite($albumId: ID!, $photoName: String!, $status: Boolean!) {
-		setPhotoFavourite(albumId: $albumId, photoName: $photoName, status: $status)
+export const SET_PHOTO_TAGS = `
+	mutation SetPhotoTags($albumId: ID!, $photoName: String!, $addTags: [String]!, $removeTags: [String]!) {
+		setPhotoTags(albumId: $albumId, photoName: $photoName, addTags: $addTags, removeTags: $removeTags)
 	}
 `;
 

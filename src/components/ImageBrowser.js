@@ -35,8 +35,7 @@ class ImageBrowser extends Component {
   }
 
   componentDidMount() {
-    const albumNameFromUrl = this.getAlbumNameFromUrl(this.props);
-    this.props.onSelectAlbum(albumNameFromUrl);
+    this.loadAlbum();
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -48,8 +47,18 @@ class ImageBrowser extends Component {
 
     const albumNameFromUrl = this.getAlbumNameFromUrl(this.props);
     if (this.shouldLoadAlbum(prevProps, albumNameFromUrl) === true) {
-      this.props.onSelectAlbum(albumNameFromUrl);
+      this.loadAlbum(albumNameFromUrl);
     }
+  }
+
+  loadAlbum(albumNameFromUrl) {
+
+    if (!albumNameFromUrl) {
+      albumNameFromUrl = this.getAlbumNameFromUrl(this.props);
+    }
+
+    const tags = C.getPhotoFilterTagsFromCookies(this.props.cookies);
+    this.props.onSelectAlbum(albumNameFromUrl, tags);
   }
 
   shouldLoadAlbum(prevProps, albumNameFromUrl) {
@@ -92,6 +101,7 @@ class ImageBrowser extends Component {
     const photoCount = (album.files) ? album.files.length : 0;
     const selectedPhotoIndex = this.props.selectedPhotoIndex
     const albumIsReady = album.isReady === true;
+    const isReloadingPhotos = album.isReloadingPhotos === true;
     const movementDirection = this.state.movementDirection;
     const { photoUrlFadeIn, photoUrlFadeOut, photoUrlBuffer, photoNameFadeIn, photoNameFadeOut, photoNameBuffer } = this.getPhotoUrlsAndNames(album, selectedPhotoIndex, movementDirection);
     const { fadeInClass, fadeOutClass } = this.getPhotoFadingClasses(selectedPhotoIndex, movementDirection)
@@ -115,7 +125,7 @@ class ImageBrowser extends Component {
 
         <div className={showLeftMenu ? "col-sm-10" : "col-sm-12"} style={{ padding: "0" }}>
 
-          {(albumIsReady === true) ? (
+          {(albumIsReady === true && isReloadingPhotos === false) ? (
 
             <div id="mainMe" className="column" style={{ width: "100%", height: "100%" }}>
 
@@ -237,7 +247,6 @@ class ImageBrowser extends Component {
   async loadExif(fadeIn = true) {
     const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
     const exif = await getExif(img);
-    this.props.onLoadExif(exif);
 
     const divExif = this.node.querySelector("#divExif");
     let exifText = "";
@@ -267,14 +276,13 @@ class ImageBrowser extends Component {
   nextPhoto(forward, scrollBahaviour = null) {
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
-    const showOnlyFavourites = this.props.showOnlyFavourites;
-    const enableNext = this.canNextPhoto(showOnlyFavourites, forward, curIndex, album);
+    const enableNext = this.canNextPhoto(forward, curIndex, album);
 
     if (enableNext === true) {
       forward === true ? this.props.onNextPhoto() : this.props.onPrevPhoto();
       this.setState({ animating: true, movementDirection: forward === true ? "next" : "prev" });
       this.disableNavButtons();
-      this.markThumbByIndexAsSelected(this.findNextPhotoIndex(album, curIndex, forward, showOnlyFavourites), true, scrollBahaviour);
+      this.markThumbByIndexAsSelected(this.findNextPhotoIndex(album, curIndex, forward), true, scrollBahaviour);
     }
 
     const divExif = this.node.querySelector("#divExif");
@@ -283,23 +291,17 @@ class ImageBrowser extends Component {
 
   }
 
-  canNextPhoto(showOnlyFavourites, forward, curIndex, album) {
-    if (showOnlyFavourites === true) {
-      if ((forward === true && curIndex < (C.findLastFavouriteIndex(album))) ||
-        (forward === false && C.findFirstFavouriteIndex(album) < curIndex))
-        return true;
-    } else {
-      if ((forward === true && curIndex < (album.files.length - 1)) ||
-        (forward === false && curIndex > 0))
-        return true;
-    }
+  canNextPhoto(forward, curIndex, album) {
+    if ((forward === true && curIndex < (album.files.length - 1)) ||
+      (forward === false && curIndex > 0))
+      return true;
   }
 
-  findNextPhotoIndex(album, curIndex, forward, onlyFavourites) {
+  findNextPhotoIndex(album, curIndex, forward) {
     let nextThumbIndex = (forward === true) ?
-      (onlyFavourites === true) ? C.findNextFavourite(album, curIndex) : curIndex + 1
+      curIndex + 1
       :
-      (onlyFavourites === true) ? C.findPrevFavourite(album, curIndex) : curIndex - 1;
+      curIndex - 1;
 
     return nextThumbIndex;
   }
@@ -307,10 +309,9 @@ class ImageBrowser extends Component {
   disableNavButtons() {
     const curIndex = this.props.selectedPhotoIndex;
     const album = this.props.album;
-    const showOnlyFavourites = this.props.showOnlyFavourites;
 
-    this.node.querySelector(`#btnNextPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, true, curIndex, album);
-    this.node.querySelector(`#btnPrevPhoto`).disabled = !this.canNextPhoto(showOnlyFavourites, false, curIndex, album);
+    this.node.querySelector(`#btnNextPhoto`).disabled = !this.canNextPhoto(true, curIndex, album);
+    this.node.querySelector(`#btnPrevPhoto`).disabled = !this.canNextPhoto(false, curIndex, album);
   }
 
   markThumbByIndexAsSelected(index, scroolTo = false, scrollBahaviour = null) {
@@ -382,8 +383,7 @@ function mapStateToProps(state, ownState) {
   return {
     album: state.selectedAlbum,
     selectedPhotoIndex: C.meOrVal(state.selectedAlbum.selectedPhotoIndex, -1),
-    showOriginals: state.showOriginals,
-    showOnlyFavourites: state.showOnlyFavourites,
+    selectedFilterTags: state.selectedFilterTags,
     match: ownState.match
   };
 }
@@ -397,15 +397,9 @@ function mapDispatchToProps(dispatch) {
     onPrevPhoto: () => {
       dispatch({ type: actions.PREV_PHOTO });
     },
-    onSelectAlbum: (albumId) => {
-      dispatch({ type: actions.GET_ALBUM, payload: { albumId } });
-    },
-    onResetAlbum: () => {
-      dispatch({ type: actions.RESET_ALBUM });
-    },
-    onLoadExif: (exif) => {
-      dispatch({ type: actions.LOAD_EXIF, payload: { exif } });
-    },
+    onSelectAlbum: (albumId, tags) => {
+      dispatch({ type: actions.GET_ALBUM, payload: { albumId, tags: tags } });
+    }
   }
 }
 
