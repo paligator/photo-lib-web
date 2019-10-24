@@ -22,44 +22,46 @@ class ImageDetails extends Component {
 
 		return (<div className="leftMenuItem">
 
-			<Query query={gqlCommands.GET_PHOTO_DETAILS_GQL} variables={{ albumId, photoName }} fetchPolicy="cache-and-network">
-				{({ loading, data }) => {
+			{(!photoName) ? null : (
 
-					if (loading === true || !data) {
-						return <div />
-					}
+				<Query query={gqlCommands.GET_PHOTO_DETAILS_GQL} variables={{ albumId, photoName }} fetchPolicy="cache-and-network">
+					{({ loading, data }) => {
 
-					const photo = data.photo || {};
-					const tags = photo.tags || [];
+						if (loading === true || !data) {
+							return <div />
+						}
 
-					return (<div className="">
-						<h4>Photo details:</h4>
-						<p>
-							Name:<br />
-							<span>{photoName}</span>
-						</p>
-						<Can perform="photo:setPhotoTags" yes={() => (
-							<Mutation
-								mutation={gql`${gqlCommands.SET_PHOTO_TAGS}`}
-								refetchQueries={[{ query: "Photo", variables: { albumId, photoName } }]}
-								fetchPolicy="no-cache"
-							>
-								{(updateTags) => {
-									return (
-										<div>
-											Tags:<br />
-											<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
-										</div>
-									)
-								}}
-							</Mutation>
-						)} no={() => (<PhotoTags albumId={album.id} photoName={photoName} tags={tags} disabled={true}></PhotoTags>)} />
-					</div>
-					)
-				}}
-			</Query>
+						const photo = data.photo || {};
+						const tags = photo.tags || [];
 
+						return (<div className="">
+							<h4>Photo details:</h4>
+							<p>
+								Name:<br />
+								<span>{photoName}</span>
+							</p>
+							<Can perform="photo:setPhotoTags" yes={() => (
+								<Mutation
+									mutation={gql`${gqlCommands.SET_PHOTO_TAGS}`}
+									refetchQueries={[{ query: "Photo", variables: { albumId, photoName } }]}
+									fetchPolicy="no-cache"
+								>
+									{(updateTags) => {
+										return (
+											<div>
+												Tags:<br />
+												<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
+											</div>
+										)
+									}}
+								</Mutation>
+							)} no={() => (<PhotoTags albumId={album.id} photoName={photoName} tags={tags} disabled={true}></PhotoTags>)} />
+						</div>
+						)
+					}}
+				</Query>
 
+			)}
 
 		</div >
 		)
@@ -83,7 +85,7 @@ function mapStateToProps(state) {
 // eslint-disable-next-line no-unused-vars
 function mapDispatchToProps(dispatch) {
 	return {
-		
+
 	};
 }
 

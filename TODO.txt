@@ -1,18 +1,12 @@
-bug: When checkbox with favourites is checked and there is no favourtie, there is error, or if in favrourites is nonexist photo
-
-bug: when i jum on thum which is loading there is border - ok, when the thumb is loaded border dissapear
-
-bug: load into cache with selected favourties button doesn't work
+bug: when i jump on thumb which is loading there is border - ok, when the thumb is loaded border dissapear
 
 BUG: works only in chrome
 
 globe in navbar - make it bigger
 
-after click on favourite button there is some border
-
 validate email/password before submit
 
-dorobit aj video
+video
 
 JS error reporting services 
 
@@ -22,5 +16,5 @@ devide error boudnary
 
 SEO
 
-check if withou edit permissions
+check if without edit permissions
 
