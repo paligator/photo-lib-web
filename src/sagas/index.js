@@ -28,13 +28,13 @@ function* getAlbumWorker(inputAction) {
   try {
     const response = yield apolloClient.query({
       query: gql`${gqlCommands.GET_ALBUM}`,
+      fetchPolicy: "network-only",
       variables: { albumName: inputAction.payload.albumId, tags: inputAction.payload.tags }
     })
 
     const album = response.data.album;
 
     album.files = response.data.photosByTags;
-
     album.files.sort();
 
     yield put({ type: actions.toSuccessAction(actions.GET_ALBUM), data: album });
@@ -49,11 +49,11 @@ function* filterAlbumPhotos(inputAction) {
   try {
     const response = yield apolloClient.query({
       query: gql`${gqlCommands.GET_ALBUM_PHOTOS}`,
+      fetchPolicy: "network-only",
       variables: { albumName: inputAction.payload.albumName, tags: inputAction.payload.tags }
     })
 
     const photos = response.data.photosByTags;
-
 
     yield put({ type: actions.toSuccessAction(actions.FILTER_ALBUM_PHOTOS), data: photos });
 
