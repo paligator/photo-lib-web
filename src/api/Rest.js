@@ -18,7 +18,7 @@ export async function get(endpoint) {
 
 		return data;
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 
 }
@@ -41,7 +41,7 @@ export async function post(endpoint) {
 
 		return data;
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 
 }

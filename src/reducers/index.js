@@ -18,13 +18,10 @@ const initialState = {
 		isReloadingPhotos: false,
 		files: []
 	},
-	unSuccessfulLogin: false,
 	userRoles: []
 };
 
 export default function rootReducer(state = initialState, inputAction) {
-
-	//	console.log(`rootReducer() ${JSON.stringify(inputAction)}`);
 
 	const parsedAction = parseAction(inputAction);
 	const action = parsedAction.action

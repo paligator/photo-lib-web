@@ -87,7 +87,6 @@ function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
 	return {
 		onResetAlbum: () => {
-			console.log("WorldMap -> reset album");
 			dispatch({ type: actions.RESET_ALBUM });
 		}
 	}
