@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import ReactLoading from 'react-loading';
+import { Warning } from '../components';
 
 class PhotoLoader extends Component {
 
@@ -48,10 +49,7 @@ class PhotoLoader extends Component {
 
 				{(this.state.photoLoadingState === "error" && this.props.photoUrl !== '') ?
 					(
-						<div className="mainImage" style={{ textAlign: "center" }}>
-							<i style={{ fontSize: "5em" }} className="fas fa-bug"></i><br /><br />
-							{`Sorry, there was a problem to get photo "${this.props.photoName}"!`}
-						</div>
+						<Warning text={`Sorry, there was a problem to get photo "${this.props.photoName}"!`} icon="fas fa-bug" />
 					) : null
 				}
 

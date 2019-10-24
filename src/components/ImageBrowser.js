@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Thumbs, PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter } from '../components'
+import { Thumbs, PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter, Warning } from '../components'
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import config from '../config';
@@ -136,30 +136,39 @@ class ImageBrowser extends Component {
                 </div>) : null
               }
 
-              <Swipeable onSwipedLeft={() => { this.nextPhoto(true) }} onSwipedRight={() => { this.nextPhoto(false) }} >
+              {(photoCount === 0) ?
+                (
+                  <Warning text="Sorry, there are no photos for this filter!" icon="fas fa-eye-slash" />
+                )
+                :
+                (
+                  <Swipeable onSwipedLeft={() => { this.nextPhoto(true) }} onSwipedRight={() => { this.nextPhoto(false) }} >
 
-                <div className="row" style={{ height: '100%', width: "100%", position: "absolute", }}>
-                  <div className="column" style={{ width: "100%" }}>
+                    <div className="row" style={{ height: '100%', width: "100%", position: "absolute" }}>
+                      <div className="column" style={{ width: "100%" }}>
 
-                    <div id="divPhotoLoaders" className="photoLoadersDiv">
-                      <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                      <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                      <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                        <div id="divPhotoLoaders" className="photoLoadersDiv">
+                          <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                          <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                          <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
+                        </div>
+                        <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
+                      </div>
+
+                      <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" tooltip="Next photo" onClick={() => { this.nextPhoto(false) }} />
+                      <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
+                      <button className="btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
+
+                      <div className="photoCounter">{selectedPhotoIndex + 1}/{photoCount}</div>
+
+                      <p id="divExif" className="exif animated" style={{ display: "none" }}></p>
+                      <div id="btnExif" className="btn-exif" onClick={this.showExif}>EXIF</div>
+
                     </div>
-                    <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
-                  </div>
+                  </Swipeable>
 
-                  <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" tooltip="Next photo" onClick={() => { this.nextPhoto(false) }} />
-                  <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
-                  <button className="btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
+                )}
 
-                  <div className="photoCounter">{selectedPhotoIndex + 1}/{photoCount}</div>
-
-                  <p id="divExif" className="exif animated" style={{ display: "none" }}></p>
-                  <div id="btnExif" className="btn-exif" onClick={this.showExif}>EXIF</div>
-
-                </div>
-              </Swipeable>
             </div>
           ) :
             this.getLoadingDiv()
