@@ -18,13 +18,6 @@ const initialState = {
 		isReloadingPhotos: false,
 		files: []
 	},
-	selectedPhoto: {
-		isFetching: false,
-		isReady: false,
-		error: null,
-		exif: null
-	},
-	isUserLogged: false,
 	unSuccessfulLogin: false,
 	userRoles: []
 };
@@ -71,29 +64,29 @@ export default function rootReducer(state = initialState, inputAction) {
 }
 
 function ACT_CHOOSE_PHOTO_INDEX(state, inputAction) {
-	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex: parseInt(inputAction.payload.photoIndex) }, selectedPhoto: { isReady: false } };
+	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex: parseInt(inputAction.payload.photoIndex) } };
 }
 
 function ACT_PREV_PHOTO(state) {
 	const actualIndex = parseInt(state.selectedAlbum.selectedPhotoIndex);
 	const selectedPhotoIndex = actualIndex - 1;
-	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex }, selectedPhoto: { isReady: false } };
+	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex } };
 }
 
 function ACT_NEXT_PHOTO(state) {
 	const actualIndex = parseInt(state.selectedAlbum.selectedPhotoIndex);
 	const selectedPhotoIndex = actualIndex + 1;
-	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex }, selectedPhoto: { isReady: false } };
+	return { ...state, selectedAlbum: { ...state.selectedAlbum, selectedPhotoIndex } };
 }
 
 function ACT_INIT_STATE_BY_COOKIES(inputAction, state) {
 	const cookies = inputAction.payload.cookies;
 	const userRoles = isUserLogged() ? getUserRoles() : {};
-	return { ...state, selectedFilterTags: cookies.selectedFilterTags ? JSON.parse(cookies.selectedFilterTags) : [], userRoles };
+	return { ...state, userRoles };
 }
 
 function ACT_RESET_ALBUM(state) {
-	return { ...state, selectedAlbum: initialState.selectedAlbum, selectedPhoto: initialState.selectedPhoto };
+	return { ...state, selectedAlbum: initialState.selectedAlbum };
 }
 
 function ACT_GET_ALBUM(state, inputAction, actionType) {
@@ -110,7 +103,7 @@ function ACT_GET_ALBUM(state, inputAction, actionType) {
 		}
 
 	} else if (actionType === 'REQUEST') {
-		return { ...state, selectedAlbum: { name: inputAction.payload.albumId, isReady: false, isFetching: true }, selectedPhotoIndex: -1, selectedPhoto: { isReady: false } };
+		return { ...state, selectedAlbum: { name: inputAction.payload.albumId, isReady: false, isFetching: true,  selectedPhotoIndex: -1 } };
 	}
 }
 
@@ -118,7 +111,7 @@ function ACT_LOGIN(state, inputAction, actionType) {
 	if (actionType === 'SUCCESS') {
 		localStorage.setItem("token", inputAction.data);
 
-		return { ...state, isUserLogged: true, userRoles: getUserRoles() };
+		return { ...state, userRoles: getUserRoles() };
 	} if (actionType === 'REQUEST') {
 		//FIXME: do it normal, some stages, not true/false/XXX
 		return { ...initialState, unSuccessfulLogin: 'XXX' };
@@ -143,7 +136,7 @@ function FILTER_ALBUM_PHOTOS(state, inputAction, actionType) {
 	} else if (actionType === 'ERROR') {
 		return { ...state, selectedAlbum: { ...state.selectedAlbum, files:[], error: inputAction.error } };
 	} else if (actionType === 'REQUEST') {
-		return { ...state, selectedAlbum: { ...state.selectedAlbum, isReloadingPhotos: true }, selectedPhotoIndex: -1, selectedPhoto: { isReady: false } };
+		return { ...state, selectedAlbum: { ...state.selectedAlbum, isReloadingPhotos: true }, selectedPhotoIndex: -1 };
 	}
 }
 

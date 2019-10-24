@@ -71,11 +71,9 @@ class ImageDetails extends Component {
 function mapStateToProps(state) {
 
 	const album = state.selectedAlbum || null;
-	const photo = state.selectedPhoto || null;
 
 	const retVal = {
 		album,
-		photo
 	};
 
 	return retVal;

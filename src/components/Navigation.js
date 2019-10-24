@@ -113,6 +113,11 @@ class Navigation extends Component {
 
 }
 
+const mapStateToProps = state => {
+	return {};
+}
+
+
 const mapDispatchToProps = dispatch => {
 	return {
 		onLogout: () => {
@@ -122,4 +127,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapDispatchToProps)(Navigation);
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);

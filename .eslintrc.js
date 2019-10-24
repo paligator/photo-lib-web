@@ -8,7 +8,10 @@ module.exports = {
 		"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
 		"no-console": "off",
 		"react/prop-types": "off"
-
+		'semi': [
+			'error',
+			'always'
+		],
 	},
 	"extends": [
 		"eslint:recommended",

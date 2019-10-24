@@ -18,16 +18,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import './css/index.scss';
 
-
+/* It's needed, becuase of Redex DevTools in chrome */ 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; 
 const sagaMiddleware = createSagaMiddleware();
-let middlewares = applyMiddleware(sagaMiddleware);
-
-// const reduxDevTools =
-// 	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
-
-let store = createStore(
-	rootReducer,
-	compose(middlewares)
+const store = createStore(rootReducer,
+	composeEnhancers(
+		applyMiddleware(sagaMiddleware)
+	)
 );
 
 sagaMiddleware.run(rootSaga);
@@ -39,7 +36,8 @@ ReactDOM.render(
 		</Provider>
 	</CookiesProvider>,
 
-	document.getElementById('root'));
+	document.getElementById('root')
+);
 
 
 // If you want your app to work offline and load faster, you can change

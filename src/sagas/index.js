@@ -28,9 +28,9 @@ function* getAlbumWorker(inputAction) {
   try {
     const response = yield apolloClient.query({
       query: gql`${gqlCommands.GET_ALBUM}`,
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache", /*because data will be keps in redux */
       variables: { albumName: inputAction.payload.albumId, tags: inputAction.payload.tags }
-    })
+    });
 
     const album = response.data.album;
 
@@ -49,9 +49,9 @@ function* filterAlbumPhotos(inputAction) {
   try {
     const response = yield apolloClient.query({
       query: gql`${gqlCommands.GET_ALBUM_PHOTOS}`,
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache", /*because data will be keps in redux */
       variables: { albumName: inputAction.payload.albumName, tags: inputAction.payload.tags }
-    })
+    });
 
     const photos = response.data.photosByTags;
 
@@ -61,4 +61,5 @@ function* filterAlbumPhotos(inputAction) {
     console.error("getAlbumWorker:", error);
     yield put({ type: actions.toErrorAction(actions.FILTER_ALBUM_PHOTOS), error });
   }
+
 }
