@@ -161,7 +161,7 @@ class ImageBrowser extends Component {
 
                       <div className="photoCounter">{selectedPhotoIndex + 1}/{photoCount}</div>
 
-                      <p id="divExif" className="exif animated" style={{ display: "none" }}></p>
+                      <Exif exif={this.state.exif}></Exif>
                       <div id="btnExif" className="btn-exif" onClick={this.showExif}>EXIF</div>
 
                     </div>
@@ -257,20 +257,12 @@ class ImageBrowser extends Component {
     const img = this.node.querySelector("#loaderIn").querySelector(`#imgPhotoIn`);
     const exif = await getExif(img);
 
+    this.setState({ exif })
+
     const divExif = this.node.querySelector("#divExif");
     let exifText = "";
 
-    if (exif.Camera) { exifText += `Camera: ${exif.Camera}<br>` }
-    if (exif.Camera) { exifText += `Date: ${exif.DateTime}<br>` }
-    if (exif.ExposureTime) { exifText += `Exp. Time: ${formatExposureTime(exif.ExposureTime)}s<br>` }
-    if (exif.FNumber) { exifText += `FNumber: ${exif.FNumber}F<br>` }
-    if (exif.ApertureValue) { exifText += `Aperture: ${exif.ApertureValue}<br>` }
-    if (exif.ISOSpeedRatings) { exifText += `ISO: ${exif.ISOSpeedRatings}<br>` }
 
-    //Not the nicest way, but when there is exif last item are very short and there is nice cascade around fullscreen button
-    if (!exifText || exifText === "") exifText = "Photo has no Exif &nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;"
-
-    divExif.innerHTML = exifText;
 
     if (fadeIn === true) {
       divExif.classList.remove("fadeOut");
@@ -410,6 +402,32 @@ function mapDispatchToProps(dispatch) {
       dispatch({ type: actions.GET_ALBUM, payload: { albumId, tags: tags } });
     }
   }
+}
+
+const Exif = (props) => {
+
+  const exif = props.exif;
+
+  if (!exif) {
+    return <div id="divExif">nist</div>
+  }
+
+  let array = [];
+
+  if (exif.Camera) array.push({ key: "Camera", text: `${exif.Camera}` });
+  if (exif.DateTime) array.push({ key: 'Date', text: `${exif.DateTime}` });
+  if (exif.ExposureTime) array.push({ key: 'Exposure Time', text: `${formatExposureTime(exif.ExposureTime)}s` });
+  if (exif.FNumber) array.push({ key: 'FNumber', text: `${exif.FNumber}F` });
+  if (exif.ApertureValue) array.push({ key: 'Aperture', text: `${exif.ApertureValue}` });
+  if (exif.ISOSpeedRatings) array.push({ key: 'ISO', text: `${exif.ISOSpeedRatings}` });
+
+
+  return (<div id="divExif" key={Math.random()} className="exif animated" style={{ display: "inline" }}>
+    {array.map((item, index) => (
+      <p key={index}>{item.key}: {item.text}</p>
+    ))
+    }
+  </div >)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImageBrowser);
