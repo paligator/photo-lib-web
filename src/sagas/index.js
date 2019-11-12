@@ -34,8 +34,11 @@ function* getAlbumWorker(inputAction) {
 
     const album = response.data.album;
 
-    album.files = response.data.photosByTags;
-    album.files.sort();
+    const allFiles = [];
+    response.data.photosByTags.forEach(group => allFiles.push(...group.photos));
+    allFiles.sort();
+    album.files = allFiles;
+    album.groupedFiles = response.data.photosByTags;
 
     yield put({ type: actions.toSuccessAction(actions.GET_ALBUM), data: album });
 
@@ -53,9 +56,11 @@ function* filterAlbumPhotos(inputAction) {
       variables: { albumName: inputAction.payload.albumName, tags: inputAction.payload.tags }
     });
 
-    const photos = response.data.photosByTags;
+    const allFiles = [];
+    response.data.photosByTags.forEach(group => allFiles.push(...group.photos));
+    allFiles.sort();
 
-    yield put({ type: actions.toSuccessAction(actions.FILTER_ALBUM_PHOTOS), data: photos });
+    yield put({ type: actions.toSuccessAction(actions.FILTER_ALBUM_PHOTOS), data: allFiles });
 
   } catch (error) {
     console.error("getAlbumWorker:", error);

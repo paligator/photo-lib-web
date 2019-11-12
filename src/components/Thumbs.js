@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { InView } from 'react-intersection-observer'
+import { InView } from 'react-intersection-observer';
 import * as actions from "../constants/action-types";
 import config from '../config';
 import * as C from "../api/Common";
@@ -22,6 +22,7 @@ class Thumbs extends Component {
 		this.onPhotoVisibilityChange = this.onPhotoVisibilityChange.bind(this);
 		this.onPhotoIsLoaded = this.onPhotoIsLoaded.bind(this);
 		this.onPhotoLoadError = this.onPhotoLoadError.bind(this);
+		this.loadPhotosInAdvance = this.loadPhotosInAdvance.bind(this);
 	}
 
 	shouldComponentUpdate() {
@@ -33,6 +34,7 @@ class Thumbs extends Component {
 
 		const thumbUrl = `${config.imageProxyUrl}/photo/thumb/${this.props.urlPath}`;
 		const files = this.props.album.files;
+		const groupedFiles = this.props.album.groupedFiles;
 		const curIndex = this.props.selectedPhotoIndex;
 
 		return (
@@ -40,7 +42,9 @@ class Thumbs extends Component {
 				{
 					files.map((file, i) => {
 						const url = `${thumbUrl}/${file}`;
-						const className = (i === curIndex) ? "thumb thumbSelected" : "thumb";
+						const color = this.getColor(file, groupedFiles);
+						const className = (i === curIndex) ? `thumb thumbSelected ${color}` : `thumb ${color}`;
+						console.log(color);
 						return (
 							<InView id={`thumbObsv${i}`} key={i} data-key={i} onClick={this.chooseThumb} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
 
@@ -56,7 +60,7 @@ class Thumbs extends Component {
 									data-src={url}>
 								</img>
 
-								<div id={`errorMsg${i}`} className={className} style={{ display: "none", width: "5em" }} title={`Error get photo "${file}"`}>
+								<div id={`errorMsg${i}`} className={className + " thumbPhoto"} style={{ display: "none", width: "5em" }} title={`Error get photo "${file}"`}>
 									<div style={{ position: "relative", width: "100%", height: "100%" }}>
 										<div style={{ position: "absolute", textAlign: "center", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
 											<i className="fas fa-bug" style={{ fontSize: "1em", }} />
@@ -65,21 +69,40 @@ class Thumbs extends Component {
 									</div>
 								</div>
 
-								<div className={"thumbLoading " + className} id={`thumbLoading${i}`} >
+								<div className={"thumbLoading " + className} id={`thumbLoading${i}`}>
 									<img alt="waiting..." src={this.SPINNER_IMGET_URL} style={{ height: "100%", width: "auto" }} />
 								</div>
 
 							</InView >
-						)
+						);
 					})
 				}
 			</div >
 		);
 	}
 
+	getColor(file, groupedFiles) {
+
+		const group = groupedFiles.find(group => (group.photos.indexOf(file) > -1));
+
+		if (!group) {
+			return '';
+		}
+
+		const tag = group.tag;
+
+		switch (tag) {
+			case 'nice':
+			case 'top':
+			case 'boring':
+				return tag;
+		}
+
+	}
+
 	onPhotoLoadError(e) {
 		if (e && e.target.src !== this.DEFAULT_PHOTO_URL) {
-			//e.target.style.display = "";
+
 			e.target.dataset.isloaded = true;
 
 			//remove photo from downloading images

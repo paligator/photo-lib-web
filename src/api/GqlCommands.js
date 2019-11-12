@@ -11,14 +11,20 @@ export const GET_ALBUM = `
 			path
 			files
 		}
-		photosByTags(albumName: $albumName, tags: $tags)
+		photosByTags(albumName: $albumName, tags: $tags) {
+			tag
+			photos
+		}
 	}
 `;
 export const GET_ALBUM_GQL = toGql(GET_ALBUM);
 
 export const GET_ALBUM_PHOTOS = `
 	query GetPhotosByTags($albumName: String!, $tags: [String]) {
-		photosByTags(albumName: $albumName, tags: $tags)
+		photosByTags(albumName: $albumName, tags: $tags) {
+			tag
+			photos
+		}
 	}
 `;
 export const GET_ALBUM_PHOTOS_GQL = toGql(GET_ALBUM_PHOTOS);

@@ -147,7 +147,7 @@ class ImageBrowser extends Component {
                     <div className="row" style={{ height: '100%', width: "100%", position: "absolute" }}>
                       <div className="column" style={{ width: "100%" }}>
 
-                        <div id="divPhotoLoaders" className="photoLoadersDiv">
+                        <div id="divPhotoLoaders" key="divPhotoLoaders" className="photoLoadersDiv">
                           <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />

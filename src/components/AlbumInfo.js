@@ -26,7 +26,7 @@ function mapStateToProps(state) {
 // eslint-disable-next-line no-unused-vars
 function mapDispatchToProps(dispatch) {
 	return {
-	}
+	};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumInfo);

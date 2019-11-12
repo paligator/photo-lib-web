@@ -28,13 +28,13 @@ class ImageDetails extends Component {
 					{({ loading, data }) => {
 
 						if (loading === true || !data) {
-							return <div />
+							return <div />;
 						}
 
 						const photo = data.photo || {};
 						const tags = photo.tags || [];
 
-						return (<div className="">
+						return (<div>
 							<h4>Photo details:</h4>
 							<p>
 								Name:<br />
@@ -52,19 +52,19 @@ class ImageDetails extends Component {
 												Tags:<br />
 												<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
 											</div>
-										)
+										);
 									}}
 								</Mutation>
 							)} no={() => (<PhotoTags albumId={album.id} photoName={photoName} tags={tags} disabled={true}></PhotoTags>)} />
 						</div>
-						)
+						);
 					}}
 				</Query>
 
 			)}
 
 		</div >
-		)
+		);
 	}
 }
 
