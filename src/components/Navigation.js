@@ -49,7 +49,7 @@ class Navigation extends Component {
 					<img alt="globe" src={globe} width="65px"></img>
 				</Link>
 				{/* </NavbarBrand> */}
-				<NavbarToggler onClick={this.toggle} />
+				<NavbarToggler onClick={this.toggle} aria-label="Show/hide menu"></NavbarToggler>
 				<Collapse isOpen={this.state.togglerOpened} navbar>
 					<Nav navbar className="navbar-center" >
 						<Query query={gqlCommands.GET_ALL_ALBUMS_GQL}>
@@ -73,7 +73,7 @@ class Navigation extends Component {
 					<Nav navbar>
 						<UncontrolledDropdown nav inNavbar key="help" title="help">
 							{/* <DropdownToggle nav>⚙</DropdownToggle> */}
-							<DropdownToggle className="navbar-dropdown"><i className="fas fa-cog" /></DropdownToggle>
+							<DropdownToggle className="navbar-dropdown"><i className="fas fa-cog" aria-label="Help" /></DropdownToggle>
 							<DropdownMenu className="dropdown-menu-right">
 								<DropdownItem key="logout">
 									<NavItem key="logout" onClick={this.logOut}>

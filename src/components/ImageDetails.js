@@ -24,43 +24,46 @@ class ImageDetails extends Component {
 
 			{(!photoName) ? null : (
 
-				<Query query={gqlCommands.GET_PHOTO_DETAILS_GQL} variables={{ albumId, photoName }} fetchPolicy="cache-and-network">
-					{({ loading, data }) => {
+				<React.Fragment>
+					<h4>Photo details:</h4>
 
-						if (loading === true || !data) {
-							return <div />;
-						}
+					<Query query={gqlCommands.GET_PHOTO_DETAILS_GQL} variables={{ albumId, photoName }} fetchPolicy="cache-and-network">
+						{({ loading, data }) => {
 
-						const photo = data.photo || {};
-						const tags = photo.tags || [];
+							if (loading === true || !data) {
+								return <div />;
+							}
 
-						return (<div>
-							<h4>Photo details:</h4>
-							<p>
-								Name:<br />
-								<span>{photoName}</span>
-							</p>
-							<Can perform="photo:setPhotoTags" yes={() => (
-								<Mutation
-									mutation={gql`${gqlCommands.SET_PHOTO_TAGS}`}
-									refetchQueries={[{ query: "Photo", variables: { albumId, photoName } }]}
-									fetchPolicy="no-cache"
-								>
-									{(updateTags) => {
-										return (
-											<div>
-												Tags:<br />
-												<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
-											</div>
-										);
-									}}
-								</Mutation>
-							)} no={() => (<PhotoTags albumId={album.id} photoName={photoName} tags={tags} disabled={true}></PhotoTags>)} />
-						</div>
-						);
-					}}
-				</Query>
+							const photo = data.photo || {};
+							const tags = photo.tags || [];
 
+							return (<div>
+
+								<p>
+									Name:<br />
+									<span>{photoName}</span>
+								</p>
+								<Can perform="photo:setPhotoTags" yes={() => (
+									<Mutation
+										mutation={gql`${gqlCommands.SET_PHOTO_TAGS}`}
+										refetchQueries={[{ query: "Photo", variables: { albumId, photoName } }]}
+										fetchPolicy="no-cache"
+									>
+										{(updateTags) => {
+											return (
+												<div>
+													Tags:<br />
+													<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
+												</div>
+											);
+										}}
+									</Mutation>
+								)} no={() => (<PhotoTags albumId={album.id} photoName={photoName} tags={tags} disabled={true}></PhotoTags>)} />
+							</div>
+							);
+						}}
+					</Query>
+				</React.Fragment>
 			)}
 
 		</div >

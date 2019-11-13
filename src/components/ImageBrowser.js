@@ -104,7 +104,7 @@ class ImageBrowser extends Component {
     const isReloadingPhotos = album.isReloadingPhotos === true;
     const movementDirection = this.state.movementDirection;
     const { photoUrlFadeIn, photoUrlFadeOut, photoUrlBuffer, photoNameFadeIn, photoNameFadeOut, photoNameBuffer } = this.getPhotoUrlsAndNames(album, selectedPhotoIndex, movementDirection);
-    const { fadeInClass, fadeOutClass } = this.getPhotoFadingClasses(selectedPhotoIndex, movementDirection)
+    const { fadeInClass, fadeOutClass } = this.getPhotoFadingClasses(selectedPhotoIndex, movementDirection);
 
     const showLeftMenu = this.props.styles.showLeftMenu === true;
 
@@ -148,16 +148,16 @@ class ImageBrowser extends Component {
                       <div className="column" style={{ width: "100%" }}>
 
                         <div id="divPhotoLoaders" key="divPhotoLoaders" className="photoLoadersDiv">
-                          <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                          <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                          <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn || "photoIn"} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                          <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut || "photoOut"} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
                         </div>
                         <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
                       </div>
 
-                      <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" tooltip="Next photo" onClick={() => { this.nextPhoto(false) }} />
-                      <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" tooltip="Previoius photo" onClick={() => { this.nextPhoto(true) }}></button>
-                      <button className="btn-fullscreen fas" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }} />
+                      <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" aria-label="Previous photo" tooltip="Previous photo" onClick={() => { this.nextPhoto(false) }}></button>
+                      <button id="btnNextPhoto" className="btn-nav btn-nav-right fas" aria-label="Next photo" tooltip="Next photo" onClick={() => { this.nextPhoto(true) }}></button>
+                      <button className="btn-fullscreen fas" aria-label="Go to Fullscreen" tooltip="Go to Fullscreen" onClick={() => { this.goToFullScreen() }}></button>
 
                       <div className="photoCounter">{selectedPhotoIndex + 1}/{photoCount}</div>
 

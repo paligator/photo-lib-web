@@ -1,6 +1,12 @@
-@import '@fortawesome/fontawesome-free/scss/regular.scss';
-@import '@fortawesome/fontawesome-free/scss/solid.scss';
+// @import '@fortawesome/fontawesome-free/scss/regular.scss';
+// @import '@fortawesome/fontawesome-free/scss/solid.scss';
 @import 'bootstrap/scss/bootstrap.scss';
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  src: url(/static/media/fa-solid-900.44d537ab.woff2) format('woff2');
+  font-display: swap;
+}
 
 $main: #006699; 
 
@@ -20,7 +26,7 @@ $bigSpace: 0.2em;
 $tagBoring: rgb(80, 80, 80);
 $tagNice: #92EB86;
 $tagTop: #EB4F46;
-$tagInactiveOpactiy: 0.3;
+$tagInactiveOpactiy: 0.2;
 $tagHoverOpacity: 0.7;
 $tagBtnBorder: 4px;
 $tagNotTagged: $main;
@@ -420,10 +426,12 @@ input:checked + .slider:before {
   outline: none;
   box-shadow: none !important;
   border-style: solid;
-  margin-top: $baseSpace
+  margin-top: $baseSpace;
+  color: $main
 }
 .btn-tag.active {
  border-width: $tagBtnBorder;
+ color: $main
 }
 
 .btn-tag.boring {
@@ -480,9 +488,10 @@ input:checked + .slider:before {
 }
 
 .tags-filter-btn, .tags-filter-btn:hover, .tags-filter-btn:focus, .tags-filter-btn.dropdown-toggle {
-  background-color: $main-03 !important;
+  background-color: $main-01 !important;
   box-shadow: none !important;
   color: $main !important;
 }
 
 /* #endregion */
+
