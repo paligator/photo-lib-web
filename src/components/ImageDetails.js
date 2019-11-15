@@ -21,21 +21,17 @@ class ImageDetails extends Component {
 		const photoName = selectedPhotoIndex > -1 ? album.files[selectedPhotoIndex] : "";
 
 		return (<div className="leftMenuItem">
+			<h4>Photo details:</h4>
 
 			{(!photoName) ? null : (
 
 				<React.Fragment>
-					<h4>Photo details:</h4>
 
 					<Query query={gqlCommands.GET_PHOTO_DETAILS_GQL} variables={{ albumId, photoName }} fetchPolicy="cache-and-network">
-						{({ loading, data }) => {
+						{({ data }) => {
 
-							if (loading === true || !data) {
-								return <div />;
-							}
-
-							const photo = data.photo || {};
-							const tags = photo.tags || [];
+							const photo = (data && data.photo) || {};
+							const tags = (photo && photo.tags) || [];
 
 							return (<div>
 

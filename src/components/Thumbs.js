@@ -44,7 +44,6 @@ class Thumbs extends Component {
 						const url = `${thumbUrl}/${file}`;
 						const color = this.getColor(file, groupedFiles);
 						const className = (i === curIndex) ? `thumb thumbSelected ${color}` : `thumb ${color}`;
-						console.log(color);
 						return (
 							<InView id={`thumbObsv${i}`} key={i} data-key={i} onClick={this.chooseThumb} triggerOnce={false} onChange={this.onPhotoVisibilityChange} >
 
@@ -96,6 +95,8 @@ class Thumbs extends Component {
 			case 'top':
 			case 'boring':
 				return tag;
+			default:
+				return "";
 		}
 
 	}

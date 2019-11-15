@@ -4,7 +4,8 @@
 
 @font-face {
   font-family: 'Font Awesome 5 Free';
-  src: url(/static/media/fa-solid-900.44d537ab.woff2) format('woff2');
+  font-weight: 900;
+  src: local('Font Awesome 5 Free');
   font-display: swap;
 }
 
@@ -24,7 +25,7 @@ $baseSpace: 5px;
 $scrollbarWidth: 8px;
 $bigSpace: 0.2em;
 $tagBoring: rgb(80, 80, 80);
-$tagNice: #92EB86;
+$tagNice: #268618;
 $tagTop: #EB4F46;
 $tagInactiveOpactiy: 0.2;
 $tagHoverOpacity: 0.7;
@@ -420,18 +421,19 @@ input:checked + .slider:before {
 
 .btn-tag {
   @extend .btn;
-  font-size: 0.7em;
+  font-weight: bold;
+  font-size: 0.8em;
   margin-right: 5px;
   border: 0;
   outline: none;
   box-shadow: none !important;
   border-style: solid;
-  margin-top: $baseSpace;
-  color: $main
+  margin-top: $baseSpace; 
+  color: $main;
 }
 .btn-tag.active {
  border-width: $tagBtnBorder;
- color: $main
+ color: $main;
 }
 
 .btn-tag.boring {

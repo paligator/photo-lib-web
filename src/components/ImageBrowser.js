@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Thumbs, PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter, Warning } from '../components'
+import React, { Component, Suspense, lazy } from 'react';
+import { PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter, Warning } from '../components';
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import config from '../config';
@@ -8,6 +8,8 @@ import * as C from "../api/Common";
 import { GlobalHotKeys } from "react-hotkeys";
 import { getExif, formatExposureTime } from "../api/Utils";
 import { Swipeable } from 'react-swipeable'
+
+const Thumbs = lazy(() => import('../components/Thumbs'));
 
 class ImageBrowser extends Component {
 
@@ -152,7 +154,11 @@ class ImageBrowser extends Component {
                           <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut || "photoOut"} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
                         </div>
-                        <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
+
+                        <Suspense fallback={<div>Loading...</div>}>
+                          <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
+                        </Suspense>
+
                       </div>
 
                       <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" aria-label="Previous photo" tooltip="Previous photo" onClick={() => { this.nextPhoto(false) }}></button>

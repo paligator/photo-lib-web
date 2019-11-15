@@ -77,7 +77,6 @@ function ACT_NEXT_PHOTO(state) {
 }
 
 function ACT_INIT_STATE_BY_COOKIES(inputAction, state) {
-	const cookies = inputAction.payload.cookies;
 	const userRoles = isUserLogged() ? getUserRoles() : {};
 	return { ...state, userRoles };
 }

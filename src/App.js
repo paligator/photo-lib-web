@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { connect } from "react-redux";
 import * as action from "./constants/action-types";
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
@@ -8,7 +8,9 @@ import { withCookies } from 'react-cookie';
 import config from './config';
 import { isUserNotLogged, isUserLogged } from './api/Authorization';
 import { Redirect } from 'react-router-dom';
-import { Login, ImageBrowser, Navigation, WorldMap, ErrorBoundary } from './components';
+import { Login, Navigation, WorldMap, ErrorBoundary } from './components';
+
+const ImageBrowser = lazy(() => import('./components/ImageBrowser'));
 
 export const apolloClient = new ApolloClient({
   link: new ApolloLink((operation, forward) => {
@@ -63,13 +65,15 @@ class App extends Component {
           <BrowserRouter>
             <ApolloProvider client={apolloClient}>
               <Navigation />
-              <Switch>
-                {/* TODO: maybe move to rules can do logged/not logged  */}
-                <Route path="/" exact render={() => (isUserNotLogged() ? <Login /> : <WorldMap />)} />
-                <Route path="/album/:continent/:albumName" isExact="false" render={({ match }) => (isUserNotLogged() ? <Login /> : <ImageBrowser match={match} styles={styles} cookies={this.props.cookies} />)} />
-                <Route path="/login" exact render={() => (isUserNotLogged() ? <Login /> : <Redirect to="/" />)} />
-                <Route render={() => isUserLogged() ? <Redirect to="/" /> : <Login />} />
-              </Switch>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Switch>
+                  {/* TODO: maybe move to rules can do logged/not logged  */}
+                  <Route path="/" exact render={() => (isUserNotLogged() ? <Login /> : <WorldMap />)} />
+                  <Route path="/album/:continent/:albumName" isExact="false" render={({ match }) => (isUserNotLogged() ? <Login /> : <ImageBrowser match={match} styles={styles} cookies={this.props.cookies} />)} />
+                  <Route path="/login" exact render={() => (isUserNotLogged() ? <Login /> : <Redirect to="/" />)} />
+                  <Route render={() => isUserLogged() ? <Redirect to="/" /> : <Login />} />
+                </Switch>
+              </Suspense>
             </ApolloProvider>
           </BrowserRouter>
 
