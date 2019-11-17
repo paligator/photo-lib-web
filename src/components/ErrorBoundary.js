@@ -18,15 +18,6 @@ class ErrorBoundary extends Component {
 		});
 	}
 
-	// static getDerivedStateFromError(error, errorInfo) {
-	// 	console.log("ErrorBounday -> getDerivedStateFromError hura sme tu")
-	// 	return {
-	// 		hasError: true,
-	// 		error: error,
-	// 		errorInfo: errorInfo
-	// 	};
-	// }
-
 	render() {
 		if (this.state.hasError === true) {
 			return (
