@@ -4,10 +4,15 @@ module.exports = {
 		"node": true,
 		"es6": true
 	},
+	"plugins": [
+		"react-hooks"
+	],
 	"rules": {
 		"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
 		"no-console": "off",
 		"react/prop-types": "off",
+		"react-hooks/rules-of-hooks": "error",
+		"react-hooks/exhaustive-deps": "warn"
 		// 'semi': [
 		// 	'error',
 		// 	'always'

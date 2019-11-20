@@ -7,7 +7,7 @@ import { Can, PhotoTags } from "../components";
 import { Query } from "react-apollo";
 import { useSelector } from "react-redux";
 
-const ImageDetails = () => {
+function ImageDetails() {
 
 	const album = useSelector(state => state.selectedAlbum);
 	const albumId = (album) ? album.id : null;

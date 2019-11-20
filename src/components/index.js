@@ -8,6 +8,7 @@ import ImagesFilter from './ImagesFilter';
 // import Thumbs from './Thumbs';
 import ErrorBoundary from './ErrorBoundary';
 import PhotoLoader from './PhotoLoader';
+import AboutMe from './AboutMe';
 
 
 export * from "./basics"
@@ -22,5 +23,6 @@ export {
 	ImagesFilter,
 	// Thumbs,
 	ErrorBoundary,
-	PhotoLoader
+	PhotoLoader,
+	AboutMe
 }

@@ -50,6 +50,7 @@
   ],
   "devDependencies": {
     "cross-env": "^6.0.3",
-    "eslint-plugin-react": "^7.16.0"
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.3.0"
   }
 }

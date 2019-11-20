@@ -40,11 +40,11 @@ class Login extends Component {
 				<Form style={{ width: "20em", paddingTop: "10vh" }} onSubmit={this.doLogin}>
 					<FormGroup>
 						<Label for="txtEmail">Email</Label>
-						<Input type="email" name="email" id="txtEmail" placeholder="@" onChange={(() => this.hideWrongLogin())} />
+						<Input type="email" name="email" id="txtEmail" placeholder="guest@paligator.sk" onChange={(() => this.hideWrongLogin())} />
 					</FormGroup>
 					<FormGroup>
 						<Label for="txtPassword">Password</Label>
-						<Input type="password" name="password" id="txtPassword" placeholder="" onChange={(() => this.hideWrongLogin())} />
+						<Input type="password" name="password" id="txtPassword" placeholder="Password123" onChange={(() => this.hideWrongLogin())} />
 					</FormGroup>
 					<FormGroup style={{textAlign: "center"}}><Button className="btn-primary">Login</Button></FormGroup>
 					{(this.state.wrongLogin === true) ? <FormGroup><div className="alert alert-danger">Wrong email or password!</div></FormGroup> : (null)}

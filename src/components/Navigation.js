@@ -7,6 +7,7 @@ import { Query } from "react-apollo";
 import * as gqlCommands from '../api/GqlCommands';
 import globe from '../images/globe.png';
 import config from '../config';
+import { isUserLogged } from "../api/Authorization"
 const C = require('../api/Common');
 
 const Navigation = () => {
@@ -14,9 +15,10 @@ const Navigation = () => {
 	const [togglerOpened, toggle] = useState(false);
 	const dispatch = useDispatch();
 	const continents = config.categories;
+	const logged = isUserLogged();
 
 	const getAlbumDropDownItems = (continent, contAlbums) => {
-		if (contAlbums.length > 0)
+		if (logged === true && contAlbums.length > 0)
 			return (
 				contAlbums.map(album => (
 					<DropdownItem key={album.id}>
@@ -69,11 +71,22 @@ const Navigation = () => {
 						{/* <DropdownToggle nav>⚙</DropdownToggle> */}
 						<DropdownToggle className="navbar-dropdown"><i className="fas fa-cog" aria-label="Help" /></DropdownToggle>
 						<DropdownMenu className="dropdown-menu-right">
-							<DropdownItem key="logout">
-								<NavItem key="logout" onClick={() => dispatch({ type: actions.LOGOUT })}>
-									<Link className="navItem" to={`/login`}>Logout</Link>
-								</NavItem>
-							</DropdownItem>
+
+							{(logged === true) ?
+								(<DropdownItem key="logout">
+									<NavItem key="logout" onClick={() => dispatch({ type: actions.LOGOUT })}>
+										<Link className="navItem" to={`/login`}>Logout</Link>
+									</NavItem>
+								</DropdownItem>) :
+								(null)
+							}
+
+									<DropdownItem key="aboutMe">
+									<NavItem key="aboutMe">
+										<Link className="navItem" to={`/aboutme`}>About Me</Link>
+									</NavItem>
+								</DropdownItem>
+
 						</DropdownMenu>
 					</UncontrolledDropdown>
 				</Nav>
