@@ -26,17 +26,16 @@ class Login extends Component {
 
 	doLogin(event) {
 		event.preventDefault();
-
-		const data = new FormData(event.target);
-		const email = data.get("email");
-		const password = data.get("password");
+		
+		const email = this.node.querySelector("#txtEmail").value;
+		const password = this.node.querySelector("#txtPassword").value;
 
 		this.props.onLogin(email, password);
 	}
 
 	render() {
 		return (
-			<div className="flexContainer" style={{ width: "100%" }}>
+			<div ref={node => this.node = node} className="flexContainer" style={{ width: "100%" }}>
 				<Form style={{ width: "20em", paddingTop: "10vh" }} onSubmit={this.doLogin}>
 					<FormGroup>
 						<Label for="txtEmail">Email</Label>
