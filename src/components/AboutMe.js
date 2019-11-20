@@ -4,8 +4,7 @@ import me from '../images/me.png';
 function AboutMe() {
 
 	return (
-		<div style={{ textAlign: "center", position: "relative", height: 'calc(100% - 80px)', maxWidth: "100%" }}>
-			<div style={{ position: "absolute", display: "inline-block", width: "100%", left: "50%", top: "50%", marginTop: "-30px", transform: "translate(-50%, -50%)" }}>
+		<div style={{ textAlign: "center", height: 'calc(100% - 80px)', maxWidth: "100%" }}>		
 				<div style={{ display: "inline-block", verticalAlign: "top", padding: "2em" }}>
 					<img alt={`That's me`} style={{ borderRadius: "50%", maxWidth: "13em", width: "100%", height: "auto" }}
 						src={me} />
@@ -19,8 +18,6 @@ function AboutMe() {
 					<br /><br />
 					If you are interested in source code, check <a target="_blank" rel="noopener noreferrer" href="https://github.com/paligator/photo-lib-web/">github-web</a> and <a target="_blank" rel="noopener noreferrer" href="https://github.com/paligator/photo-lib-api/">github-api.</a>
 				</p>
-			</div>
-
 		</div >
 	)
 
