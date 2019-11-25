@@ -35,8 +35,8 @@ function ImageDetails() {
 							</p>
 							<Can perform="photo:setPhotoTags" yes={() => (
 								<Mutation
-									mutation={gql`${gqlCommands.SET_PHOTO_TAGS}`}
-									refetchQueries={[{ query: "Photo", variables: { albumId, photoName } }]}
+									mutation={gqlCommands.SET_PHOTO_TAGS_GQL}
+									refetchQueries={[{ query: gqlCommands.GET_PHOTO_DETAILS_GQL, variables: { albumId, photoName } }]}
 									fetchPolicy="no-cache"
 								>
 									{(updateTags) => {

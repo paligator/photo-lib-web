@@ -57,6 +57,7 @@ export const SET_PHOTO_TAGS = `
 		setPhotoTags(albumId: $albumId, photoName: $photoName, addTags: $addTags, removeTags: $removeTags)
 	}
 `;
+export const SET_PHOTO_TAGS_GQL = toGql(SET_PHOTO_TAGS);
 
 function toGql(command) {
 	return gql`${command}`;
