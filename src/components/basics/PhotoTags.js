@@ -11,8 +11,11 @@ class PhotoTags extends Component {
 
 	render() {
 
+		console.log(`PhotoTags: ${JSON.stringify(this.props.tags)}`);
+
 		return (
-			<div className="leftMenuItem" ref={node => this.node = node} style={{ verticalAlign: "middle", display: "block" }}>
+			/* Without key on div, there was a problem, that active button stayed active, even it shouldn't */
+			<div key={this.props.photoName} className="leftMenuItem" ref={node => this.node = node} style={{ verticalAlign: "middle", display: "block" }}>
 				<Button data-tag="nice" className={this.getBtnClasses("nice")} onClick={this.onClick} disabled={this.props.disabled}>Nice</Button>
 				<Button data-tag="top" className={this.getBtnClasses("top")} onClick={this.onClick} disabled={this.props.disabled}>TOP</Button>
 				<Button data-tag="boring" className={this.getBtnClasses("boring")} onClick={this.onClick} disabled={this.props.disabled}>boring</Button>
@@ -21,7 +24,7 @@ class PhotoTags extends Component {
 	}
 
 	getBtnClasses(tag) {
-		return `btn-tag ${tag} ${this.props.tags.indexOf(tag) > -1 ? " active" : ""}`
+		return `btn-tag ${tag} ${this.props.tags.indexOf(tag) > -1 ? " active" : ""}`;
 	}
 
 	onClick(e) {

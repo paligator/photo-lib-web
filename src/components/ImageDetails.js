@@ -1,5 +1,4 @@
 import React from 'react';
-import gql from "graphql-tag";
 import { Mutation } from 'react-apollo';
 
 import * as gqlCommands from '../api/GqlCommands';
@@ -37,7 +36,7 @@ function ImageDetails() {
 								<Mutation
 									mutation={gqlCommands.SET_PHOTO_TAGS_GQL}
 									refetchQueries={[{ query: gqlCommands.GET_PHOTO_DETAILS_GQL, variables: { albumId, photoName } }]}
-									fetchPolicy="no-cache"
+									fetchPolicy="no-cache"							
 								>
 									{(updateTags) => {
 										return (
