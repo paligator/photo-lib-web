@@ -34,6 +34,7 @@ class ImageBrowser extends Component {
     this.loadExif = this.loadExif.bind(this);
     this.setNextFading = this.setNextFading.bind(this);
     this.showExif = this.showExif.bind(this);
+    this.markThumbWithTag = this.markThumbWithTag.bind(this);
   }
 
   componentDidMount() {
@@ -120,7 +121,7 @@ class ImageBrowser extends Component {
           <div className="col-sm-2" style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto", overflowX: "hidden" }} >
             <AlbumInfo />
             <ImagesFilter cookies={this.props.cookies} />
-            <ImageDetails />
+            <ImageDetails markThumbWithTag={this.markThumbWithTag} />
           </div>
           : null
         }
@@ -334,6 +335,17 @@ class ImageBrowser extends Component {
     this.markThumbAsSelected(target, this.node, scroolTo, scrollBahaviour);
   }
 
+  markThumbWithTag(tags) {
+    let target = this.node.querySelector(`#thumbObsv${this.props.selectedPhotoIndex}`);
+    target = this.findDisplayedTagComponent(target);
+    
+    target.classList.remove("nice", "top", "boring");
+
+    if (tags.length > 0) {
+      target.classList.add(tags[0]);
+    }
+  }
+
   setNextFading() {
     this.setState({ movementDirection: "thumbClick", lastIndex: this.props.selectedPhotoIndex });
   }
@@ -341,13 +353,7 @@ class ImageBrowser extends Component {
   markThumbAsSelected(target, node, scroolTo = false, scrollbehavior) {
     node.querySelectorAll('.thumbSelected').forEach(thumb => { thumb.classList.remove("thumbSelected") });
 
-    // find componnet which is displayed (loader, image, error message), on that compoment i can aply selected border
-    for (let i = 0; i < target.children.length; i++) {
-      if (target.children[i].style.display !== "none") {
-        target = target.children[i];
-        break;
-      }
-    }
+    target = this.findDisplayedTagComponent(target);
 
     target.classList.add("thumbSelected");
     if (scroolTo === true) {
@@ -355,6 +361,17 @@ class ImageBrowser extends Component {
       target.scrollIntoView({ behavior: scrollbehavior || "smooth", inline: "center", block: "center" });
     }
     this.disableNavButtons();
+  }
+
+  findDisplayedTagComponent(thumbParent) {
+    // find componnet which is displayed (loader, image, error message), on that compoment i can aply selected border
+    for (let i = 0; i < thumbParent.children.length; i++) {
+      if (thumbParent.children[i].style.display !== "none") {
+        return thumbParent.children[i];
+      }
+
+      return null;
+    }
   }
 
   getLoadingDiv() {

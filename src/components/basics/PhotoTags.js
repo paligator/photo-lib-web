@@ -1,36 +1,18 @@
-import React, { Component } from 'react';
+import React, { useRef } from 'react';
 import { Button } from 'reactstrap';
 
-class PhotoTags extends Component {
+const PhotoTags = (props) => {
 
-	constructor(props) {
-		super(props);
-		this.onClick = this.onClick.bind(this);
-		this.getBtnClasses = this.getBtnClasses.bind(this);
+	const node = useRef();
+
+	function getBtnClasses(tag, props) {
+		return `btn-tag ${tag} ${props.tags.indexOf(tag) > -1 ? " active" : ""}`;
 	}
 
-	render() {
-
-		console.log(`PhotoTags: ${JSON.stringify(this.props.tags)}`);
-
-		return (
-			/* Without key on div, there was a problem, that active button stayed active, even it shouldn't */
-			<div key={this.props.photoName} className="leftMenuItem" ref={node => this.node = node} style={{ verticalAlign: "middle", display: "block" }}>
-				<Button data-tag="nice" className={this.getBtnClasses("nice")} onClick={this.onClick} disabled={this.props.disabled}>Nice</Button>
-				<Button data-tag="top" className={this.getBtnClasses("top")} onClick={this.onClick} disabled={this.props.disabled}>TOP</Button>
-				<Button data-tag="boring" className={this.getBtnClasses("boring")} onClick={this.onClick} disabled={this.props.disabled}>boring</Button>
-			</div>
-		);
-	}
-
-	getBtnClasses(tag) {
-		return `btn-tag ${tag} ${this.props.tags.indexOf(tag) > -1 ? " active" : ""}`;
-	}
-
-	onClick(e) {
+	function onClick(e, props) {
 		const clickedBtn = e.target;
 		const isActive = clickedBtn.classList.contains("active");
-		const activeTagBtns = this.node.querySelectorAll('.active');
+		const activeTagBtns = node.current.querySelectorAll('.active');
 
 		const removeTags = [];
 		const addTags = [];
@@ -47,16 +29,28 @@ class PhotoTags extends Component {
 		}
 
 		// call props method update tags with added, deleted tags
-		if (this.props.updateTags) {
-			this.props.updateTags({ variables: { albumId: this.props.albumId, photoName: this.props.photoName, addTags, removeTags } });
+		if (props.updateTags) {
+			props.updateTags({ variables: { albumId: props.albumId, photoName: props.photoName, addTags, removeTags } });
 		}
+
+		if (props.markThumbWithTag) {
+			props.markThumbWithTag(addTags);
+		}
+
+
 	}
+
+	return (
+		/* Without key on div, there was a problem, that active button stayed active, even it shouldn't */
+		<div key={props.photoName} ref={node} className="leftMenuItem" style={{ verticalAlign: "middle", display: "block" }}>
+			<Button data-tag="nice" className={getBtnClasses("nice", props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>Nice</Button>
+			<Button data-tag="top" className={getBtnClasses("top", props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>TOP</Button>
+			<Button data-tag="boring" className={getBtnClasses("boring", props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>boring</Button>
+		</div>
+	);
+
 }
 
-PhotoTags.defaultProps = {
-	tags: [],
-	disabled: false,
-};
 
 export default PhotoTags;
 

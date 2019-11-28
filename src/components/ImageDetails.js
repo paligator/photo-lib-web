@@ -6,7 +6,7 @@ import { Can, PhotoTags } from "../components";
 import { Query } from "react-apollo";
 import { useSelector } from "react-redux";
 
-function ImageDetails() {
+const ImageDetails = (props) => {
 
 	const album = useSelector(state => state.selectedAlbum);
 	const albumId = (album) ? album.id : null;
@@ -38,11 +38,11 @@ function ImageDetails() {
 									refetchQueries={[{ query: gqlCommands.GET_PHOTO_DETAILS_GQL, variables: { albumId, photoName } }]}
 									fetchPolicy="no-cache"							
 								>
-									{(updateTags) => {
+									{(updateTags) => {									
 										return (
 											<div>
 												Tags:<br />
-												<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} />
+												<PhotoTags albumId={album.id} photoName={photoName} tags={tags} updateTags={updateTags} markThumbWithTag={props.markThumbWithTag}/>
 											</div>
 										);
 									}}
