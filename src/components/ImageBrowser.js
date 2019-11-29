@@ -42,8 +42,8 @@ class ImageBrowser extends Component {
     this.loadAlbum();
   }
 
-  // eslint-disable-next-line no-unused-vars
-  componentDidUpdate(prevProps, prevState) {
+
+  componentDidUpdate(prevProps) {
 
     if (this.props.album.exists === true && this.props.album.error) {
       throw new Error(this.props.album.error);
@@ -213,7 +213,7 @@ class ImageBrowser extends Component {
 
   getPhotoUrlsAndNames(album, selectedPhotoIndex, movementDirection) {
 
-    if (album.isReady !== true) {
+    if (album.isReady !== true || selectedPhotoIndex < 0) {
       return {}
     }
 
