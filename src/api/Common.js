@@ -1,3 +1,5 @@
+const { Tags } = require("../constants/index");
+
 function meOrNull(me) {
 	return (me || me === 0) ? me : null;
 }
@@ -26,13 +28,13 @@ function getPhotoFilterTagsFromCookies(cookies) {
 	if (tags) {
 		tags = JSON.parse(tags);
 	} else {
-		tags = ["nice", "top"];
+		tags = [Tags.nice.name, Tags.top.name];
 	}
 	return tags;
 }
 
-module.exports = {
+export {
 	meOrNull, meOrVal,
-	formatAlbumName, deleteFromArray, 
+	formatAlbumName, deleteFromArray,
 	setCookie, getPhotoFilterTagsFromCookies
 };

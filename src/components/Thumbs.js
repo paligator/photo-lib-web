@@ -6,6 +6,7 @@ import config from '../config';
 import * as C from "../api/Common";
 import emptyImage from '../images/emptyImage.png';
 import spinnerImage from '../images/spinner.gif';
+import { Tags } from "../constants/";
 
 class Thumbs extends Component {
 
@@ -91,9 +92,9 @@ class Thumbs extends Component {
 		const tag = group.tag;
 
 		switch (tag) {
-			case 'nice':
-			case 'top':
-			case 'boring':
+			case Tags.nice.name:
+			case Tags.top.name:
+			case Tags.boring.name:
 				return tag;
 			default:
 				return "";

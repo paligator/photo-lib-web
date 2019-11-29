@@ -3,18 +3,12 @@ import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import * as C from '../api/Common';
 import { Button, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import { Tags } from "../constants";
 
 class ImagesFilter extends Component {
 
 	state = {
 		tagsFilterIsOpen: false
-	}
-
-	tags = {
-		top: "TOP",
-		nice: "Nice",
-		boring: "boring",
-		notTagged: "Not Tagged"
 	}
 
 	constructor(props) {
@@ -31,6 +25,11 @@ class ImagesFilter extends Component {
 		const tags = C.getPhotoFilterTagsFromCookies(this.props.cookies);
 		const tagsDesc = this.formatTags(tags);
 
+		const TagButton = (props) => {
+			const tag = props.tag;
+			return <Button data-tag={tag.name} className={this.getTagBtnClasses(tag.name, tags)} onClick={this.tagButtonClick} style={{ width: "100%", marginTop: 0 }}>{tag.label}</Button>
+		}
+
 		return (
 			<div className="leftMenuItem boxUderline" ref={node => this.node = node} >
 				<h4>Photo Filter:</h4>
@@ -39,13 +38,12 @@ class ImagesFilter extends Component {
 
 					<DropdownMenu id="tags-filter-menu" className="tags-filter-menu">
 						<div style={{ backgroundColor: "white", widht: "100%", height: "100%" }}>
-							<Button data-tag="nice" className={this.getTagBtnClasses("nice", tags)} onClick={this.tagButtonClick} style={{ width: "100%", marginTop: 0 }}>{this.tags.nice}</Button>
-							<Button data-tag="top" className={this.getTagBtnClasses("top", tags)} onClick={this.tagButtonClick} style={{ width: "100%" }}>{this.tags.top}</Button>
-							<Button data-tag="boring" className={this.getTagBtnClasses("boring", tags)} onClick={this.tagButtonClick} style={{ width: "100%" }}>{this.tags.boring}</Button>
-							<Button data-tag="notTagged" className={this.getTagBtnClasses("notTagged", tags)} onClick={this.tagButtonClick} style={{ width: "100%", marginBottom: 0 }}>{this.tags.notTagged}</Button>
+							<TagButton tag={Tags.nice} />
+							<TagButton tag={Tags.top} />
+							<TagButton tag={Tags.boring} />
+							<TagButton tag={Tags.notTagged} />
 						</div>
 					</DropdownMenu>
-
 				</Dropdown>
 			</div >
 		)
@@ -78,7 +76,7 @@ class ImagesFilter extends Component {
 
 	formatTags(tags) {
 		if (tags && tags.length > 0) {
-			return tags.map(tag => this.tags[tag]).join(", ");
+			return tags.map(tag => Tags[tag].label).join(", ");
 		} else {
 			return "choose tags";
 		}

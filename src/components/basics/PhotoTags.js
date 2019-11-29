@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from 'reactstrap';
+import { Tags } from '../../constants';
 
 const PhotoTags = (props) => {
 
@@ -36,16 +37,19 @@ const PhotoTags = (props) => {
 		if (props.markThumbWithTag) {
 			props.markThumbWithTag(addTags);
 		}
+	}
 
-
+	const TagButton = (props) => {
+		const tag = props.tag;
+		return <Button data-tag={tag.name} className={getBtnClasses(tag.name, props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>{tag.label}</Button>
 	}
 
 	return (
 		/* Without key on div, there was a problem, that active button stayed active, even it shouldn't */
 		<div key={props.photoName} ref={node} className="leftMenuItem" style={{ verticalAlign: "middle", display: "block" }}>
-			<Button data-tag="nice" className={getBtnClasses("nice", props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>Nice</Button>
-			<Button data-tag="top" className={getBtnClasses("top", props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>TOP</Button>
-			<Button data-tag="boring" className={getBtnClasses("boring", props)} onClick={(e) => onClick(e, props)} disabled={props.disabled}>boring</Button>
+			<TagButton tag={Tags.nice} {...props}/>
+			<TagButton tag={Tags.top} {...props}/>
+			<TagButton tag={Tags.boring} {...props}/>
 		</div>
 	);
 

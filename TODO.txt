@@ -16,6 +16,4 @@ devide error boudnary
 
 SEO
 
-check if without edit permissions
-
-refresh color when photo tag is changed (border of thumb)
+check filter, when no tag is selected

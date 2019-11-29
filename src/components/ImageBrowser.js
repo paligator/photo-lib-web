@@ -7,7 +7,8 @@ import ReactLoading from 'react-loading';
 import * as C from "../api/Common";
 import { GlobalHotKeys } from "react-hotkeys";
 import { getExif, formatExposureTime } from "../api/Utils";
-import { Swipeable } from 'react-swipeable'
+import { Swipeable } from 'react-swipeable';
+import { Tags } from "../constants";
 
 const Thumbs = lazy(() => import('../components/Thumbs'));
 
@@ -338,8 +339,9 @@ class ImageBrowser extends Component {
   markThumbWithTag(tags) {
     let target = this.node.querySelector(`#thumbObsv${this.props.selectedPhotoIndex}`);
     target = this.findDisplayedTagComponent(target);
-    
-    target.classList.remove("nice", "top", "boring");
+
+    //remove all tags
+    target.classList.remove(...Object.keys(Tags));
 
     if (tags.length > 0) {
       target.classList.add(tags[0]);
