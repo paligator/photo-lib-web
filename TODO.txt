@@ -4,8 +4,6 @@ BUG: works only in chrome
 
 globe in navbar - make it bigger
 
-validate email/password before submit
-
 video
 
 JS error reporting services 
@@ -15,5 +13,3 @@ do better error page
 devide error boudnary
 
 SEO
-
-check filter, when no tag is selected

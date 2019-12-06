@@ -1,5 +1,5 @@
-
 import EXIF from 'exif-js';
+import passwordValidator from "password-validator";
 
 export async function getExif(img) {
 	const exif = await new Promise((resolve): void => {
@@ -43,5 +43,24 @@ export function formatExposureTime(value) {
 	} catch (e) {
 		console.error(`Error parse exposure time ${value}`, e)
 		return value;
+	}
+}
+
+export function isPasswordComplex(value) {
+	const schema = new passwordValidator();
+	schema
+		.is().min(6)
+		.is().max(20)
+		.has().uppercase()
+		.has().lowercase()
+		.has().digits()
+		.has().not().spaces();
+
+	const passwordValidationErrors = schema.validate(value, { list: true });
+
+	if (passwordValidationErrors === false || passwordValidationErrors.length > 0) {
+		return false;
+	} else {
+		return true;
 	}
 }
