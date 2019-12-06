@@ -154,6 +154,19 @@ h1, h2, h3, H4, h5, h6 {
   border-bottom: 1px solid  $main-05;
 }
 
+/* #region Form validation message */
+
+.validationMsg {
+  color: red;
+}
+
+.validationMsg::before {
+  display: inline;
+  content: "* ";
+}
+
+/* #endregion */
+
 /* #region Navigation buttons */
 .btn-nav {
   border: 0px;
@@ -367,7 +380,6 @@ h1, h2, h3, H4, h5, h6 {
   float:left;
 }
 
-/* #region The slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -391,7 +403,6 @@ h1, h2, h3, H4, h5, h6 {
   -webkit-transition: .4s;
   transition: .4s;
 }
-
 
 input.primary:checked + .slider {
   background-color: $main;

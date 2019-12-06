@@ -47,16 +47,19 @@ const Login = () => {
 	const ErrorMessage = ({ error }) => {
 		if (error) {
 
-			if (error.message) {
-				return <p>{error.message}</p>;
-			}
+			let msg;
 
-			switch (error.type) {
-				case "required":	return <p>This is required</p>;
-				case "pattern":		return <p>Must meet pattern</p>;
-				case "validate":	return <p>Not valid</p>;
-				default:	return null;
+			if (error.message) {
+				msg = error.message;
+			} else {
+				switch (error.type) {
+					case "required":	msg = "This is required"; break;
+					case "pattern":		msg = "Must meet pattern"; break;
+					case "validate":	msg = "Not valid"; break;
+					default: msg = "Wrong value";
+				}
 			}
+			return <p className="validationMsg">{msg}</p>;
 		}
 		
 		return null;
