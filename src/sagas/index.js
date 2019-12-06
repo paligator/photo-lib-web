@@ -1,5 +1,5 @@
 import { takeLatest, call, put, all } from "redux-saga/effects";
-import * as apiAlbum from "../api/Album";
+import * as rests from "../api/Rest";
 import * as actions from "../constants/action-types";
 import * as gqlCommands from '../api/GqlCommands';
 import gql from "graphql-tag";
@@ -15,7 +15,7 @@ export default function* rootSaga() {
 
 export function* getLoginWorker(inputAction) {
   try {
-    const response = yield call(apiAlbum.postLogin, inputAction.payload.email, inputAction.payload.password);
+    const response = yield call(rests.postLogin, inputAction.payload.email, inputAction.payload.password);
     const data = response.data.data;
     yield put({ type: actions.toSuccessAction(actions.LOGIN), data: data.token });
   } catch (error) {

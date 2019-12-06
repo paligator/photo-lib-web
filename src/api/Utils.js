@@ -2,7 +2,7 @@ import EXIF from 'exif-js';
 import passwordValidator from "password-validator";
 
 export async function getExif(img) {
-	const exif = await new Promise((resolve): void => {
+	const exif = await new Promise((resolve) => {
 		EXIF.getData(img, function () {
 			var exif = {
 				DateTime: EXIF.getTag(this, "DateTime") || "",
