@@ -44,6 +44,8 @@ export default function rootReducer(state = initialState, inputAction) {
 			return ACT_GET_ALBUM(state, inputAction, actionType)
 		case actions.LOGIN:
 			return ACT_LOGIN(state, inputAction, actionType);
+		case actions.LOGIN_GOOGLE: 
+			return ACT_LOGIN_GOOGLE(state, inputAction, actionType);
 		case actions.LOGOUT:
 			return ACT_LOGOUT(state);
 		case actions.FILTER_ALBUM_PHOTOS:
@@ -104,6 +106,20 @@ function ACT_GET_ALBUM(state, inputAction, actionType) {
 }
 
 function ACT_LOGIN(state, inputAction, actionType) {
+	if (actionType === 'SUCCESS') {
+		localStorage.setItem("token", inputAction.data);
+
+		return { ...state, userRoles: getUserRoles() };
+	} if (actionType === 'REQUEST') {
+		//FIXME: do it normal, some stages, not true/false/XXX
+		return { ...initialState, unSuccessfulLogin: 'XXX' };
+	} else {
+		localStorage.removeItem("token");
+		return { ...initialState, unSuccessfulLogin: true };
+	}
+}
+
+function ACT_LOGIN_GOOGLE(state, inputAction, actionType) {
 	if (actionType === 'SUCCESS') {
 		localStorage.setItem("token", inputAction.data);
 

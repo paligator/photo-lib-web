@@ -57,6 +57,21 @@ export function postLogin(email, password) {
 	});
 }
 
+export function postLoginGoogle(googleToken) {
+	return axios({
+		method: "post",
+		url: `${config.apiUrl}/auth/login-google`,
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		data: {
+			token: googleToken
+		},
+		mode: 'cors'
+	});
+}
+
 
 
 

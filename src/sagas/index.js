@@ -9,7 +9,8 @@ export default function* rootSaga() {
   yield all([
     takeLatest(actions.GET_ALBUM, getAlbumWorker),
     takeLatest(actions.FILTER_ALBUM_PHOTOS, filterAlbumPhotos),
-    takeLatest(actions.LOGIN, getLoginWorker)
+    takeLatest(actions.LOGIN, getLoginWorker),
+    takeLatest(actions.LOGIN_GOOGLE, getLoginGoogleWorker)
   ]);
 }
 
@@ -20,6 +21,17 @@ export function* getLoginWorker(inputAction) {
     yield put({ type: actions.toSuccessAction(actions.LOGIN), data: data.token });
   } catch (error) {
     console.error("getLoginWorker" + error);
+    yield put({ type: actions.toErrorAction(actions.LOGIN) });
+  }
+}
+
+export function* getLoginGoogleWorker(inputAction) {
+  try {
+    const response = yield call(rests.postLoginGoogle, inputAction.payload.googleToken);
+    const data = response.data.data;
+    yield put({ type: actions.toSuccessAction(actions.LOGIN), data: data.token });
+  } catch (error) {
+    console.error("getLoginGoogleWorker" + error);
     yield put({ type: actions.toErrorAction(actions.LOGIN) });
   }
 }

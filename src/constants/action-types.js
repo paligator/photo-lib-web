@@ -7,6 +7,7 @@ export const CHANGE_FILTER_TAGS = "CHANGE_FILTER_TAGS";
 export const INIT_STATE_BY_COOKIES = "INIT_STATE_BY_COOKIES";
 
 export const LOGIN = "LOGIN_REQUEST";
+export const LOGIN_GOOGLE = "LOGIN_GOOGLE_REQUEST";
 export const LOGOUT = "LOGOUT";
 
 export const NEXT_PHOTO = "NEXT_PHOTO";
