@@ -92,16 +92,17 @@ const Login = () => {
 					<ErrorMessage error={errors.password}></ErrorMessage>
 				</FormGroup>
 				<FormGroup style={{ textAlign: "center" }}>
-					<Button className="btn-primary">Login</Button>
+					<Button className="btn-primary" style={{marginBottom: 0}}>Login</Button>
 				</FormGroup>
 				{(hideWrongLoginMsg === "dependsOnRedux" && reduxUnSuccessfulLogin === true) ? <FormGroup><div className="alert alert-danger">Wrong email or password!</div></FormGroup> : (null)}
-				<FormGroup style={{ textAlign: "center" }}>
-					<GoogleLogin className="btn"
+				<FormGroup style={{ textAlign: "center" }} className="googleLoginButton">
+					<GoogleLogin
 						clientId="97296305214-ec3aaco5i3bduubkfbd028hdbror2g7q.apps.googleusercontent.com"
 						buttonText="Log in with Google"
+						theme="dark"
+						style={{ backgroundColor: "red" }}
 						onSuccess={responseGoogle}
-						onFailure={responseGoogleError}
-					/>
+						onFailure={responseGoogleError} />
 				</FormGroup>
 			</Form>
 		</div >
