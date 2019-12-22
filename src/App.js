@@ -49,6 +49,16 @@ class App extends Component {
     this.setState({ windowWidth, windowHeight });
   }
 
+  getGoogleToken(location) {
+
+    if (!location || !location.hash) {
+      return "";
+    }
+
+    const hash = location.hash;
+    const parsed = hash.split("&").find(item => item.startsWith("id_token")).split("=")[1];
+    return parsed;
+  }
 
   render() {
 
@@ -69,6 +79,7 @@ class App extends Component {
                 <Switch>
                   {/* TODO: maybe move to rules can do logged/not logged  */}
                   <Route path="/" exact render={() => (isUserNotLogged() ? <Login /> : <WorldMap />)} />
+                  <Route path="/google-login" isExact="false" render={({ location }) => <Login googleToken={this.getGoogleToken(location)} />} />
                   <Route path="/album/:continent/:albumName" isExact="false" render={({ match }) => (isUserNotLogged() ? <Login /> : <ImageBrowser match={match} styles={styles} cookies={this.props.cookies} />)} />
                   <Route path="/login" exact render={() => (isUserNotLogged() ? <Login /> : <Redirect to="/" />)} />
                   <Route path="/aboutme" exact render={() => <AboutMe></AboutMe>} />
@@ -83,7 +94,6 @@ class App extends Component {
     );
   }
 }
-
 
 function mapStateToProps(state, ownProps) {
   return {

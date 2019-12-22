@@ -5,15 +5,21 @@ import useForm from "react-hook-form";
 import { isPasswordComplex } from "../api/Utils";
 import GoogleLogin from 'react-google-login';
 import { useSelector, useDispatch } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ googleToken }) => {
 
 	const node = useRef();
 	const dispatch = useDispatch();
 
-	const [hideWrongLoginMsg, setHideWrongLoginMsg] = useState("dependsOnRedux");
+	const [hideWrongLoginMsg, setHideWrongLoginMsg] = useState(googleToken ? "dependsOnGoogle" : "dependsOnRedux");
 	const reduxUnSuccessfulLogin = useSelector(state => state.unSuccessfulLogin || false);
 	const { register, errors, clearError, triggerValidation } = useForm({ mode: 'onSubmit', reValidateMode: 'onSubmit', validateCriteriaMode: 'all' });
+
+	if (googleToken) {
+		dispatch({ type: actions.LOGIN_GOOGLE, payload: { googleToken: googleToken } });
+		return (<Redirect to="/" />);
+	}
 
 	function hideWrongLogin(e) {
 		clearError(e.target.name);
@@ -66,7 +72,7 @@ const Login = () => {
 	};
 
 	const responseGoogle = async (response) => {
-		console.log("success: " + JSON.stringify(response));
+		console.log("Login Google OAuth success: " + JSON.stringify(response));
 		if (response.tokenId) {
 			dispatch({ type: actions.LOGIN_GOOGLE, payload: { googleToken: response.tokenId } });
 		} else {
@@ -75,7 +81,7 @@ const Login = () => {
 	};
 
 	const responseGoogleError = async (response) => {
-		console.error("google OAuth error: " + response);
+		console.error("Login Google OAuth error: " + JSON.stringify(response));
 	};
 
 	return (
@@ -92,17 +98,21 @@ const Login = () => {
 					<ErrorMessage error={errors.password}></ErrorMessage>
 				</FormGroup>
 				<FormGroup style={{ textAlign: "center" }}>
-					<Button className="btn-primary" style={{marginBottom: 0}}>Login</Button>
+					<Button className="btn-primary" style={{ marginBottom: 0 }}>Login</Button>
 				</FormGroup>
 				{(hideWrongLoginMsg === "dependsOnRedux" && reduxUnSuccessfulLogin === true) ? <FormGroup><div className="alert alert-danger">Wrong email or password!</div></FormGroup> : (null)}
+				{(hideWrongLoginMsg === "dependsOnGoogle" && reduxUnSuccessfulLogin === true) ? <FormGroup><div className="alert alert-danger">Something wrong with Google login!</div></FormGroup> : (null)}
 				<FormGroup style={{ textAlign: "center" }} className="googleLoginButton">
 					<GoogleLogin
 						clientId="97296305214-ec3aaco5i3bduubkfbd028hdbror2g7q.apps.googleusercontent.com"
 						buttonText="Log in with Google"
 						theme="dark"
-						style={{ backgroundColor: "red" }}
+						cookiePolicy={'single_host_origin'}
+						uxMode={'redirect'}
+						redirectUri={'https://paligator.sk/google-login/'}
 						onSuccess={responseGoogle}
-						onFailure={responseGoogleError} />
+						onFailure={responseGoogleError}
+					/>
 				</FormGroup>
 			</Form>
 		</div >
