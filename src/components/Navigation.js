@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useDispatch } from "react-redux";
 import { Navbar, Collapse, Nav, NavItem, NavbarToggler, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
 import * as actions from "../constants/action-types";
@@ -7,7 +7,7 @@ import { Query } from "react-apollo";
 import * as gqlCommands from '../api/GqlCommands';
 import globe from '../images/globe.png';
 import config from '../config';
-import { isUserLogged } from "../api/Authorization"
+import { isUserLogged, getUserName } from "../api/Authorization"
 const C = require('../api/Common');
 
 const Navigation = () => {
@@ -16,6 +16,7 @@ const Navigation = () => {
 	const dispatch = useDispatch();
 	const continents = config.categories;
 	const logged = isUserLogged();
+	const userName = getUserName();
 
 	const getAlbumDropDownItems = (continent, contAlbums) => {
 		if (logged === true && contAlbums.length > 0)
@@ -84,7 +85,7 @@ const Navigation = () => {
 				</Nav>
 				<Nav navbar>
 					<UncontrolledDropdown nav inNavbar key="help" title="help">
-						<DropdownToggle className="navbar-dropdown"><i className="fas fa-cog" aria-label="Help" /></DropdownToggle>
+						<DropdownToggle className="navbar-dropdown">{userName? (<Fragment>{userName} <br /></Fragment>): null}<i className="fas fa-cog" aria-label="Help" /></DropdownToggle>
 						<DropdownMenu className="dropdown-menu-right">
 							{(logged === true) ?
 								(<DropdownItem key="logout">

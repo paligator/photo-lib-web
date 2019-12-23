@@ -28,25 +28,43 @@ export function isUserNotLogged() {
 	return !isUserLogged();
 }
 
+function decodeToken() {
+	const token = localStorage.getItem('token');
+
+	if (!token) {
+		return null;
+	}
+
+	try {
+		return decode(token);
+	} catch (e) {
+		return null;
+	}
+}
+
 /**
  * Takes roles from token, use only if roles are not in state
  */
 export function getUserRoles() {
 
-	const token = localStorage.getItem('token');
+	const decodedToken = decodeToken();
 
-	if (!token) {
+	if (!decodedToken) {
 		return [];
 	}
 
-	let decoded;
-	try {
-		decoded = decode(token);
-	} catch (e) {
-		return [];
+	return decodedToken.roles;
+}
+
+export function getUserName() {
+
+	const decodedToken = decodeToken();
+
+	if (!decodedToken) {
+		return "";
 	}
 
-	return decoded.roles;
+	return decodedToken.username;
 }
 
 export function isAnyUserRoleAllowed(userRoles, action) {
