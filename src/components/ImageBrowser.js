@@ -110,7 +110,7 @@ class ImageBrowser extends Component {
     const { photoUrlFadeIn, photoUrlFadeOut, photoUrlBuffer, photoNameFadeIn, photoNameFadeOut, photoNameBuffer } = this.getPhotoUrlsAndNames(album, selectedPhotoIndex, movementDirection);
     const { fadeInClass, fadeOutClass } = this.getPhotoFadingClasses(selectedPhotoIndex, movementDirection);
 
-    const showLeftMenu = this.props.styles.showLeftMenu === true;
+    const isBigScreen = this.props.styles.isBigScreen === true;
 
     return (
 
@@ -118,7 +118,7 @@ class ImageBrowser extends Component {
 
         <GlobalHotKeys keyMap={this.globalKeyMap} handlers={this.globalKeyHandlers} />
 
-        {(showLeftMenu === true) ?
+        {(isBigScreen === true) ?
           <div className="col-sm-2" style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto", overflowX: "hidden" }} >
             <AlbumInfo />
             <ImagesFilter cookies={this.props.cookies} />
@@ -127,16 +127,17 @@ class ImageBrowser extends Component {
           : null
         }
 
-        <div className={showLeftMenu ? "col-sm-10" : "col-sm-12"} style={{ padding: "0" }}>
+        <div className={isBigScreen ? "col-sm-10" : "col-sm-12"} style={{ padding: "0" }}>
 
           {(albumIsReady === true && isReloadingPhotos === false) ? (
 
             <div id="mainMe" className="column" style={{ width: "100%", height: "100%" }}>
 
-              {(showLeftMenu === false) ? (
+              {(isBigScreen === false) ? (
                 <div style={{ padding: "10px" }}>
                   <AlbumInfo />
                   <ImagesFilter cookies={this.props.cookies} />
+                  <ImageDetails markThumbWithTag={this.markThumbWithTag} />
                 </div>) : null
               }
 
@@ -149,18 +150,16 @@ class ImageBrowser extends Component {
                   <Swipeable onSwipedLeft={() => { this.nextPhoto(true) }} onSwipedRight={() => { this.nextPhoto(false) }} >
 
                     <div className="row" style={{ height: '100%', width: "100%", position: "absolute" }}>
-                      <div className="column" style={{ width: "100%" }}>
 
+                      <div className="column" style={{ width: "100%" }}>
                         <div id="divPhotoLoaders" key="divPhotoLoaders" className="photoLoadersDiv">
                           <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn || "photoIn"} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut || "photoOut"} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
                         </div>
-
                         <Suspense fallback={<div>Loading...</div>}>
                           <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
                         </Suspense>
-
                       </div>
 
                       <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" aria-label="Previous photo" tooltip="Previous photo" onClick={() => { this.nextPhoto(false) }}></button>

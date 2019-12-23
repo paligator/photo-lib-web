@@ -65,7 +65,7 @@ class App extends Component {
     const { windowWidth } = this.state;
 
     const styles = {
-      showLeftMenu: windowWidth > 900
+      isBigScreen: windowWidth > 900
     };
 
     return (
