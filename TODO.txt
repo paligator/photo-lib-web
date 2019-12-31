@@ -13,3 +13,5 @@ do better error page
 devide error boudnary
 
 SEO
+
+super user can delete every comment

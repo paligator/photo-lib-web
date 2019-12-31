@@ -47,6 +47,13 @@ export const GET_PHOTO_DETAILS = `
 	query GetPhotoDetails($albumId: ID!, $photoName: String!) {
 		photo(albumId: $albumId, photoName: $photoName) {
 			tags
+			comments { 
+        username
+        userEmail
+				comment
+				createDate
+				_id
+      }
 		}
 	}
 `;
@@ -58,6 +65,20 @@ export const SET_PHOTO_TAGS = `
 	}
 `;
 export const SET_PHOTO_TAGS_GQL = toGql(SET_PHOTO_TAGS);
+
+export const ADD_PHOTO_COMMENT = `
+	mutation AddPhotoComment($albumId: ID!, $photoName: String!, $comment: String!) {
+		addPhotoComment(albumId: $albumId, photoName: $photoName, comment: $comment)
+	}
+`;
+export const ADD_PHOTO_COMMENT_GQL = toGql(ADD_PHOTO_COMMENT);
+
+export const DELETE_PHOTO_COMMENT = `
+	mutation DeletePhotoComment($albumId: ID!, $photoName: String!, $commentId: ID!) {
+		deletePhotoComment(albumId: $albumId, photoName: $photoName, commentId: $commentId)
+	}
+`;
+export const DELETE_PHOTO_COMMENT_GQL = toGql(DELETE_PHOTO_COMMENT);
 
 function toGql(command) {
 	return gql`${command}`;

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const { Tags } = require("../constants/index");
 
 function meOrNull(me) {
@@ -33,8 +35,17 @@ function getPhotoFilterTagsFromCookies(cookies) {
 	return tags;
 }
 
+function formatDate(date) {
+	if (!date) {
+		return "";
+	}
+
+	return new moment(date).format("D.M.YYYY H:mm");
+}
+
 export {
 	meOrNull, meOrVal,
 	formatAlbumName, deleteFromArray,
-	setCookie, getPhotoFilterTagsFromCookies
+	setCookie, getPhotoFilterTagsFromCookies,
+	formatDate
 };

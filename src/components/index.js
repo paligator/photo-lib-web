@@ -9,6 +9,7 @@ import ImagesFilter from './ImagesFilter';
 import ErrorBoundary from './ErrorBoundary';
 import PhotoLoader from './PhotoLoader';
 import AboutMe from './AboutMe';
+import Comments from './Comments';
 
 
 export * from "./basics"
@@ -24,5 +25,6 @@ export {
 	// Thumbs,
 	ErrorBoundary,
 	PhotoLoader,
-	AboutMe
+	AboutMe,
+	Comments
 }

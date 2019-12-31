@@ -509,3 +509,19 @@ input:checked + .slider:before {
 
 /* #endregion */
 
+/* #region Commets */
+
+.comment {
+  font-size: 0.8em;
+}
+
+.comment strong {
+  font-weight: 650;
+}
+
+.comment .fa-times {
+  color: $tagTop;
+  cursor: pointer;
+}
+
+/* #endregion */

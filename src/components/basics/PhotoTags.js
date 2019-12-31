@@ -46,7 +46,7 @@ const PhotoTags = (props) => {
 
 	return (
 		/* Without key on div, there was a problem, that active button stayed active, even it shouldn't */
-		<div key={props.photoName} ref={node} className="leftMenuItem" style={{ verticalAlign: "middle", display: "block" }}>
+		<div key={props.photoName} ref={node} style={{ verticalAlign: "middle", display: "block" }}>
 			<TagButton tag={Tags.nice} {...props}/>
 			<TagButton tag={Tags.top} {...props}/>
 			<TagButton tag={Tags.boring} {...props}/>

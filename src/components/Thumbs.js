@@ -30,7 +30,6 @@ class Thumbs extends Component {
 		return false;
 	}
 
-
 	render() {
 
 		const thumbUrl = `${config.imageProxyUrl}/photo/thumb/${this.props.urlPath}`;

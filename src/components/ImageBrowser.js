@@ -1,5 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
-import { PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter, Warning } from '../components';
+import { PhotoLoader, ImageDetails, AlbumInfo, ImagesFilter, Warning, Comments } from '../components';
 import { connect } from "react-redux";
 import * as actions from "../constants/action-types";
 import config from '../config';
@@ -123,6 +123,7 @@ class ImageBrowser extends Component {
             <AlbumInfo />
             <ImagesFilter cookies={this.props.cookies} />
             <ImageDetails markThumbWithTag={this.markThumbWithTag} />
+            <Comments />
           </div>
           : null
         }
@@ -148,9 +149,7 @@ class ImageBrowser extends Component {
                 :
                 (
                   <Swipeable onSwipedLeft={() => { this.nextPhoto(true) }} onSwipedRight={() => { this.nextPhoto(false) }} >
-
                     <div className="row" style={{ height: '100%', width: "100%", position: "absolute" }}>
-
                       <div className="column" style={{ width: "100%" }}>
                         <div id="divPhotoLoaders" key="divPhotoLoaders" className="photoLoadersDiv">
                           <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn || "photoIn"} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
@@ -160,6 +159,13 @@ class ImageBrowser extends Component {
                         <Suspense fallback={<div>Loading...</div>}>
                           <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
                         </Suspense>
+
+                        {(isBigScreen === false) ?
+                          <div style={{ padding: "10px" }}>
+                            <Comments />
+                          </div>
+                          : null
+                        }
                       </div>
 
                       <button id="btnPrevPhoto" className="btn-nav btn-nav-left fas" aria-label="Previous photo" tooltip="Previous photo" onClick={() => { this.nextPhoto(false) }}></button>
@@ -173,10 +179,10 @@ class ImageBrowser extends Component {
 
                     </div>
                   </Swipeable>
-
                 )}
-
             </div>
+
+
           ) :
             this.getLoadingDiv()
           }
