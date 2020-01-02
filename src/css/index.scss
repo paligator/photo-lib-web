@@ -133,6 +133,10 @@ h1, h2, h3, H4, h5, h6 {
   margin: $baseSpace;
 }
 
+.photoLoader.sm {
+  margin: 0;
+}
+
 .photoLoadersDiv {
   width: 100%; 
   height: calc(100% - #{$thumbsHeight} - #{$baseSpace}); 
@@ -208,6 +212,11 @@ h1, h2, h3, H4, h5, h6 {
   margin-right: $bigSpace;
   content: "\f054";
 }
+
+.btn-nav.sm:before {
+  height: calc(100% - #{$baseSpace});
+}
+
 /* #endregion */
 
 /* #region FullScreen button */
@@ -226,9 +235,15 @@ h1, h2, h3, H4, h5, h6 {
   margin-right: $bigSpace;
   z-index: 5;
 }
+
+.btn-fullscreen.sm:before {
+  bottom: $baseSpace;
+}
 .btn-fullscreen:hover:before {
   color: $main;
 }
+
+
 /* #endregion */
 
 /* #region Exif */
@@ -240,6 +255,10 @@ h1, h2, h3, H4, h5, h6 {
   cursor: pointer;
   color: $main-01;
 }
+
+.btn-exif.sm {
+  bottom: $baseSpace;
+} 
 
 .btn-exif:hover {
   color: $main;
@@ -260,6 +279,10 @@ h1, h2, h3, H4, h5, h6 {
   color: $main;
   background-color: $black-05;
   animation-duration: 0.2s;
+}
+
+.exif.sm {
+  bottom: $baseSpace; 
 }
 
 /* #endregion */
