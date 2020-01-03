@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 const AlbumInfo = () => {
 
 	const album = useSelector(state => state.selectedAlbum);
-	const date = `${album.month ? album.month + "/" : ""}${album.year}`;
+	const date = `${album.month ? album.month + "/" : ""}${album.year || ""}`;
 
 	return (
 		<div className="leftMenuItem boxUderline">

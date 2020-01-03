@@ -130,11 +130,7 @@ h1, h2, h3, H4, h5, h6 {
   position: absolute; 
   width: 100%; 
   height: calc(100% - (#{$baseSpace} * 2)); 
-  margin: $baseSpace;
-}
-
-.photoLoader.sm {
-  margin: 0;
+  margin-top: $baseSpace;
 }
 
 .photoLoadersDiv {

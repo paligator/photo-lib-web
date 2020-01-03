@@ -21,5 +21,7 @@ export const Tags = {
 	}
 };
 
+export const APP_NAME = "My Dreams come TRUE"
+
 
 

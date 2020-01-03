@@ -8,7 +8,7 @@ import * as C from "../api/Common";
 import { GlobalHotKeys } from "react-hotkeys";
 import { getExif, formatExposureTime } from "../api/Utils";
 import { Swipeable } from 'react-swipeable';
-import { Tags } from "../constants";
+import { Tags, APP_NAME } from "../constants";
 
 const Thumbs = lazy(() => import('../components/Thumbs'));
 
@@ -42,6 +42,9 @@ class ImageBrowser extends Component {
     this.loadAlbum();
   }
 
+  componentWillUnmount() {
+    document.title = APP_NAME;
+  }
 
   componentDidUpdate(prevProps) {
 
@@ -53,6 +56,8 @@ class ImageBrowser extends Component {
     if (this.shouldLoadAlbum(prevProps, albumNameFromUrl) === true) {
       this.loadAlbum(albumNameFromUrl);
     }
+
+    document.title = this.getAlbumNameFromUrl(this.props);
   }
 
   loadAlbum(albumNameFromUrl) {
@@ -189,7 +194,7 @@ class ImageBrowser extends Component {
 
             <div id="mainMe" className="column" style={{ width: "100%" }}>
 
-              <div style={{padding: "5px"}}>
+              <div style={{ padding: "5px" }}>
                 <AlbumInfo />
                 <ImagesFilter cookies={this.props.cookies} />
                 <ImageDetails markThumbWithTag={this.markThumbWithTag} />
@@ -205,8 +210,8 @@ class ImageBrowser extends Component {
                     <div style={{ width: "100%" }}>
                       <div className="column" style={{ width: "100%" }}>
                         <div id="divPhotoLoaders" key="divPhotoLoaders" className="photoLoadersDiv">
-                          <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass + " sm"} display="block" key={photoUrlFadeIn || "photoIn"} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
-                          <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass + " sm"} display="block" key={photoUrlFadeOut || "photoOut"} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                          <PhotoLoader id="loaderIn" imgId="imgPhotoIn" className={fadeInClass} display="block" key={photoUrlFadeIn || "photoIn"} photoName={photoNameFadeIn} photoUrl={photoUrlFadeIn} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
+                          <PhotoLoader id="loaderOut" imgId="imgPhotoOut" className={fadeOutClass} display="block" key={photoUrlFadeOut || "photoOut"} photoName={photoNameFadeOut} photoUrl={photoUrlFadeOut} onAnimationEnd={(e) => this.onAnimationEnd(e)} />
                           <PhotoLoader id="loaderBuffer" imgId="imgBimgPhotoBuffer" display="none" key={photoUrlBuffer} photoName={photoNameBuffer} photoUrl={photoUrlBuffer} />
 
                           <button id="btnPrevPhoto" className="btn-nav sm btn-nav-left fas" aria-label="Previous photo" tooltip="Previous photo" onClick={() => { this.nextPhoto(false) }}></button>
@@ -224,7 +229,7 @@ class ImageBrowser extends Component {
                           <Thumbs urlPath={album.path} markThumbAsSelected={this.markThumbAsSelected} setNextFading={this.setNextFading} style={{ width: "100%" }} />
                         </Suspense>
 
-                        <div style={{padding: "5px"}}>
+                        <div style={{ padding: "5px" }}>
                           <Comments />
                         </div>
 
@@ -437,40 +442,40 @@ class ImageBrowser extends Component {
   }
 
   getLoadingDiv(top) {
-    return (< div style={{ position: "absolute", left: "37.5%", top: top || "15%", height: "auto", width: "25%"}}>
-  <ReactLoading type='spin' color="red" style={{ width: "100%", height: "100%" }} />
+    return (< div style={{ position: "absolute", left: "37.5%", top: top || "15%", height: "auto", width: "25%" }}>
+      <ReactLoading type='spin' color="red" style={{ width: "100%", height: "100%" }} />
     </div >)
   }
 
-goToFullScreen() {
-  const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
-    (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
-    (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
-    (document.msFullscreenElement && document.msFullscreenElement !== null);
+  goToFullScreen() {
+    const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+      (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+      (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+      (document.msFullscreenElement && document.msFullscreenElement !== null);
 
-  const docElm = this.node.querySelector("#divPhotoLoaders");
-  if (!isInFullScreen) {
-    if (docElm.requestFullscreen) {
-      docElm.requestFullscreen();
-    } else if (docElm.mozRequestFullScreen) {
-      docElm.mozRequestFullScreen();
-    } else if (docElm.webkitRequestFullScreen) {
-      docElm.webkitRequestFullScreen();
-    } else if (docElm.msRequestFullscreen) {
-      docElm.msRequestFullscreen();
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
+    const docElm = this.node.querySelector("#divPhotoLoaders");
+    if (!isInFullScreen) {
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+      } else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     }
   }
-}
 }
 
 function mapStateToProps(state, ownState) {
