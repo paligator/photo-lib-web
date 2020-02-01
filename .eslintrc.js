@@ -18,6 +18,12 @@ module.exports = {
 		// 	'always'
 		// ],
 	},
+	"settings": {
+		"react": {
+			"pragma": "React",
+			"version": "16.0"
+		},
+	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:react/recommended"
@@ -31,6 +37,6 @@ module.exports = {
 		"ecmaFeatures": {
 			"jsx": true,
 			"modules": true
-		}
+		},
 	}
 }

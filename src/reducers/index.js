@@ -3,11 +3,6 @@ import { apolloClient } from '../App';
 import { getUserRoles, isUserLogged } from "../api/Authorization"
 
 const initialState = {
-	albums: {
-		isFetcing: false,
-		error: null,
-		value: []
-	},
 	selectedAlbum: {
 		id: null,
 		exists: true,

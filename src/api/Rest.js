@@ -1,5 +1,8 @@
 import config from '../config';
 import axios from "axios";
+import { apolloClient } from '../App';
+import * as gqlCommands from '../api/GqlCommands';
+import gql from "graphql-tag";
 
 export async function get(endpoint) {
 	try {
@@ -72,6 +75,21 @@ export function postLoginGoogle(googleToken) {
 	});
 }
 
+
+export async function getAllAlbums() {
+	try {
+    const response = await apolloClient.query({
+      query: gql`${gqlCommands.GET_ALL_ALBUMS}`,
+      fetchPolicy: "no-cache", 
+      variables: { }
+    });
+	
+		return response.data.albums;
+
+  } catch (error) {
+    console.error("getAllAlbums:", error);
+  }
+}
 
 
 

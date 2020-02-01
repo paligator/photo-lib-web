@@ -9,6 +9,8 @@ import config from './config';
 import { isUserNotLogged, isUserLogged } from './api/Authorization';
 import { Redirect } from 'react-router-dom';
 import { Login, Navigation, WorldMap, ErrorBoundary, AboutMe } from './components';
+import PackageContext from "./context";
+import { getAllAlbums } from "./api/Rest"
 
 const ImageBrowser = lazy(() => import('./components/ImageBrowser'));
 
@@ -29,14 +31,22 @@ class App extends Component {
 
   state = {
     windowWidth: 0,
-    windowHeight: 0
+    windowHeight: 0,
+    albums: {
+      status: 'loading',
+      data: []
+    }
   };
 
-  componentDidMount() {
+
+  async componentDidMount() {
     this.props.initStateByCookies({ cookies: this.props.cookies.cookies });
 
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions.bind(this));
+
+    const res = await getAllAlbums();
+    this.setState({ ...this.state, albums: { state: "status", data: res } });
   }
 
   componentWillUnmount() {
@@ -73,20 +83,26 @@ class App extends Component {
         <div className="App" style={{ height: "100%", width: "100%" }}>
 
           <BrowserRouter>
-            <ApolloProvider client={apolloClient}>
-              <Navigation />
-              <Suspense fallback={<div>Loading...</div>}>
-                <Switch>
-                  {/* TODO: maybe move to rules can do logged/not logged  */}
-                  <Route path="/" exact render={() => (isUserNotLogged() ? <Login /> : <WorldMap />)} />
-                  <Route path="/google-login" isExact="false" render={({ location }) => <Login googleToken={this.getGoogleToken(location)} />} />
-                  <Route path="/album/:continent/:albumName" isExact="false" render={({ match }) => (isUserNotLogged() ? <Login /> : <ImageBrowser match={match} styles={styles} cookies={this.props.cookies} />)} />
-                  <Route path="/login" exact render={() => (isUserNotLogged() ? <Login /> : <Redirect to="/" />)} />
-                  <Route path="/aboutme" exact render={() => <AboutMe></AboutMe>} />
-                  <Route render={() => isUserLogged() ? <Redirect to="/" /> : <Login />} />
-                </Switch>
-              </Suspense>
-            </ApolloProvider>
+            <PackageContext.Provider
+              value={{
+                albums: this.state.albums,
+              }}
+            >
+              <ApolloProvider client={apolloClient}>
+                <Navigation />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Switch>
+                    {/* TODO: maybe move to rules can do logged/not logged  */}
+                    <Route path="/" exact render={() => (isUserNotLogged() ? <Login /> : <WorldMap />)} />
+                    <Route path="/google-login" isExact="false" render={({ location }) => <Login googleToken={this.getGoogleToken(location)} />} />
+                    <Route path="/album/:continent/:albumName" isExact="false" render={({ match }) => (isUserNotLogged() ? <Login /> : <ImageBrowser match={match} styles={styles} cookies={this.props.cookies} />)} />
+                    <Route path="/login" exact render={() => (isUserNotLogged() ? <Login /> : <Redirect to="/" />)} />
+                    <Route path="/aboutme" exact render={() => <AboutMe></AboutMe>} />
+                    <Route render={() => isUserLogged() ? <Redirect to="/" /> : <Login />} />
+                  </Switch>
+                </Suspense>
+              </ApolloProvider>
+            </PackageContext.Provider>
           </BrowserRouter>
 
         </div >
@@ -110,5 +126,5 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-
 export default withCookies(connect(mapStateToProps, mapDispatchToProps)(App));
+
