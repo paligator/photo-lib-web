@@ -10,7 +10,7 @@ import { isUserNotLogged, isUserLogged } from './api/Authorization';
 import { Redirect } from 'react-router-dom';
 import { Login, Navigation, WorldMap, ErrorBoundary, AboutMe } from './components';
 import PackageContext from "./context";
-import { getAllAlbums } from "./api/Rest"
+import { getAllAlbums } from "./api/Rest";
 
 const ImageBrowser = lazy(() => import('./components/ImageBrowser'));
 
@@ -33,24 +33,23 @@ class App extends Component {
     windowWidth: 0,
     windowHeight: 0,
     albums: {
-      status: 'loading',
+      status: 'init',
       data: []
     }
   };
-
 
   async componentDidMount() {
     this.props.initStateByCookies({ cookies: this.props.cookies.cookies });
 
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions.bind(this));
-
-    const res = await getAllAlbums();
-    this.setState({ ...this.state, albums: { state: "status", data: res } });
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateDimensions.bind(this));
+  async componentDidUpdate() {
+    if (isUserLogged() === true && this.state.albums.status === 'init') {
+      const albums = await getAllAlbums();
+      this.setState({ ...this.state, albums: { state: "loaded", data: albums } });
+    }
   }
 
   updateDimensions() {
@@ -113,8 +112,8 @@ class App extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    state: state,
     cookies: ownProps.cookies,
+    token: state.token
   };
 }
 
@@ -124,7 +123,7 @@ const mapDispatchToProps = dispatch => {
       dispatch({ type: action.INIT_STATE_BY_COOKIES, payload: cookies })
     }
   };
-};
+}
 
 export default withCookies(connect(mapStateToProps, mapDispatchToProps)(App));
 

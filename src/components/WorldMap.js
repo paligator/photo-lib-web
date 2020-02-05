@@ -62,7 +62,7 @@ const WorldMap = () => {
 		<Context.Consumer>
 			{context => {
 
-				const albums = (context.albums.status === "loading") ? [] : context.albums.data;
+				const albums = (context.albums.status === "init") ? [] : (context.albums.data || []);
 				const countryColorMap = {};
 
 				albums.forEach(album => {
